@@ -2,44 +2,23 @@
 % Please edit documentation in R/mf_init.R
 \name{mf_init}
 \alias{mf_init}
-\title{Initialize or export a map}
+\title{Initialize a map with a specific extent}
 \usage{
-mf_init(
-  x,
-  expandBB = rep(0, 4),
-  theme,
-  export,
-  filename,
-  width,
-  height,
-  res = 72
-)
+mf_init(x, expandBB = rep(0, 4), theme)
 }
 \arguments{
-\item{x}{object of class \code{sf} or \code{sfc}}
+\item{x}{object of class \code{sf}, \code{sfc} or \code{Raster}}
 
 \item{expandBB}{fractional values to expand the bounding box with, in each
 direction (bottom, left, top, right)}
 
 \item{theme}{apply a theme from \code{mf_theme}}
-
-\item{export}{if set to "png" or "svg" a png or svg plot device is opened}
-
-\item{filename}{path to the exported file}
-
-\item{width}{width of the figure (pixels for png, inches for svg)}
-
-\item{height}{height of the figure (pixels for png, inches for svg)}
-
-\item{res}{resolution (for png)}
 }
 \value{
 No return value, a map is initiated.
 }
 \description{
 Plot an invisible layer with the extent of a spatial object.
-Export a map in png or svg format. It uses a reference
-geographic layer to find a correct ratio for the export.
 }
 \examples{
 mtq <- mf_get_mtq()

@@ -5,8 +5,10 @@
 
 <!-- badges: start -->
 
-[![codecov](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg?token=TPK6HZOLWH)](https://codecov.io/gh/riatelab/mapsf)
+[![CRAN](https://www.r-pkg.org/badges/version/mapsf)](https://cran.r-project.org/package=mapsf)
 [![R-CMD-check](https://github.com/riatelab/mapsf/workflows/R-CMD-check/badge.svg)](https://github.com/riatelab/mapsf/actions)
+[![codecov](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg?token=TPK6HZOLWH)](https://codecov.io/gh/riatelab/mapsf)
+[![status](https://tinyverse.netlify.com/badge/mapsf)](https://CRAN.R-project.org/package=mapsf)
 <!-- badges: end -->
 
 Create and integrate thematic maps in your R workflow. This package
@@ -18,20 +20,21 @@ presentation of maps (e.g. scale bar, north arrow, title, labels).
 
 ## Installation
 
-<!-- You can install the released version of mapsf  -->
-<!-- from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("mapsf") -->
-<!-- ``` -->
-<!-- Alternatively,  -->
+You can install the released version of mapsf from
+[CRAN](https://cran.r-project.org/package=mapsf) with:
 
-You can install the development version of `mapsf` from GitHub with:
+``` r
+install.packages("mapsf")
+```
+
+Alternatively, you can install the development version of `mapsf` from
+GitHub with:
 
 ``` r
 remotes::install_github("riatelab/mapsf")
 ```
 
-## Examples
+## Usage
 
 This is a basic example which shows how to create a map with `mapsf`.  
 The main `mapsf` function is `mf_map()`.
@@ -48,9 +51,7 @@ mf_map(x = mtq)
 mf_map(x = mtq, var = "POP", type = "prop")
 # Plot a map layout
 mf_layout(title = "Population in Martinique", 
-          credits = "T. Giraud; Sources: INSEE & IGN, 2018", 
-          frame = TRUE)
-box(which = "figure")
+          credits = "T. Giraud; Sources: INSEE & IGN, 2018")
 ```
 
 ![](man/figures/README-example1-1.png)<!-- -->
@@ -58,9 +59,9 @@ box(which = "figure")
 A more detailed example:
 
 ``` r
-# Initiate a map figure with a theme and extra margins 
-mf_init(x = mtq, theme = "dark", expandBB = c(0,0,0,.3),
-        export = "svg", filename = "man/figures/mtq.svg", width = 6) 
+# Export a map figure with a theme and extra margins 
+mf_export(x = mtq, filename = "mtq.png", width = 600, 
+          theme = "dark", expandBB = c(0,0,0,.3)) 
 # Plot a shadow
 mf_shadow(mtq, col = "grey10", add = TRUE)
 # Plot a choropleth map
@@ -88,7 +89,7 @@ mf_arrow('topleft')
 dev.off()
 ```
 
-![](man/figures/mtq.svg)
+![](man/figures/mtq.png)
 
 Note that `mapsf` is, to a certain degree, compatible with the pipe
 syntax:

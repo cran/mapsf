@@ -8,6 +8,7 @@
 #' 'add' ,
 #' 'col_na',
 #' 'pal',
+#' 'alpha',
 #' 'breaks',
 #' 'nbreaks',
 #' 'leg_pos',
@@ -40,6 +41,7 @@
 #' )
 mf_choro <- function(x, var,
                      pal = "Mint",
+                     alpha = 1,
                      breaks = "quantile",
                      nbreaks,
                      border,
@@ -56,20 +58,19 @@ mf_choro <- function(x, var,
                      leg_val_rnd = 2,
                      leg_no_data = "No data",
                      leg_frame = FALSE,
-                     add) {
+                     add = FALSE) {
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- FALSE
 
   # get the breaks
   breaks <- mf_get_breaks(x = x[[var]], nbreaks = nbreaks, breaks = breaks)
   nbreaks <- length(breaks) - 1
   # get the cols
-  pal <- get_the_pal(pal = pal, nbreaks = nbreaks)
+  pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
   mycols <- get_col_vec(x = x[[var]], breaks = breaks, pal = pal)
 
@@ -80,18 +81,23 @@ mf_choro <- function(x, var,
   mycols[is.na(mycols)] <- col_na
 
 
-  if (is(st_geometry(x), c("sfc_LINESTRING", "sfc_MULTILINESTRING"))) {
+  if (add == FALSE) {
+    mf_init(x)
+    add <- TRUE
+  }
+
+  xtype <- get_geom_type(x)
+  if (xtype == "LINE") {
     plot(st_geometry(x), col = mycols, lwd = lwd, bg = bg, add = add)
   }
-  if (is(st_geometry(x), c("sfc_POLYGON", "sfc_MULTIPOLYGON"))) {
+  if (xtype == "POLYGON") {
     plot(
       st_geometry(x),
       col = mycols, border = border, lwd = lwd,
       bg = bg, add = add
     )
   }
-  if (is(st_geometry(x), c("sfc_POINT", "sfc_MULTIPOINT"))) {
-    cx <- "point"
+  if (xtype == "POINT") {
     if (pch %in% 21:25) {
       mycolspt <- border
     } else {

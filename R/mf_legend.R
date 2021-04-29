@@ -18,9 +18,8 @@
 #' "prop_line", "grad_line"
 #' @eval my_params(c("pos", "inches", "border", "symbol", "title",
 #' "title_cex", "val_cex", "val_rnd", "frame", "no_data", "no_data_txt",
-#' "bg", "fg", "cex"))
+#' "bg", "fg", "cex", "pal"))
 #' @param val a vector of values
-#' @param pal a vector of colors
 #' @param col a color
 #' @param lwd line width(s)
 #' @param pt_cex cex of the symbols
@@ -72,8 +71,7 @@ mf_legend <- function(type, pos, val, pal,
 
   if (missing(bg)) args$bg <- .gmapsf$args$bg
   if (missing(fg)) args$fg <- .gmapsf$args$fg
-  switch(
-    type,
+  switch(type,
     prop = do.call(what = mf_legend_p, args),
     choro = do.call(what = mf_legend_c, args),
     typo = do.call(what = mf_legend_t, args),

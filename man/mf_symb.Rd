@@ -8,6 +8,7 @@ mf_symb(
   x,
   var,
   pal = "Dynamic",
+  alpha = 1,
   border,
   pch,
   cex = 1,
@@ -23,7 +24,7 @@ mf_symb(
   leg_val_rnd = 2,
   leg_no_data = "No data",
   leg_frame = FALSE,
-  add
+  add = TRUE
 )
 }
 \arguments{
@@ -32,6 +33,8 @@ mf_symb(
 \item{var}{name(s) of the variable(s) to plot}
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+
+\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
 
 \item{border}{border color}
 

@@ -9,9 +9,10 @@
 #' 'add' ,
 #' 'col_na',
 #' 'pal',
+#' 'alpha',
 #' 'breaks',
 #' 'nbreaks',
-#' 'leg_pos',
+#' 'leg_pos2',
 #' 'leg_title',
 #' 'leg_title_cex',
 #' 'leg_val_cex',
@@ -48,6 +49,7 @@
 #' )
 mf_symb_choro <- function(x, var,
                           pal = "Mint",
+                          alpha = 1,
                           breaks = "quantile",
                           nbreaks,
                           border,
@@ -65,7 +67,7 @@ mf_symb_choro <- function(x, var,
                           leg_val_rnd = 2,
                           leg_no_data = c("No data", "No data"),
                           leg_frame = c(FALSE, FALSE),
-                          add) {
+                          add = TRUE) {
 
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
@@ -73,7 +75,6 @@ mf_symb_choro <- function(x, var,
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- TRUE
   var2 <- var[2]
   var1 <- var[1]
 
@@ -85,7 +86,7 @@ mf_symb_choro <- function(x, var,
   breaks <- mf_get_breaks(x = x[[var2]], nbreaks = nbreaks, breaks = breaks)
   nbreaks <- length(breaks) - 1
   # get the cols
-  pal <- get_the_pal(pal = pal, nbreaks = nbreaks)
+  pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
   mycols <- get_col_vec(x = x[[var2]], breaks = breaks, pal = pal)
 
@@ -139,6 +140,10 @@ mf_symb_choro <- function(x, var,
   mycolsptbg <- mycols
 
   ##################################################################
+  if (add == FALSE) {
+    mf_init(x)
+    add <- TRUE
+  }
 
   plot(st_geometry(x),
     col = mycolspt, bg = mycolsptbg, cex = mycex, pch = mysym,
@@ -146,16 +151,16 @@ mf_symb_choro <- function(x, var,
   )
 
   # box(col = bg)
-
+  leg_pos <- split_leg(leg_pos)
   mf_legend_c(
-    pos = leg_pos[2], val = breaks, title = leg_title[2],
+    pos = leg_pos[[2]], val = breaks, title = leg_title[2],
     title_cex = leg_title_cex[2], val_cex = leg_val_cex[2],
     val_rnd = leg_val_rnd,
     col_na = col_na, no_data = no_data[2], no_data_txt = leg_no_data[2],
     frame = leg_frame[2], pal = pal, bg = bg, fg = fg
   )
   mf_legend_s(
-    pos = leg_pos[1],
+    pos = leg_pos[[1]],
     val = val_order,
     title = leg_title[1],
     title_cex = leg_title_cex[1],

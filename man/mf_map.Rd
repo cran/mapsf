@@ -11,6 +11,7 @@ mf_map(
   breaks,
   nbreaks,
   pal,
+  alpha = 1,
   inches,
   val_max,
   symbol,
@@ -21,6 +22,7 @@ mf_map(
   cex,
   border,
   lwd,
+  bg,
   col_na,
   cex_na,
   pch_na,
@@ -49,6 +51,8 @@ mf_map(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
+\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+
 \item{inches}{size of the biggest symbol (radius for circles, half width for squares) in inches.}
 
 \item{val_max}{maximum value used for proportional symbols}
@@ -68,6 +72,8 @@ mf_map(
 \item{border}{border color}
 
 \item{lwd}{border width}
+
+\item{bg}{background color}
 
 \item{col_na}{color for missing values}
 

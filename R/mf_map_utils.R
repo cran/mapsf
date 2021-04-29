@@ -2,12 +2,13 @@
 #'
 #' @param pal pal
 #' @param nbreaks nbreaks
+#' @param alpha alpha
 #' @noRd
 #' @importFrom grDevices hcl.pals hcl.colors
-get_the_pal <- function(pal, nbreaks) {
+get_the_pal <- function(pal, nbreaks, alpha = 1) {
   if (length(pal) == 1) {
     if (pal %in% hcl.pals()) {
-      cols <- hcl.colors(n = nbreaks, palette = pal, rev = TRUE)
+      cols <- hcl.colors(n = nbreaks, palette = pal, alpha = alpha, rev = TRUE)
     } else {
       cols <- rep(pal, nbreaks)
     }
@@ -96,19 +97,19 @@ plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
         fg = border,
         lwd = lwd,
         add = TRUE,
-        inches = FALSE,
+        inches = inches,
         asp = 1
       )
     },
     square = {
       symbols(
         x = dots[, 1:2, drop = TRUE],
-        squares = sizes * 2,
+        squares = sizes,
         bg = mycols,
         fg = border,
         lwd = lwd,
         add = TRUE,
-        inches = FALSE,
+        inches = inches * 2,
         asp = 1
       )
     }
@@ -170,4 +171,55 @@ get_sym_typo <- function(x, pch, val_order) {
     stringsAsFactors = FALSE
   )
   mysym <- refsym[match(x, refsym[, 1]), 2]
+}
+
+
+
+# split multiple legend position
+split_leg <- function(x) {
+  llp <- length(x)
+  if (llp == 2) {
+    lp1 <- x[1]
+    lp2 <- x[2]
+  }
+  if (llp == 3) {
+    tt <- tryCatch(as.numeric(x[1]), warning = function(w) w)
+    if (methods::is(tt, "warning")) {
+      lp1 <- x[1]
+      lp2 <- as.numeric(x[2:3])
+    } else {
+      lp1 <- as.numeric(x[1:2])
+      lp2 <- x[3]
+    }
+  }
+  if (llp == 4) {
+    lp1 <- x[1:2]
+    lp2 <- x[3:4]
+  }
+  list(lp1, lp2)
+}
+
+
+
+get_geom_type <- function(x) {
+  a <- list(
+    other = "GEOMETRY", POINT = "POINT", LINE = "LINESTRING",
+    POLYGON = "POLYGON",
+    POINT = "MULTIPOINT",
+    LINE = "MULTILINESTRING", POLYGON = "MULTIPOLYGON",
+    other = "GEOMETRYCOLLECTION", other = "CIRCULARSTRING",
+    other = "COMPOUNDCURVE", other = "CURVEPOLYGON",
+    other = "MULTICURVE", other = "MULTISURFACE",
+    other = "CURVE", other = "SURFACE", other = "POLYHEDRALSURFACE",
+    other = "TIN", other = "TRIANGLE"
+  )
+  type <- st_geometry_type(x)
+  levels(type) <- a
+  type <- as.character(unique(type))
+  if (length(type) > 1) {
+    stop("GEOMETRYCOLLECTION objects should have consistent type",
+      call. = FALSE
+    )
+  }
+  return(type)
 }

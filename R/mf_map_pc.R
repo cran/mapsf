@@ -7,8 +7,8 @@
 #' 'border',
 #' 'lwd',
 #' 'add' ,
-#' 'inches', 'val_max', 'symbol', 'col_na', 'pal', 'breaks', 'nbreaks',
-#' 'leg_pos', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'leg_val_rnd',
+#' 'inches', 'val_max', 'symbol', 'col_na', 'pal', 'alpha', 'breaks', 'nbreaks',
+#' 'leg_pos2', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'leg_val_rnd',
 #' 'leg_no_data', 'leg_frame'))
 #'
 #' @importFrom methods is
@@ -41,6 +41,7 @@ mf_prop_choro <- function(x,
                           val_max,
                           symbol = "circle",
                           pal = "Mint",
+                          alpha = 1,
                           breaks = "quantile",
                           nbreaks,
                           border,
@@ -53,13 +54,12 @@ mf_prop_choro <- function(x,
                           leg_val_rnd = c(0, 2),
                           leg_no_data = "No data",
                           leg_frame = c(FALSE, FALSE),
-                          add) {
+                          add = TRUE) {
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
-  if (missing(add)) add <- TRUE
   if (missing(border)) border <- fg
 
   var2 <- var[2]
@@ -74,7 +74,7 @@ mf_prop_choro <- function(x,
   )
   nbreaks <- length(breaks) - 1
   # get the cols
-  pal <- get_the_pal(pal = pal, nbreaks = nbreaks)
+  pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
   mycols <- get_col_vec(x = dots[[var2]], breaks = breaks, pal = pal)
 
@@ -96,9 +96,11 @@ mf_prop_choro <- function(x,
   )
 
   # size and values for legend, hollow circle (fixmax case)
-  sizeMax <- max(sizes)
-  if (inches <= sizeMax) {
-    inches <- sizeMax
+  size_max <- max(sizes)
+  val <- seq(sqrt(min(dots[[var1]])), sqrt(max(dots[[var1]])), length.out = 4)
+  val <- val * val
+  if (inches <= size_max) {
+    inches <- size_max
     borders <- border
   } else {
     mycols <- c(NA, mycols)
@@ -120,19 +122,18 @@ mf_prop_choro <- function(x,
     inches = inches
   )
 
+  leg_pos <- split_leg(leg_pos)
   # symbols size
-  val <- seq(sqrt(min(dots[[var1]])), sqrt(max(dots[[var1]])), length.out = 4)
-  val <- val * val
   mf_legend_p(
-    pos = leg_pos[1], val = val, title = leg_title[1],
-    symbol = symbol, inches = inches, col = "grey80",
+    pos = leg_pos[[1]], val = val, title = leg_title[1],
+    symbol = symbol, inches = size_max, col = "grey80",
     title_cex = leg_title_cex[1], val_cex = leg_val_cex[1],
     val_rnd = leg_val_rnd[1],
     frame = leg_frame[1], border = border, lwd = lwd,
     bg = bg, fg = fg
   )
   mf_legend_c(
-    pos = leg_pos[2], val = breaks, title = leg_title[2],
+    pos = leg_pos[[2]], val = breaks, title = leg_title[2],
     title_cex = leg_title_cex[2], val_cex = leg_val_cex[2],
     val_rnd = leg_val_rnd[2],
     col_na = col_na, no_data = no_data, no_data_txt = leg_no_data,

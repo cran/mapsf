@@ -13,6 +13,7 @@
 #' setup of the graphic device.
 #' @export
 #' @return No return value, a map is displayed.
+#' @importFrom methods is
 #' @examples
 #' library("raster")
 #' r <- raster(system.file("external/test.grd", package = "raster"))
@@ -33,16 +34,18 @@ mf_raster <- function(x, add = FALSE, ...) {
   on.exit(par(op))
 
   if (add == FALSE) {
-    bbx <- sf::st_as_sfc(sf::st_bbox(x))
-    mf_base(x = bbx, col = NA, border = NA, add = FALSE)
+    mf_init(x)
+    add <- TRUE
   }
 
   if (is(x, "RasterBrick")) {
     ops <- list(...)
     ops$x <- x
-    ops$add <- TRUE
+    ops$add <- add
     # Default opts
-    ops$maxpixels <- ifelse(is.null(ops$maxpixels), raster::ncell(x),
+    ops$maxpixels <- ifelse(
+      is.null(ops$maxpixels),
+      raster::ncell(x),
       ops$maxpixels
     )
     ops$bgalpha <- ifelse(is.null(ops$bgalpha), 0, ops$bgalpha)
@@ -52,16 +55,18 @@ mf_raster <- function(x, add = FALSE, ...) {
   if (is(x, "RasterLayer")) {
     ops <- list(...)
     ops$x <- x
-    ops$add <- TRUE
+    ops$add <- add
     # Default opts
     ops$legend <- ifelse(is.null(ops$legend), FALSE, ops$legend)
     ops$axes <- ifelse(is.null(ops$axes), FALSE, ops$axes)
-    ops$box <- ifelse(is.null(ops$box), FALSE, ops$bow)
-    ops$maxpixels <- ifelse(is.null(ops$maxpixels), raster::ncell(x),
+    ops$box <- ifelse(is.null(ops$box), FALSE, ops$box)
+    ops$maxpixels <- ifelse(
+      is.null(ops$maxpixels),
+      raster::ncell(x),
       ops$maxpixels
     )
     ops$bgalpha <- ifelse(is.null(ops$bgalpha), 0, ops$bgalpha)
-    ops$interpolate <- ifelse(is.null(ops$interpolate), TRUE, ops$interpolate)
+    ops$interpolate <- ifelse(is.null(ops$interpolate), FALSE, ops$interpolate)
     do.call(raster::plot, ops)
   }
 }

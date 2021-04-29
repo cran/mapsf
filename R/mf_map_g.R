@@ -41,14 +41,13 @@ mf_grad <- function(x,
                     leg_val_cex = .6,
                     leg_val_rnd = 2,
                     leg_frame = FALSE,
-                    add) {
+                    add = TRUE) {
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- TRUE
 
   # data prep
   x <- x[!is.na(x = x[[var]]), ]
@@ -56,7 +55,8 @@ mf_grad <- function(x,
   breaks <- mf_get_breaks(x = x[[var]], nbreaks = nbreaks, breaks = breaks)
   nbreaks <- length(breaks) - 1
 
-  if (is(st_geometry(x), c("sfc_LINESTRING", "sfc_MULTILINESTRING"))) {
+  xtype <- get_geom_type(x)
+  if (xtype == "LINE") {
     # lwd mgmt
     if (missing(lwd)) {
       lwd <- seq(1, 4, length.out = nbreaks)
@@ -70,6 +70,11 @@ mf_grad <- function(x,
     mylwd <- get_col_vec(
       x = x[[var]], breaks = breaks, pal = lwd
     )
+
+    if (add == FALSE) {
+      mf_init(x)
+      add <- TRUE
+    }
     # map
     plot(sf::st_geometry(x), col = col, lwd = mylwd, add = add)
     # legend
@@ -105,6 +110,11 @@ mf_grad <- function(x,
   if (pch %in% 21:25) mycolspt <- border
   mycolsptbg <- col[1]
 
+
+  if (add == FALSE) {
+    mf_init(x)
+    add <- TRUE
+  }
   # display
   plot(st_geometry(x),
     col = mycolspt, bg = mycolsptbg, cex = mycex, pch = pch,

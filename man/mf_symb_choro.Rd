@@ -8,6 +8,7 @@ mf_symb_choro(
   x,
   var,
   pal = "Mint",
+  alpha = 1,
   breaks = "quantile",
   nbreaks,
   border,
@@ -25,7 +26,7 @@ mf_symb_choro(
   leg_val_rnd = 2,
   leg_no_data = c("No data", "No data"),
   leg_frame = c(FALSE, FALSE),
-  add
+  add = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ mf_symb_choro(
 \item{var}{name(s) of the variable(s) to plot}
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+
+\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
 
 \item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks})}
 
@@ -55,7 +58,7 @@ mf_symb_choro(
 
 \item{val_order}{val order}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos is 'n' then the legend is not plotted.}
+\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). If leg_pos is 'n' then the legend is not plotted.}
 
 \item{leg_title}{legend title}
 

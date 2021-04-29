@@ -4,7 +4,14 @@
 \alias{mf_credits}
 \title{Plot credits}
 \usage{
-mf_credits(txt, pos = "bottomleft", col, cex = 0.6, font = 3)
+mf_credits(
+  txt = "Source(s) & Author(s)",
+  pos = "bottomleft",
+  col,
+  cex = 0.6,
+  font = 3,
+  bg = NA
+)
 }
 \arguments{
 \item{txt}{text of the credits, use '\\n' to add line breaks}
@@ -16,6 +23,8 @@ mf_credits(txt, pos = "bottomleft", col, cex = 0.6, font = 3)
 \item{cex}{cex of the credits}
 
 \item{font}{font of the credits}
+
+\item{bg}{background color}
 }
 \value{
 No return value, credits are displayed.

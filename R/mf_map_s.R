@@ -10,6 +10,7 @@
 #' 'cex_na',
 #' 'pch_na',
 #' 'pal',
+#' 'alpha',
 #' 'leg_pos',
 #' 'leg_title',
 #' 'leg_title_cex',
@@ -40,6 +41,7 @@
 #' )
 mf_symb <- function(x, var,
                     pal = "Dynamic",
+                    alpha = 1,
                     border,
                     pch,
                     cex = 1,
@@ -55,7 +57,7 @@ mf_symb <- function(x, var,
                     leg_val_rnd = 2,
                     leg_no_data = "No data",
                     leg_frame = FALSE,
-                    add) {
+                    add = TRUE) {
 
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
@@ -63,7 +65,6 @@ mf_symb <- function(x, var,
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- TRUE
 
   # Transform to point
   st_geometry(x) <- st_centroid(st_geometry(x), of_largest_polygon = TRUE)
@@ -75,7 +76,7 @@ mf_symb <- function(x, var,
     val_order = val_order
   )
   # get color list and association
-  pal <- get_the_pal(pal = pal, nbreaks = length(val_order))
+  pal <- get_the_pal(pal = pal, nbreaks = length(val_order), alpha = alpha)
   # get color vector
   mycols <- get_col_typo(
     x = x[[var]], pal = pal,
@@ -88,7 +89,7 @@ mf_symb <- function(x, var,
   }
   if (length(pch) != length(val_order)) {
     message(paste0(
-      "the length of pch does not match the number of",
+      "the length of pch does not match the number of ",
       "modalities. The first pch is used for all modalities"
     ))
     pch <- rep(pch[1], length(val_order))
@@ -97,7 +98,7 @@ mf_symb <- function(x, var,
   if (length(cex) != length(val_order)) {
     if (length(cex) != 1) {
       message(paste0(
-        "the length of cex does not match the number of",
+        "the length of cex does not match the number of ",
         "modalities. The first cex is used for all modalities"
       ))
     }
@@ -136,6 +137,10 @@ mf_symb <- function(x, var,
   mycolsptbg <- mycols
 
   ##################################################################
+  if (add == FALSE) {
+    mf_init(x)
+    add <- TRUE
+  }
 
   plot(st_geometry(x),
     col = mycolspt, bg = mycolsptbg, cex = mycex, pch = mysym,

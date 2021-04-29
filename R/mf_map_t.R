@@ -6,7 +6,7 @@
 #' 'border',
 #' 'lwd',
 #' 'add' ,
-#' 'col_na', 'pal',
+#' 'col_na', 'pal', 'alpha',
 #' 'leg_pos', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'val_order',
 #' 'leg_no_data', 'leg_frame'))
 #' @param cex cex cex of the symbols if x is a POINT layer
@@ -33,6 +33,7 @@
 mf_typo <- function(x,
                     var,
                     pal = "Dynamic",
+                    alpha = 1,
                     val_order,
                     border,
                     pch = 21,
@@ -47,14 +48,13 @@ mf_typo <- function(x,
                     leg_val_cex = .6,
                     leg_no_data = "No data",
                     leg_frame = FALSE,
-                    add) {
+                    add = FALSE) {
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- FALSE
 
   # get modalities
   val_order <- get_modalities(
@@ -63,7 +63,7 @@ mf_typo <- function(x,
   )
 
   # get color list and association
-  pal <- get_the_pal(pal = pal, nbreaks = length(val_order))
+  pal <- get_the_pal(pal = pal, nbreaks = length(val_order), alpha = alpha)
   # get color vector
   mycols <- get_col_typo(
     x = x[[var]], pal = pal,
@@ -76,7 +76,13 @@ mf_typo <- function(x,
   }
   mycols[is.na(mycols)] <- col_na
 
-  if (is(st_geometry(x), c("sfc_LINESTRING", "sfc_MULTILINESTRING"))) {
+  if (add == FALSE) {
+    mf_init(x)
+    add <- TRUE
+  }
+
+  xtype <- get_geom_type(x)
+  if (xtype == "LINE") {
     plot(st_geometry(x), col = mycols, lwd = lwd, bg = bg, add = add)
     mf_legend_t(
       pos = leg_pos, val = val_order, title = leg_title,
@@ -85,7 +91,7 @@ mf_typo <- function(x,
       frame = leg_frame, pal = pal, bg = bg, fg = fg
     )
   }
-  if (is(st_geometry(x), c("sfc_POLYGON", "sfc_MULTIPOLYGON"))) {
+  if (xtype == "POLYGON") {
     plot(st_geometry(x),
       col = mycols, border = border,
       lwd = lwd, bg = bg, add = add
@@ -97,7 +103,7 @@ mf_typo <- function(x,
       frame = leg_frame, pal = pal, bg = bg, fg = fg
     )
   }
-  if (is(st_geometry(x), c("sfc_POINT", "sfc_MULTIPOINT"))) {
+  if (xtype == "POINT") {
     if (pch %in% 21:25) {
       mycolspt <- border
     } else {

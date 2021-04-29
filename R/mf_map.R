@@ -26,10 +26,12 @@
 #' "xfull",
 #' "var",
 #' "pal",
+#' "alpha",
 #' "breaks",
 #' "nbreaks",
 #' "border",
 #' "lwd",
+#' "bg",
 #' "col",
 #' "lwd_max",
 #' "col_na",
@@ -71,10 +73,10 @@
 #' mf_map(mtq)
 #' mf_map(mtq, var = c("STATUS", "MED"), type = "symb_choro")
 mf_map <- function(x, var, type = "base",
-                   breaks, nbreaks, pal,
+                   breaks, nbreaks, pal, alpha = 1,
                    inches, val_max, symbol, col,
                    lwd_max, val_order, pch, cex,
-                   border, lwd,
+                   border, lwd, bg,
                    col_na, cex_na, pch_na,
                    leg_pos, leg_title, leg_title_cex,
                    leg_val_cex, leg_val_rnd, leg_no_data,
@@ -83,16 +85,15 @@ mf_map <- function(x, var, type = "base",
   argx <- as.list(match.call()[-1])
   argx <- argx[names(argx) != "type"]
 
-  switch(
-    type,
-    prop  = do.call(what = mf_prop, argx, envir = parent.frame()),
+  switch(type,
+    prop = do.call(what = mf_prop, argx, envir = parent.frame()),
     choro = do.call(what = mf_choro, argx, envir = parent.frame()),
-    typo  = do.call(what = mf_typo, argx, envir = parent.frame()),
-    symb  = do.call(what = mf_symb, argx, envir = parent.frame()),
-    base  = do.call(what = mf_base, argx, envir = parent.frame()),
-    grad  = do.call(what = mf_grad, argx, envir = parent.frame()),
+    typo = do.call(what = mf_typo, argx, envir = parent.frame()),
+    symb = do.call(what = mf_symb, argx, envir = parent.frame()),
+    base = do.call(what = mf_base, argx, envir = parent.frame()),
+    grad = do.call(what = mf_grad, argx, envir = parent.frame()),
     prop_choro = do.call(what = mf_prop_choro, argx, envir = parent.frame()),
-    prop_typo  = do.call(what = mf_prop_typo, argx, envir = parent.frame()),
+    prop_typo = do.call(what = mf_prop_typo, argx, envir = parent.frame()),
     symb_choro = do.call(what = mf_symb_choro, argx, envir = parent.frame())
   )
 

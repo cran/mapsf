@@ -11,6 +11,7 @@ mf_prop_typo(
   val_max,
   symbol = "circle",
   pal = "Dynamic",
+  alpha = 1,
   val_order,
   border,
   lwd = 0.7,
@@ -22,7 +23,7 @@ mf_prop_typo(
   leg_val_rnd = c(0),
   leg_no_data = "No data",
   leg_frame = c(FALSE, FALSE),
-  add
+  add = TRUE
 )
 }
 \arguments{
@@ -38,6 +39,8 @@ mf_prop_typo(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
+\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+
 \item{val_order}{values order, a character vector that matches var modalities}
 
 \item{border}{border color}
@@ -46,7 +49,7 @@ mf_prop_typo(
 
 \item{col_na}{color for missing values}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos is 'n' then the legend is not plotted.}
+\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). If leg_pos is 'n' then the legend is not plotted.}
 
 \item{leg_title}{legend title}
 

@@ -14,7 +14,6 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  #fig.path="./fig/", 
   fig.width = 5, 
   fig.height = 6
 )
@@ -102,7 +101,7 @@ The **type** column indicates the value to use for the `type` argument in `mf_ma
 
 ## Export
 
-The `mf_init()` function can be used to export maps in raster (.png) or vector formats (.svg). The size of the exported map will fit the height/width ratio of a spatial object.
+The `mf_export()` function exports maps in raster (.png) or vector formats (.svg). The size of the exported map will fit the height/width ratio of a spatial object.
 
 ## Datasets
 

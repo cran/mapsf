@@ -13,6 +13,8 @@
 #' mf_worldmap(mtq)
 #' mf_worldmap(lon = 24, lat = 39)
 mf_worldmap <- function(x, lon, lat, ...) {
+  os2 <- sf::sf_use_s2(FALSE)
+
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   ops <- list(...)
@@ -37,13 +39,14 @@ mf_worldmap <- function(x, lon, lat, ...) {
       )
       plot(orthomap(lon, lat, disc = FALSE),
         add = TRUE,
-        col = "grey60", border = "grey50", lwd = 1
+        col = "grey60", border = "grey50", lwd = .8
       )
     })
   })
   do.call(points, ops)
-  return(invisible(NULL))
+  sf::sf_use_s2(os2)
 
+  return(invisible(NULL))
 }
 
 

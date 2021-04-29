@@ -2,7 +2,6 @@
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>", 
-  #fig.path="./fig/", 
   fig.width = 5, 
   fig.height = 6
 )

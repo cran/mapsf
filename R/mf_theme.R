@@ -18,6 +18,7 @@
 #' It is also possible to set a custom theme using a list of arguments
 #' (see Examples).
 #' Use \code{mf_theme('default')} to reset theme settings.
+#' \code{mf_theme()} returns the current theme settings.
 #' @return The (invisible) list of theme parameters is returned.
 #' @export
 #' @examples
@@ -55,37 +56,20 @@
 #' mf_title()
 #'
 #' (mf_theme("default"))
-mf_theme <- function(x, bg = "white", fg = "black", mar = c(5.1, 4.1, 4.1, 2.1),
-                     tab = TRUE, pos = "left", inner = FALSE, line = 1.2,
-                     cex = 1, font = 2) {
-  if (missing(x)) {
-    x <- list(
-      name = "custom",
-      bg = bg,
-      fg = fg,
-      mar = mar,
-      tab = tab,
-      pos = pos,
-      inner = inner,
-      line = line,
-      cex = cex,
-      font = font
-    )
-    # print("ojk")
-  }
-
+mf_theme <- function(x = "default", bg, fg, mar, tab, pos, inner, line, cex,
+                     font) {
   themes <- list(
     default = list(
       name = "default",
-      bg = "white",
-      fg = "black",
-      mar = c(5.1, 4.1, 4.1, 2.1),
+      bg = "#f7f7f7",
+      fg = "#333333",
+      mar = c(.5, .5, 1.7, .5),
       tab = TRUE,
       pos = "left",
       inner = FALSE,
       line = 1.2,
       cex = 1,
-      font = 2
+      font = 1
     ),
     brutal = list(
       name = "brutal",
@@ -222,9 +206,12 @@ mf_theme <- function(x, bg = "white", fg = "black", mar = c(5.1, 4.1, 4.1, 2.1),
   )
 
 
+  if (missing(x)) {
+    x <- .gmapsf$args
+  }
+
   if (is.list(x)) {
     theme <- x
-    # print(theme)
   } else {
     if (!x %in% names(themes)) {
       stop(paste0(
@@ -237,6 +224,21 @@ mf_theme <- function(x, bg = "white", fg = "black", mar = c(5.1, 4.1, 4.1, 2.1),
       theme <- themes[[x]]
     }
   }
+
+
+
+  if (!missing(bg)) theme$bg <- bg
+  if (!missing(fg)) theme$fg <- fg
+  if (!missing(mar)) theme$mar <- mar
+  if (!missing(tab)) theme$tab <- tab
+  if (!missing(pos)) theme$pos <- pos
+  if (!missing(inner)) theme$inner <- inner
+  if (!missing(line)) theme$line <- line
+  if (!missing(cex)) theme$cex <- cex
+  if (!missing(font)) theme$font <- font
+
+
+
 
   .gmapsf$args <- as.list(theme)
 

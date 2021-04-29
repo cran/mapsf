@@ -11,6 +11,7 @@ mf_prop_choro(
   val_max,
   symbol = "circle",
   pal = "Mint",
+  alpha = 1,
   breaks = "quantile",
   nbreaks,
   border,
@@ -23,7 +24,7 @@ mf_prop_choro(
   leg_val_rnd = c(0, 2),
   leg_no_data = "No data",
   leg_frame = c(FALSE, FALSE),
-  add
+  add = TRUE
 )
 }
 \arguments{
@@ -39,6 +40,8 @@ mf_prop_choro(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
+\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+
 \item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks})}
 
 \item{nbreaks}{number of classes}
@@ -49,7 +52,7 @@ mf_prop_choro(
 
 \item{col_na}{color for missing values}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos is 'n' then the legend is not plotted.}
+\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). If leg_pos is 'n' then the legend is not plotted.}
 
 \item{leg_title}{legend title}
 

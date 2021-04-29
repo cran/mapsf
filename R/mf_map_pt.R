@@ -6,8 +6,8 @@
 #' 'border',
 #' 'lwd',
 #' 'add' ,
-#' 'inches', 'val_max', 'symbol', 'col_na', 'pal', 'leg_val_rnd',
-#' 'leg_pos', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'val_order',
+#' 'inches', 'val_max', 'symbol', 'col_na', 'pal', 'alpha', 'leg_val_rnd',
+#' 'leg_pos2', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'val_order',
 #' 'leg_no_data', 'leg_frame'))
 #'
 #' @importFrom methods is
@@ -39,6 +39,7 @@ mf_prop_typo <- function(x, var,
                          val_max,
                          symbol = "circle",
                          pal = "Dynamic",
+                         alpha = 1,
                          val_order,
                          border,
                          lwd = .7,
@@ -50,14 +51,13 @@ mf_prop_typo <- function(x, var,
                          leg_val_rnd = c(0),
                          leg_no_data = "No data",
                          leg_frame = c(FALSE, FALSE),
-                         add) {
+                         add = TRUE) {
   # default
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   bg <- .gmapsf$args$bg
   fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
-  if (missing(add)) add <- TRUE
 
   var2 <- var[2]
   var1 <- var[1]
@@ -70,7 +70,7 @@ mf_prop_typo <- function(x, var,
     val_order = val_order
   )
   # get color list and association
-  pal <- get_the_pal(pal = pal, nbreaks = length(val_order))
+  pal <- get_the_pal(pal = pal, nbreaks = length(val_order), alpha = alpha)
   # get color vector
   mycols <- get_col_typo(
     x = dots[[var2]], pal = pal,
@@ -95,9 +95,11 @@ mf_prop_typo <- function(x, var,
   )
 
   # size and values for legend, hollow circle (fixmax case)
-  sizeMax <- max(sizes)
-  if (inches <= sizeMax) {
-    inches <- sizeMax
+  size_max <- max(sizes)
+  val <- seq(sqrt(min(dots[[var1]])), sqrt(max(dots[[var1]])), length.out = 4)
+  val <- val * val
+  if (inches <= size_max) {
+    inches <- size_max
     borders <- border
   } else {
     mycols <- c(NA, mycols)
@@ -119,19 +121,18 @@ mf_prop_typo <- function(x, var,
     inches = inches
   )
 
+  leg_pos <- split_leg(leg_pos)
   # symbols size
-  val <- seq(sqrt(min(dots[[var1]])), sqrt(max(dots[[var1]])), length.out = 4)
-  val <- val * val
   mf_legend_p(
-    pos = leg_pos[1], val = val, title = leg_title[1],
-    symbol = symbol, inches = inches, col = "grey80",
+    pos = leg_pos[[1]], val = val, title = leg_title[1],
+    symbol = symbol, inches = size_max, col = "grey80",
     title_cex = leg_title_cex[1], val_cex = leg_val_cex[1],
     val_rnd = leg_val_rnd,
     frame = leg_frame[1], border = border, lwd = lwd, bg = bg, fg = fg
   )
 
   mf_legend_t(
-    pos = leg_pos[2], val = val_order, title = leg_title[2],
+    pos = leg_pos[[2]], val = val_order, title = leg_title[2],
     title_cex = leg_title_cex[2], val_cex = leg_val_cex[2],
     col_na = col_na, no_data = no_data, no_data_txt = leg_no_data,
     frame = leg_frame[2], pal = pal, bg = bg, fg = fg
