@@ -41,7 +41,7 @@ The main `mapsf` function is `mf_map()`.
 
 ``` r
 library(mapsf)
-#> Loading required package: sf
+#> Le chargement a nécessité le package : sf
 #> Linking to GEOS 3.7.1, GDAL 3.1.2, PROJ 7.1.0
 # Import the sample dataset
 mtq <- mf_get_mtq()
@@ -92,18 +92,29 @@ dev.off()
 ![](man/figures/mtq.png)
 
 Note that `mapsf` is, to a certain degree, compatible with the pipe
-syntax:
+syntax from either `magrittr` or `base`(&gt;= 4.1.0):
+
+``` r
+mf_theme("candy")
+mtq |>
+  mf_init(expandBB = c(0,0,0,.4)) |>
+  mf_map(add = TRUE) |>
+  mf_map(c("POP","STATUS"), "prop_typo")
+mf_title("Population and Status")
+```
+
+![](man/figures/README-example4-1.png)<!-- -->
 
 ``` r
 library(magrittr)
 mf_theme("agolalight")
 mtq %>% 
   mf_map() %>%
-  mf_map(c("POP","STATUS"), "prop_typo")
-mf_title()
+  mf_map(c("POP","MED"), "prop_choro")
+mf_title("Population and Wealth")
 ```
 
-![](man/figures/README-example4-1.png)<!-- -->
+![](man/figures/README-example5-1.png)<!-- -->
 
 ## Main features
 
@@ -112,6 +123,13 @@ in `mf_map(x, var, type)`. The **data** column displays the relevant
 data types for each map types.
 
 ![](man/figures/features.png)
+
+## Ressources
+
+-   [Website](https://riatelab.github.io/mapsf/)
+-   `mapsf`, a New Package for Thematic Mapping, useR 2021! -
+    [Video](https://youtu.be/8PMF7cBBH7k?t=2621) -
+    [Slides](https://rcarto.github.io/user2021/)
 
 ## Background
 
@@ -128,11 +146,11 @@ to migrate from `cartography` to `mapsf`.
 
 ## Alternatives
 
--   [cartography](https://github.com/riatelab/cartography)
--   [tmap](https://github.com/mtennekes/tmap)  
+-   [cartography](https://github.com/riatelab/cartography) (*superseded
+    by `mapsf`*)
+-   [tmap](https://github.com/r-tmap/tmap)  
 -   [ggplot2](https://github.com/tidyverse/ggplot2) +
-    [ggspatial](https://github.com/paleolimbot/ggspatial)  
--   [oceanis](https://github.com/insee-psar-at/oceanis-package)
+    [ggspatial](https://github.com/paleolimbot/ggspatial)
 
 ## Community Guidelines
 
