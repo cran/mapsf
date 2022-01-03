@@ -82,6 +82,33 @@ mf_map <- function(x, var, type = "base",
                    leg_val_cex, leg_val_rnd, leg_no_data,
                    leg_frame, add,
                    ...) {
+  # check args
+  if (!type %in% c(
+    "base", "prop", "choro", "typo", "symb", "grad",
+    "prop_choro", "prop_typo", "symb_choro"
+  )) {
+    stop(paste0(
+      '\'type\' should be one of "base", "prop", "choro", "typo", ',
+      '"symb", "grad", "prop_choro", "prop_typo" or "symb_choro".'
+    ),
+    call. = FALSE
+    )
+  }
+  if (!missing(var)) {
+    if (type == "base") {
+      message("Please use the 'type' argument to map variables.")
+    } else {
+      lv <- length(var)
+      lin <- var %in% names(x)
+      if (lv != length(lin[lin == TRUE])) {
+        stop(paste0("It is likely that 'var' is not a valid variable name."),
+          call. = FALSE
+        )
+      }
+    }
+  }
+
+
   argx <- as.list(match.call()[-1])
   argx <- argx[names(argx) != "type"]
 

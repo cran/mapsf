@@ -3,7 +3,12 @@
 #' @eval my_params("xfull")
 #' @param lon longitude
 #' @param lat latitude
-#' @param ... further parameters to pass to points (cex, pch, col...).
+#' @param water_col color of the water
+#' @param land_col color of the land
+#' @param border_col color of the borders
+#' @param border_lwd width of the borders
+#' @param ... further parameters related to the plotted point aspect
+#' (cex, pch, col...)
 #' @return No return value, a world map is displayed.
 #' @export
 #' @note The main part of the code is stolen from @fzenoni
@@ -12,7 +17,15 @@
 #' mtq <- mf_get_mtq()
 #' mf_worldmap(mtq)
 #' mf_worldmap(lon = 24, lat = 39)
-mf_worldmap <- function(x, lon, lat, ...) {
+#' mf_worldmap(
+#'   lon = 106, lat = 26,
+#'   pch = 4, lwd = 3, cex = 2, col = "tomato4",
+#'   water_col = "#232525", land_col = "#A9B7C6",
+#'   border_col = "white", border_lwd = 1
+#' )
+mf_worldmap <- function(x, lon, lat, water_col = "lightblue",
+                        land_col = "grey60", border_col = "grey40",
+                        border_lwd = .8, ...) {
   quiet <- function(x) {
     sink(tempfile())
     on.exit(sink(), add = TRUE)
@@ -38,13 +51,13 @@ mf_worldmap <- function(x, lon, lat, ...) {
         lat <- co[2]
       }
       plot(orthomap(lon, lat, disc = TRUE),
-        col = "lightblue",
-        border = "lightblue",
+        col = water_col,
+        border = water_col,
         bg = .gmapsf$args$bg
       )
       plot(orthomap(lon, lat, disc = FALSE),
         add = TRUE,
-        col = "grey60", border = "grey50", lwd = .8
+        col = land_col, border = border_col, lwd = border_lwd
       )
     })
   })

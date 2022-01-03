@@ -4,7 +4,16 @@
 \alias{mf_worldmap}
 \title{Plot a point on a world map}
 \usage{
-mf_worldmap(x, lon, lat, ...)
+mf_worldmap(
+  x,
+  lon,
+  lat,
+  water_col = "lightblue",
+  land_col = "grey60",
+  border_col = "grey40",
+  border_lwd = 0.8,
+  ...
+)
 }
 \arguments{
 \item{x}{object of class \code{sf} or \code{sfc}}
@@ -13,7 +22,16 @@ mf_worldmap(x, lon, lat, ...)
 
 \item{lat}{latitude}
 
-\item{...}{further parameters to pass to points (cex, pch, col...).}
+\item{water_col}{color of the water}
+
+\item{land_col}{color of the land}
+
+\item{border_col}{color of the borders}
+
+\item{border_lwd}{width of the borders}
+
+\item{...}{further parameters related to the plotted point aspect
+(cex, pch, col...)}
 }
 \value{
 No return value, a world map is displayed.
@@ -29,4 +47,10 @@ The main part of the code is stolen from @fzenoni
 mtq <- mf_get_mtq()
 mf_worldmap(mtq)
 mf_worldmap(lon = 24, lat = 39)
+mf_worldmap(
+  lon = 106, lat = 26,
+  pch = 4, lwd = 3, cex = 2, col = "tomato4",
+  water_col = "#232525", land_col = "#A9B7C6",
+  border_col = "white", border_lwd = 1
+)
 }
