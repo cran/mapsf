@@ -6,7 +6,7 @@
 #' for squares) in inches
 #' @param pos position of the legend, one of "topleft", "top",
 #' "topright", "right", "bottomright", "bottom", "bottomleft",
-#' "left" or a vector of two coordinates in map units
+#' "left", "interactive" or a vector of two coordinates in map units
 #' (c(x, y)).
 #' @param val vector of values (at least min and max).
 #' @param title title of the legend
@@ -21,6 +21,8 @@
 #' @param col color of the symbols
 #' @param bg background of the legend
 #' @param fg foreground of the legend
+#' @param self_adjust if TRUE values are self-adjusted to keep min, max and
+#' intermediate rounded values
 #' @keywords internal
 #' @export
 #' @return No return value, a legend is displayed.
@@ -43,20 +45,13 @@ mf_legend_p <- function(pos = "left",
                         frame = FALSE,
                         bg,
                         fg,
-                        cex = 1) {
+                        cex = 1,
+                        self_adjust = FALSE) {
   op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
   on.exit(par(op))
   # stop if the position is not valid
-  positions <- c(
-    "bottomleft", "left", "topleft", "top", "bottom",
-    "bottomright", "right", "topright",
-    "bottomleft1", "bottomright1", "bottom1",
-    "bottomleft2", "bottomright2", "bottom2",
-    "topright1", "topleft1", "top1",
-    "topright2", "topleft2", "top2"
-  )
   if (length(pos) == 1) {
-    if (!pos %in% positions) {
+    if (!pos %in% .gmapsf$positions) {
       return(invisible())
     }
   }
@@ -68,8 +63,14 @@ mf_legend_p <- function(pos = "left",
   if (missing(fg)) fg <- .gmapsf$args$fg
   if (missing(border)) border <- fg
 
-
+  if (self_adjust == TRUE) {
+    val <- self_adjust(val, inches, val_cex)
+  }
   val <- sort(val, decreasing = TRUE)
+
+
+
+
   valleg <- get_val_rnd(val = val, val_rnd = val_rnd)
   xy_leg <- NULL
 

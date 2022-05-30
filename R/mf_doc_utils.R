@@ -21,15 +21,17 @@ my_params <- function(x) {
       "'topright', 'right', 'bottomright', 'bottom', ",
       "'bottomleft', 'left' or a vector of two coordinates ",
       "in map units (c(x, y)). If leg_pos = NA then the ",
-      "legend is not plotted."
+      "legend is not plotted. If leg_pos = 'interactive' click on",
+      "the map to choose the legend position."
     ),
     leg_pos2 = paste0(
       "leg_pos position of the legend, two of 'topleft', 'top','topright', 'right', ",
-      "'bottomright', 'bottom', 'bottomleft', 'left' or vector of two ",
+      "'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two ",
       "coordinates in map units (c(x, y)). leg_pos argument can be ",
       "c('position', 'position'), c('position', x2, y2), ",
       "c(x1,y1, 'position') or c(x1, y1, x2, y2). ",
-      "If leg_pos = NA then the legend is not plotted."
+      "Use NA to avoid plotting the legend, use 'interactive' to choose the",
+      "legend position interactively."
     ),
     leg_title = "leg_title legend title",
     leg_title_cex = "leg_title_cex size of the legend title",
@@ -48,15 +50,15 @@ my_params <- function(x) {
       "the alpha-transparency level in the range [0,1]"
     ),
     col_na = "col_na color for missing values",
-    cex_na = "cex_na cex for NA values",
-    pch_na = "pch_na pch for NA values",
+    cex_na = "cex_na cex (point size) for NA values",
+    pch_na = "pch_na pch (point type) for NA values",
     val_max = "val_max maximum value used for proportional symbols",
     breaks = "breaks either a numeric vector with the actual breaks, or a classification method name (see \\link{mf_get_breaks})",
     nbreaks = "nbreaks number of classes",
     pos = paste0(
       "pos position. It can be one of 'topleft', 'top',",
       "'topright', 'right', 'bottomright', 'bottom',",
-      "'bottomleft', 'left' or a vector of two coordinates ",
+      "'bottomleft', 'left', 'interactive' or a vector of two coordinates ",
       "in map units (c(x, y))"
     ),
     title = "title legend title",
@@ -66,7 +68,9 @@ my_params <- function(x) {
     frame = "frame whether to add a frame to the legend (TRUE) or not (FALSE)",
     no_data_txt = "no_data_txt label for missing values",
     no_data = "no_data if TRUE a 'missing values' box is plotted",
-    cex = "cex size of the legend; 2 means two times bigger"
+    cex = "cex size of the legend; 2 means two times bigger",
+    cexs = "cex cex (point size) for symbols",
+    pch = "pch pch (point type) for symbols"
   )
 
 

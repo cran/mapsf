@@ -31,7 +31,6 @@
 #' "nbreaks",
 #' "border",
 #' "lwd",
-#' "bg",
 #' "col",
 #' "lwd_max",
 #' "col_na",
@@ -51,8 +50,8 @@
 #' 'val_order'))
 #' @param type one of "base", "prop", "choro", "typo", "symb", "grad",
 #' "prop_choro", "prop_typo", "symb_choro"
-#' @param cex cex for symbols
-#' @param pch pch for symbols
+#' @param cex cex (point size) for symbols
+#' @param pch pch (point type) for symbols
 #' @param ... further parameters from \link{plot} for sfc objects
 #' @export
 #' @return x is (invisibly) returned.
@@ -76,7 +75,7 @@ mf_map <- function(x, var, type = "base",
                    breaks, nbreaks, pal, alpha = 1,
                    inches, val_max, symbol, col,
                    lwd_max, val_order, pch, cex,
-                   border, lwd, bg,
+                   border, lwd,
                    col_na, cex_na, pch_na,
                    leg_pos, leg_title, leg_title_cex,
                    leg_val_cex, leg_val_rnd, leg_no_data,

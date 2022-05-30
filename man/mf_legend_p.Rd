@@ -19,13 +19,14 @@ mf_legend_p(
   frame = FALSE,
   bg,
   fg,
-  cex = 1
+  cex = 1,
+  self_adjust = FALSE
 )
 }
 \arguments{
 \item{pos}{position of the legend, one of "topleft", "top",
 "topright", "right", "bottomright", "bottom", "bottomleft",
-"left" or a vector of two coordinates in map units
+"left", "interactive" or a vector of two coordinates in map units
 (c(x, y)).}
 
 \item{val}{vector of values (at least min and max).}
@@ -57,6 +58,9 @@ the legend.}
 \item{fg}{foreground of the legend}
 
 \item{cex}{size of the legend; 2 means two times bigger}
+
+\item{self_adjust}{if TRUE values are self-adjusted to keep min, max and
+intermediate rounded values}
 }
 \value{
 No return value, a legend is displayed.

@@ -35,7 +35,6 @@ get_pos_leg <- function(pos, xy_rect, inset, xy_title, frame = FALSE) {
   if (frame) {
     pu <- pu + c(inset2, -inset2, inset2, -inset2)
   }
-
   lpos <- nchar(pos)
   ex_line <- substr(pos, lpos, lpos)
   extra <- 0
@@ -76,13 +75,25 @@ get_pos_leg <- function(pos, xy_rect, inset, xy_title, frame = FALSE) {
     topright = c(
       pu[2] - xy_rect[3] - xy_rect[1] - inset2,
       pu[4] - inset2 - 3 * extra
-    )
+    ),
+    interactive = interleg()
   )
 
   return(unname(xy))
 }
 
-
+interleg <- function(txt = c("legend", "Legend")) {
+  if (interactive()) {
+    message(paste0("Click on the map to choose the ", txt[1], " position."))
+    x <- unlist(locator(1))
+    message(paste0(txt[2], " coordinates:\nc(", x[[1]], ", ", x[[2]], ")"))
+    return(x)
+  } else {
+    stop('You cannot use "interactive" in a non-interactive R session.',
+      call. = FALSE
+    )
+  }
+}
 
 
 

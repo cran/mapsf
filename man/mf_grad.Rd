@@ -36,13 +36,13 @@ mf_grad(
 
 \item{border}{border color}
 
-\item{pch}{pch for symbols}
+\item{pch}{pch (point type) for symbols}
 
-\item{cex}{cex for symbols}
+\item{cex}{cex (point size) for symbols}
 
 \item{lwd}{border width}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
 
 \item{leg_title}{legend title}
 

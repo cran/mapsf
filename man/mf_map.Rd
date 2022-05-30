@@ -22,7 +22,6 @@ mf_map(
   cex,
   border,
   lwd,
-  bg,
   col_na,
   cex_na,
   pch_na,
@@ -65,23 +64,21 @@ mf_map(
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
-\item{pch}{pch for symbols}
+\item{pch}{pch (point type) for symbols}
 
-\item{cex}{cex for symbols}
+\item{cex}{cex (point size) for symbols}
 
 \item{border}{border color}
 
 \item{lwd}{border width}
 
-\item{bg}{background color}
-
 \item{col_na}{color for missing values}
 
-\item{cex_na}{cex for NA values}
+\item{cex_na}{cex (point size) for NA values}
 
-\item{pch_na}{pch for NA values}
+\item{pch_na}{pch (point type) for NA values}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
 
 \item{leg_title}{legend title}
 
