@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![CRAN](https://www.r-pkg.org/badges/version/mapsf)](https://cran.r-project.org/package=mapsf)
-[![R-CMD-check](https://github.com/riatelab/mapsf/workflows/R-CMD-check/badge.svg)](https://github.com/riatelab/mapsf/actions)
+[![CRAN](https://www.r-pkg.org/badges/version-ago/mapsf)](https://cran.r-project.org/package=mapsf)
+[![R-CMD-check](https://github.com/riatelab/mapsf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/riatelab/mapsf/actions/workflows/R-CMD-check.yaml)
 [![downloads](https://cranlogs.r-pkg.org/badges/mapsf?color=brightgreen)](https://cran.r-project.org/package=mapsf)
 [![codecov](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg?token=TPK6HZOLWH)](https://app.codecov.io/gh/riatelab/mapsf)
 [![status](https://tinyverse.netlify.com/badge/mapsf)](https://CRAN.R-project.org/package=mapsf)
@@ -52,8 +52,10 @@ mf_map(x = mtq)
 # Plot proportional symbols
 mf_map(x = mtq, var = "POP", type = "prop")
 # Plot a map layout
-mf_layout(title = "Population in Martinique", 
-          credits = "T. Giraud; Sources: INSEE & IGN, 2018")
+mf_layout(
+  title = "Population in Martinique",
+  credits = "T. Giraud; Sources: INSEE & IGN, 2018"
+)
 ```
 
 ![](man/figures/example1-1.png)<!-- -->
@@ -61,21 +63,25 @@ mf_layout(title = "Population in Martinique",
 A more detailed example:
 
 ``` r
-# Export a map with a theme and extra margins 
-mf_export(x = mtq, filename = "mtq.png",  
-          width = 600, res = 120, 
-          theme = "green", 
-          expandBB = c(0,0,0,.3)) 
+# Export a map with a theme and extra margins
+mf_export(
+  x = mtq, filename = "mtq.png",
+  width = 600, res = 120,
+  theme = "green",
+  expandBB = c(0, 0, 0, .3)
+)
 # Plot a shadow
 mf_shadow(mtq, col = "grey10", add = TRUE)
 # Plot a choropleth map
-mf_map(x = mtq, var = "MED", type = "choro",
-       pal = "Dark Mint", 
-       breaks = "quantile", 
-       nbreaks = 6, 
-       leg_title = "Median Income\n(euros)", 
-       leg_val_rnd = -2, 
-       add = TRUE)
+mf_map(
+  x = mtq, var = "MED", type = "choro",
+  pal = "Dark Mint",
+  breaks = "quantile",
+  nbreaks = 6,
+  leg_title = "Median Income\n(euros)",
+  leg_val_rnd = -2,
+  add = TRUE
+)
 # Start an inset map
 mf_inset_on(x = "worldmap", pos = "right")
 # Plot mtq position on a worldmap
@@ -89,7 +95,7 @@ mf_credits("T. Giraud\nSources: INSEE & IGN, 2018")
 # Plot a scale bar
 mf_scale(size = 5)
 # Plot a north arrow
-mf_arrow('topleft')
+mf_arrow("topleft")
 dev.off()
 ```
 
@@ -125,13 +131,13 @@ Sheet</a>
 </tbody>
 </table>
 
--   `mapsf`, a New Package for Thematic Mapping - useR 2021!
-    [Video](https://youtu.be/8PMF7cBBH7k?t=2621) &
-    [Slides](https://rcarto.github.io/user2021/) - FOSS4G 2021
-    [Video](https://www.youtube.com/watch?v=dBNp0bzD454) &
-    [Slides](https://rcarto.github.io/foss4g2021/) (EN)  
--   Créer des cartes reproductibles avec `mapsf` - Les lundis de
-    l’Ined - [Slides](https://rcarto.github.io/ined2021/) (FR)
+- `mapsf`, a New Package for Thematic Mapping - useR 2021!
+  [Video](https://youtu.be/8PMF7cBBH7k?t=2621) &
+  [Slides](https://rcarto.github.io/user2021/) - FOSS4G 2021
+  [Video](https://www.youtube.com/watch?v=dBNp0bzD454) &
+  [Slides](https://rcarto.github.io/foss4g2021/) (EN)  
+- Créer des cartes reproductibles avec `mapsf` - Les lundis de l’Ined -
+  [Slides](https://rcarto.github.io/ined2021/) (FR)
 
 ## Background
 
@@ -148,11 +154,11 @@ to migrate from `cartography` to `mapsf`.
 
 ## Alternatives
 
--   [cartography](https://github.com/riatelab/cartography) (*superseded
-    by `mapsf`*)
--   [tmap](https://github.com/r-tmap/tmap)  
--   [ggplot2](https://github.com/tidyverse/ggplot2) +
-    [ggspatial](https://github.com/paleolimbot/ggspatial)
+- [cartography](https://github.com/riatelab/cartography) (*superseded by
+  `mapsf`*)
+- [tmap](https://github.com/r-tmap/tmap)  
+- [ggplot2](https://github.com/tidyverse/ggplot2) +
+  [ggspatial](https://github.com/paleolimbot/ggspatial)
 
 ## Community Guidelines
 

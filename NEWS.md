@@ -1,3 +1,34 @@
+# mapsf 0.6.1
+
+
+## Fix
+- add explicit support for sfg objects in mf_base(), mf_map(..., type = "base")
+
+
+# mapsf 0.6.0
+
+
+## Fix
+- use val_max in mf_prop() for LINES
+- add message when mf_export() is based on longlat obj
+- add a test for "x" class in mf_map() 
+- enable proportional symbol plots for single points  when using "prop", "prop_typo" & "prop_choro" maps; see #45
+- fix a bug in color assignment when there is a mismatch between the number of classes and the size of the color palette
+- add an error for method "geom" in mf_get_breaks() when min(x) <= 0
+- remove Inf values from x when using mf_get_breaks()
+- remove Inf values from x when using "prop", "prop_typo" & "prop_choro" maps
+- add informative message when NA, 0 & Inf values are removed when using "prop", "prop_typo" & "prop_choro" maps
+- add informative message when negative values are transformed to positive values when using "prop", "prop_typo" & "prop_choro" maps
+
+## Feat
+- add "prop_typo"" maps for LINES objects 
+- add mf_get_ratio() to get appropriate values for map width & height
+
+
+
+
+
+
 # mapsf 0.5.0
 
 ## Fix

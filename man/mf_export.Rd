@@ -17,7 +17,7 @@ mf_export(
 )
 }
 \arguments{
-\item{x}{object of class \code{sf}, \code{sfc} or \code{Raster}}
+\item{x}{object of class \code{sf}, \code{sfc} or \code{SpatRaster}}
 
 \item{filename}{path to the exported file. If the file extention is ".png" a
 png graphic device is opened, if the file extension is ".svg" a svg graphic
@@ -39,14 +39,17 @@ direction (bottom, left, top, right)}
 \item{export}{deprecated}
 }
 \value{
-No return value, a map is initiated.
+No return value, a map file is initiated (in PNG or SVG format).
 }
 \description{
-Export a map with the extent of a spatial object.
-The map is exported in PNG or SVG format. If
-only one of \code{width} or \code{height} is set, \code{mf_export} uses the
-width/height ratio of \code{x} bounding box to find a matching ratio for
-the export.
+Export a map with the extent of a spatial object.\cr
+The map is exported in PNG or SVG format.\cr
+If only one of \code{width} or \code{height} is set, \code{mf_export} uses
+the width/height ratio of \code{x} bounding box to find a matching ratio for
+the export.\cr
+Always use \code{add = TRUE} in \code{mf_map} calls following an
+\code{mf_export} call.\cr
+Use \code{dev.off} to finish the export (see Examples).
 }
 \examples{
 mtq <- mf_get_mtq()

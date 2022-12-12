@@ -22,7 +22,15 @@ library(mapsf)
 # line <- rmapshaper::ms_simplify(line, keep = 0.01)
 #
 # save(list=c("point", "poly", "line"), file = "dt.RData")
-load('dt.RData')
+load('vignettes/dt.RData')
+
+library(mapsf)
+mf_export(poly,filename = "vignettes/fig/th_default.svg", width = 4, theme = "default")
+mf_shadow(poly, add = T)
+mf_map(poly, add = T)
+mf_title("default")
+dev.off()
+
 
 custom <- list(
   name = "custom",
@@ -37,6 +45,12 @@ custom <- list(
   font = 3
 )
 mf_theme(custom)
+
+svg("fig/point.svg", width = 1, height = 1, bg = NA)
+mf_init(poly)
+mf_map(point,  pch = 4, col = "black",lwd = 2, cex = 1, add = T)
+dev.off()
+
 
 # Base map
 svg("fig/point.svg", width = 1, height = 1, bg = NA)
@@ -138,7 +152,14 @@ mf_init(poly)
 mf_prop_typo(poly, var = c("POP", "STATUS"), inches = .1, leg_pos = NA)
 dev.off()
 
+dev.off()
+svg("vignettes/fig/line_pt.svg", width = 1, height = 1, bg = NA)
+mf_init(poly)
+line$cat = c("A", "A", "A", "B", "B")
+mf_prop_typo(x = line, var = c("dd", "cat"), lwd_max = 5, leg_pos = c(NA, NA))
+dev.off()
 
+getwd()
 
 # symb choro
 svg("fig/point_sc.svg", width = 1, height = 1, bg = NA)

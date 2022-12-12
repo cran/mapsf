@@ -1,7 +1,8 @@
 #' @title Get class intervals
 #' @name mf_get_breaks
 #' @description A function to classify continuous variables.
-#' @param x a vector of numeric values
+#' @param x a vector of numeric values. NA and Inf values are not used in the
+#' classification.
 #' @param nbreaks a number of classes
 #' @param breaks a classification method; one of "fixed", "sd", "equal",
 #' "pretty", "quantile",
@@ -23,7 +24,7 @@
 #' The "q6" method uses the following \code{\link[stats:quantile]{quantile}}
 #' probabilities: 0, 0.05, 0.275, 0.5, 0.725, 0.95, 1.\cr\cr
 #' The "geom" method is based on a geometric progression along
-#' the variable values.\cr\cr
+#' the variable values, all values must be strictly greater than zero.\cr\cr
 #' The "arith" method is based on an arithmetic progression along
 #' the variable values.\cr\cr
 #' The "em" method is based on nested averages computation.\cr\cr
@@ -49,6 +50,7 @@ mf_get_breaks <- function(x, nbreaks, breaks, k = 1, central = FALSE, ...) {
   }
 
   x <- as.vector(na.omit(x))
+  x <- x[is.finite(x)]
   customMethods <- c("geom", "arith", "q6", "em", "msd")
 
   # default number of classes
@@ -65,6 +67,15 @@ mf_get_breaks <- function(x, nbreaks, breaks, k = 1, central = FALSE, ...) {
   } else {
     if (breaks == "geom") {
       intervals <- min(x)
+      if (intervals <= 0) {
+        stop(
+          paste0(
+            "All values must be strictly greater ",
+            "than 0 when using the 'geom' method."
+          ),
+          call. = FALSE
+        )
+      }
       intervals <- c(intervals, max(x))
       r <- exp((log(max(x)) - log(min(x))) / nbreaks) # raison
       tmp <- min(x)

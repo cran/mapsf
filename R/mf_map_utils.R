@@ -13,7 +13,7 @@ get_the_pal <- function(pal, nbreaks, alpha = 1) {
       cols <- rep(pal, nbreaks)
     }
   } else {
-    cols <- pal
+    cols <- pal[1:nbreaks]
   }
   return(cols)
 }
@@ -45,11 +45,50 @@ create_dots <- function(x = x, var = var) {
     )),
     x
   )
+  lx <- nrow(x)
   # remove NAs and 0 values
   x <- x[!is.na(x = x[[var]]), ]
+  lxna <- nrow(x)
   x <- x[x[[var]] != 0, ]
+  lx0 <- nrow(x)
+
+  x <- x[is.finite(x[[var]]), ]
+  lxinf <- nrow(x)
+
+
+  nna <- lx - lxna
+  nn0 <- lx - nna - lx0
+  nnI <- lx - nna - nn0 - lxinf
+
+  if (nna > 0) {
+    if (nna == 1) {
+      message("1 'NA' value is not plotted on the map.")
+    } else {
+      message(paste0(nna, " 'NA' values are not plotted on the map."))
+    }
+  }
+  if (nn0 > 0) {
+    if (nn0 == 1) {
+      message("1 '0' value is not plotted on the map.")
+    } else {
+      message(paste0(nn0, " '0' values are not plotted on the map."))
+    }
+  }
+
+  if (nnI > 0) {
+    if (nnI == 1) {
+      message("1 'Infinite' value is not plotted on the map.")
+    } else {
+      message(paste0(nnI, " 'Infinite' values are not plotted on the map."))
+    }
+  }
+
   # turn to positive values
-  x[[var]] <- abs(x[[var]])
+  if (min(x[[var]]) < 0) {
+    message("Negative values have been transformed into positive values.")
+    x[[var]] <- abs(x[[var]])
+  }
+
   # Order the dots
   x <- x[order(x[[var]], decreasing = TRUE), ]
   return(x)
@@ -88,10 +127,16 @@ get_size <- function(var, inches, val_max, symbol) {
 
 # Plot symbols
 plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
+  if (inherits(dots, c("sf", "sfc"))) {
+    XY <- sf::st_set_geometry(dots[, 1:2], NULL)
+  } else {
+    XY <- dots
+  }
   switch(symbol,
     circle = {
       symbols(
-        x = dots[, 1:2, drop = TRUE],
+        x = XY[, 1],
+        y = XY[, 2],
         circles = sizes,
         bg = mycols,
         fg = border,
@@ -103,7 +148,8 @@ plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
     },
     square = {
       symbols(
-        x = dots[, 1:2, drop = TRUE],
+        x = XY[, 1],
+        y = XY[, 2],
         squares = sizes,
         bg = mycols,
         fg = border,
@@ -117,29 +163,9 @@ plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
 }
 
 
-#' @name check_order
-#' @title checkOrder
-#' @description check if col order match legend.values.order
-#' @param val_order val_order
-#' @param mod vector of modalities
-#' @return  a vector of legend.values.order.
-#' @noRd
-check_order <- function(val_order, mod) {
-  if (!missing(val_order)) {
-    m <- match(mod, val_order)
-    m <- m[!is.na(m)]
 
-    if (length(m) != length(mod) | length(mod) != length(val_order)) {
-      stop(
-        paste(
-          "'val_order' modalities must fit the modalities of 'var' (",
-          paste(mod, collapse = ","), ").",
-          sep = ""
-        ),
-        call. = FALSE
-      )
-    }
-  } else {
+check_order <- function(val_order, mod) {
+  if (missing(val_order)) {
     val_order <- sort(mod)
   }
   return(val_order)
@@ -203,15 +229,24 @@ split_leg <- function(x) {
 
 get_geom_type <- function(x) {
   a <- list(
-    other = "GEOMETRY", POINT = "POINT", LINE = "LINESTRING",
-    POLYGON = "POLYGON",
+    POINT = "POINT",
     POINT = "MULTIPOINT",
-    LINE = "MULTILINESTRING", POLYGON = "MULTIPOLYGON",
-    other = "GEOMETRYCOLLECTION", other = "CIRCULARSTRING",
-    other = "COMPOUNDCURVE", other = "CURVEPOLYGON",
-    other = "MULTICURVE", other = "MULTISURFACE",
-    other = "CURVE", other = "SURFACE", other = "POLYHEDRALSURFACE",
-    other = "TIN", other = "TRIANGLE"
+    LINE = "LINESTRING",
+    LINE = "MULTILINESTRING",
+    POLYGON = "POLYGON",
+    POLYGON = "MULTIPOLYGON",
+    other = "GEOMETRY",
+    other = "GEOMETRYCOLLECTION",
+    other = "CIRCULARSTRING",
+    other = "COMPOUNDCURVE",
+    other = "CURVEPOLYGON",
+    other = "MULTICURVE",
+    other = "MULTISURFACE",
+    other = "CURVE",
+    other = "SURFACE",
+    other = "POLYHEDRALSURFACE",
+    other = "TIN",
+    other = "TRIANGLE"
   )
   type <- st_geometry_type(x)
   levels(type) <- a

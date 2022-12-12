@@ -1,11 +1,14 @@
 #' @title Export a map
 #' @name mf_export
-#' @description Export a map with the extent of a spatial object.
-#' The map is exported in PNG or SVG format. If
-#' only one of \code{width} or \code{height} is set, \code{mf_export} uses the
-#' width/height ratio of \code{x} bounding box to find a matching ratio for
-#' the export.
-#' @param x object of class \code{sf}, \code{sfc} or \code{Raster}
+#' @description Export a map with the extent of a spatial object.\cr
+#' The map is exported in PNG or SVG format.\cr
+#' If only one of \code{width} or \code{height} is set, \code{mf_export} uses
+#' the width/height ratio of \code{x} bounding box to find a matching ratio for
+#' the export.\cr
+#' Always use \code{add = TRUE} in \code{mf_map} calls following an
+#' \code{mf_export} call.\cr
+#' Use \code{dev.off} to finish the export (see Examples).
+#' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
 #' @param theme apply a theme
@@ -20,8 +23,8 @@
 #' @export
 #' @importFrom grDevices png svg
 #' @importFrom methods is
-#' @importFrom sf st_bbox st_as_sfc st_geometry
-#' @return No return value, a map is initiated.
+#' @importFrom sf st_bbox st_as_sfc st_geometry st_is_longlat st_crs
+#' @return No return value, a map file is initiated (in PNG or SVG format).
 #' @examples
 #' mtq <- mf_get_mtq()
 #' (filename <- tempfile(fileext = ".png"))
@@ -74,6 +77,14 @@ mf_export <- function(x,
       expandBB = c(rep(-.04, 4)) + expandBB, theme = theme, ...
     )
     return(invisible(x))
+  }
+
+  if (isTRUE(st_is_longlat(st_crs(x)))) {
+    message(paste0(
+      "Exports using unprojected objects may produce figures ",
+      "with inaccurate height/width ratio. ",
+      "You may want to check 'x' CRS. "
+    ))
   }
 
   # transform to bbox
