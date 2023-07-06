@@ -24,7 +24,13 @@
 #' 'leg_val_rnd',
 #' 'leg_no_data',
 #' 'leg_frame'))
-#' @importFrom methods is
+#' @details
+#' Breaks defined by a numeric vector or a classification method are
+#' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' The "jenks" method is an exception and has to be right-closed.
+#' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 #' @importFrom graphics box
 #' @keywords internal
 #' @export
@@ -69,10 +75,10 @@ mf_symb_choro <- function(x, var,
                           leg_frame = c(FALSE, FALSE),
                           add = TRUE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
   xout <- x
   var2 <- var[2]
@@ -82,13 +88,18 @@ mf_symb_choro <- function(x, var,
   st_geometry(x) <- st_centroid(st_geometry(x), of_largest_polygon = TRUE)
 
   ################### COLORS ##########################
+  # jenks
+  jen <- FALSE
+  if (any(breaks %in% "jenks")) {
+    jen <- TRUE
+  }
   # get the breaks
   breaks <- mf_get_breaks(x = x[[var2]], nbreaks = nbreaks, breaks = breaks)
   nbreaks <- length(breaks) - 1
   # get the cols
   pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
-  mycols <- get_col_vec(x = x[[var2]], breaks = breaks, pal = pal)
+  mycols <- get_col_vec(x = x[[var2]], breaks = breaks, pal = pal, jen = jen)
 
   no_data <- c(FALSE, FALSE)
   if (max(is.na(mycols)) == 1) {
@@ -105,7 +116,7 @@ mf_symb_choro <- function(x, var,
 
   if (missing(pch)) {
     pchs <- c(0:25, 32:127)
-    pch <- pchs[1:length(val_order)]
+    pch <- pchs[seq_along(val_order)]
   }
 
   if (length(cex) != length(val_order)) {
@@ -150,7 +161,6 @@ mf_symb_choro <- function(x, var,
     lwd = lwd, add = add
   )
 
-  # box(col = bg)
   leg_pos <- split_leg(leg_pos)
   mf_legend_c(
     pos = leg_pos[[2]], val = breaks, title = leg_title[2],

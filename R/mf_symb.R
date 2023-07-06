@@ -21,7 +21,6 @@
 #' 'leg_val_rnd',
 #' 'leg_no_data',
 #' 'leg_frame'))
-#' @importFrom methods is
 #' @importFrom graphics box
 #' @keywords internal
 #' @export
@@ -59,10 +58,10 @@ mf_symb <- function(x, var,
                     leg_frame = FALSE,
                     add = TRUE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
   xout <- x
   # Transform to point
@@ -84,7 +83,7 @@ mf_symb <- function(x, var,
 
   if (missing(pch)) {
     pchs <- c(0:25, 32:127)
-    pch <- pchs[1:length(val_order)]
+    pch <- pchs[seq_along(val_order)]
   }
   if (length(pch) != length(val_order)) {
     message(paste0(
@@ -147,7 +146,8 @@ mf_symb <- function(x, var,
   )
 
   mf_legend_s(
-    pos = leg_pos, val = val_order, title = leg_title, title_cex = leg_title_cex,
+    pos = leg_pos, val = val_order, title = leg_title,
+    title_cex = leg_title_cex,
     val_cex = leg_val_cex, col_na = col_na, no_data = no_data,
     no_data_txt = leg_no_data,
     frame = leg_frame, border = border, pal = pal, lwd = lwd,

@@ -13,26 +13,23 @@
 #' mf_map(mtq)
 #' mf_arrow(pos = "topright")
 mf_arrow <- function(pos = "topleft", col, adjust) {
+  test_cur_plot()
   if (missing(col)) {
-    col <- .gmapsf$args$fg
+    col <- getOption("mapsf.fg")
   }
-
-  # why commented, test?
-  # op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
-  # on.exit(par(op))
 
   azim <- "N"
   theta <- 0
-  mapExtent <- par("usr")
+  map_extent <- par("usr")
 
-  xe <- mapExtent[1:2]
-  ye <- mapExtent[3:4]
+  xe <- map_extent[1:2]
+  ye <- map_extent[3:4]
   inset <- strwidth("M", units = "user", cex = 1)
 
 
 
 
-  if (is.numeric(pos) & length(pos) == 2) {
+  if (is.numeric(pos) && length(pos) == 2) {
     xarrow <- pos[1]
     yarrow <- pos[2]
   } else {
@@ -76,7 +73,6 @@ mf_arrow <- function(pos = "topleft", col, adjust) {
       }
     )
   }
-  # points(xarrow, yarrow, pch = 4, col = "red", cex = 2)
   xx <- c(xarrow, xarrow + inset / 2, xarrow + inset)
   yy <- c(yarrow, yarrow + inset * 1, yarrow)
 

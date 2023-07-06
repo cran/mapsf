@@ -13,7 +13,6 @@
 #' @param pch pch type of pch if x is a POINT layer
 #' @param pch_na pch for NA values if x is a POINT layer
 #' @param cex_na cex for NA values if x is a POINT layer
-#' @importFrom methods is
 #' @keywords internal
 #' @export
 #' @return No return value, a map is displayed.
@@ -50,10 +49,10 @@ mf_typo <- function(x,
                     leg_frame = FALSE,
                     add = FALSE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
 
   # get modalities

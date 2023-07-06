@@ -78,7 +78,7 @@ self_adjust <- function(var, inches, val_cex) {
   v <- sort(unique(v))
 
   # circle sizes in map units for candidate values
-  si <- xinch(get_size(
+  si <- yinch(get_size(
     var = v, inches = inches,
     val_max = max(val), symbol = "circle"
   ))
@@ -121,7 +121,8 @@ self_adjust <- function(var, inches, val_cex) {
     a[1] <- TRUE
   }
 
-  # if min value not selected, remove min selected value and replace with min value
+  # if min value not selected, remove min selected value and replace
+  # with min value
   if (a[1] == FALSE) {
     a[which(a)[1]] <- FALSE
     a[1] <- TRUE

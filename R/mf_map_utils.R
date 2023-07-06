@@ -19,9 +19,12 @@ get_the_pal <- function(pal, nbreaks, alpha = 1) {
 }
 
 
-get_col_vec <- function(x, breaks, pal) {
-  itv <- findInterval(x, breaks, all.inside = FALSE, rightmost.closed = TRUE)
-  itv[itv == 0] <- length(breaks)
+get_col_vec <- function(x, breaks, pal, jen = FALSE) {
+  if (jen) {
+    itv <- apply(array(apply(outer(x, breaks, ">"), 1, sum)), 1, max, 1)
+  } else {
+    itv <- findInterval(x, breaks, all.inside = FALSE, rightmost.closed = TRUE)
+  }
   colvec <- pal[itv]
   return(colvec)
 }
@@ -58,7 +61,7 @@ create_dots <- function(x = x, var = var) {
 
   nna <- lx - lxna
   nn0 <- lx - nna - lx0
-  nnI <- lx - nna - nn0 - lxinf
+  nni <- lx - nna - nn0 - lxinf
 
   if (nna > 0) {
     if (nna == 1) {
@@ -75,11 +78,11 @@ create_dots <- function(x = x, var = var) {
     }
   }
 
-  if (nnI > 0) {
-    if (nnI == 1) {
+  if (nni > 0) {
+    if (nni == 1) {
       message("1 'Infinite' value is not plotted on the map.")
     } else {
-      message(paste0(nnI, " 'Infinite' values are not plotted on the map."))
+      message(paste0(nni, " 'Infinite' values are not plotted on the map."))
     }
   }
 
@@ -128,15 +131,15 @@ get_size <- function(var, inches, val_max, symbol) {
 # Plot symbols
 plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
   if (inherits(dots, c("sf", "sfc"))) {
-    XY <- sf::st_set_geometry(dots[, 1:2], NULL)
+    xy <- sf::st_set_geometry(dots[, 1:2], NULL)
   } else {
-    XY <- dots
+    xy <- dots
   }
   switch(symbol,
     circle = {
       symbols(
-        x = XY[, 1],
-        y = XY[, 2],
+        x = xy[, 1],
+        y = xy[, 2],
         circles = sizes,
         bg = mycols,
         fg = border,
@@ -148,8 +151,8 @@ plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
     },
     square = {
       symbols(
-        x = XY[, 1],
-        y = XY[, 2],
+        x = xy[, 1],
+        y = xy[, 2],
         squares = sizes,
         bg = mycols,
         fg = border,
@@ -187,6 +190,7 @@ get_col_typo <- function(x, pal, val_order) {
     stringsAsFactors = FALSE
   )
   mycols <- refcol[match(x, refcol[, 1]), 2]
+  mycols
 }
 
 get_sym_typo <- function(x, pch, val_order) {
@@ -197,6 +201,7 @@ get_sym_typo <- function(x, pch, val_order) {
     stringsAsFactors = FALSE
   )
   mysym <- refsym[match(x, refsym[, 1]), 2]
+  mysym
 }
 
 
@@ -210,7 +215,7 @@ split_leg <- function(x) {
   }
   if (llp == 3) {
     tt <- tryCatch(as.numeric(x[1]), warning = function(w) w)
-    if (methods::is(tt, "warning")) {
+    if (inherits(tt, "warning")) {
       lp1 <- x[1]
       lp2 <- as.numeric(x[2:3])
     } else {
@@ -258,3 +263,33 @@ get_geom_type <- function(x) {
   }
   return(type)
 }
+
+
+# arg checking depending on type
+check_args <- function(argx, type){
+  n_rel <- !names(argx) %in% names(formals(get(paste0("mf_", type))))
+  s_n_rel <- sum(n_rel)
+  if (s_n_rel >= 1) {
+    mes <- "The following arguments are not relevant when using type = '"
+    if (s_n_rel == 1) {
+      mes <- "The following argument is not relevant when using type = '"
+    }
+    message(paste0(mes, type, "': ",
+                   paste0(names(argx[n_rel]), collapse = ", "),
+                   "."))
+    argx <- argx[!n_rel]
+  }
+  argx
+}
+
+
+
+# proj_lonlat <- function(x){
+#   if (!st_is_longlat(x)){
+#     return(x)
+#   }
+#   lat_ts = mean(sf::st_bbox(x)[c(2,4)]) # latitude of true scale
+#   x = st_transform(x, paste0("+proj=eqc +lat_ts=", lat_ts))
+#   message('"x" has been reprojected on the fly.')
+#   return(x)
+# }

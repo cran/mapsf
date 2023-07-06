@@ -22,7 +22,13 @@
 #' @param pch pch type of pch if x is a POINT layer
 #' @param pch_na pch for NA values if x is a POINT layer
 #' @param cex_na cex for NA values if x is a POINT layer
-#' @importFrom methods is
+#' @details
+#' Breaks defined by a numeric vector or a classification method are
+#' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' The "jenks" method is an exception and has to be right-closed.
+#' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -60,11 +66,17 @@ mf_choro <- function(x, var,
                      leg_frame = FALSE,
                      add = FALSE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
+
+  # jenks
+  jen <- FALSE
+  if (any(breaks %in% "jenks")) {
+    jen <- TRUE
+  }
 
   # get the breaks
   breaks <- mf_get_breaks(x = x[[var]], nbreaks = nbreaks, breaks = breaks)
@@ -72,7 +84,7 @@ mf_choro <- function(x, var,
   # get the cols
   pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
-  mycols <- get_col_vec(x = x[[var]], breaks = breaks, pal = pal)
+  mycols <- get_col_vec(x = x[[var]], breaks = breaks, pal = pal, jen = jen)
 
   no_data <- FALSE
   if (max(is.na(mycols)) == 1) {

@@ -2,14 +2,15 @@
 #' @description This function set a map theme.
 #' The parameters set by this function are the figure margins, background and
 #' foreground colors and some \link{mf_title} options.
-#' Use \code{mf_theme('default')} to reset to default theme settings.
+#' Use \code{mf_theme(NULL)} or \code{mf_theme('default')} to reset to default
+#' theme settings.
 #' @param x name of a map theme. One of "default", "brutal", "ink",
 #' "dark", "agolalight", "candy", "darkula", "iceberg", "green", "nevermind",
-#' "jsk", "barcelona". If x is used other parameters are ignored.
+#' "jsk", "barcelona".
 #' @param bg background color
 #' @param fg foreground color
 #' @param mar margins
-#' @param pos position, one of 'left', 'center', 'right'
+#' @param pos title position, one of 'left', 'center', 'right'
 #' @param tab if TRUE the title is displayed as a 'tab'
 #' @param cex cex of the title
 #' @param font font of the title
@@ -24,23 +25,32 @@
 #' @examples
 #' mtq <- mf_get_mtq()
 #'
-#' # built-in theme
-#' mf_theme("green")
+#' # Choosing a theme by name:
+#' mf_theme("default")
 #' mf_map(mtq)
 #' mf_title()
 #'
-#' # theme from arguments
-#' mf_theme(
-#'   bg = "darkslategrey", fg = "cornsilk3", mar = c(2, 2, 4, 2),
-#'   tab = FALSE, pos = "center", inner = FALSE,
-#'   line = 2, cex = 2, font = 4
-#' )
+#' # Specifying some values directly:
+#' mf_theme(bg = "darkslategrey", fg = "lightgrey")
 #' mf_map(mtq)
-#' mf_layout()
+#' mf_title()
 #'
-#' # theme from list
-#' custom <- list(
-#'   name = "custom",
+#' # Using a mix of the above:
+#' mf_theme("brutal", fg = "lightgreen", pos = "center", font = 2, tab = FALSE)
+#' mf_map(mtq)
+#' mf_title()
+#'
+#' # Specifying a list with theme values:
+#' theme <- mf_theme("default")
+#' theme$mar <- c(1, 1, 3, 1)
+#' theme$line <- 2
+#' theme$cex <- 1.5
+#' mf_theme(theme)
+#' mf_map(mtq)
+#' mf_title()
+#'
+#' # or
+#' theme <- list(
 #'   bg = "green",
 #'   fg = "red",
 #'   mar = c(2, 2, 2, 2),
@@ -51,183 +61,73 @@
 #'   cex = 1.5,
 #'   font = 3
 #' )
-#' mf_theme(custom)
+#' mf_theme(theme)
 #' mf_map(mtq)
 #' mf_title()
 #'
-#' (mf_theme("default"))
-mf_theme <- function(x = "default", bg, fg, mar, tab, pos, inner, line, cex,
+#' # Obtaining a list of parameters for the current theme:
+#' mf_theme()
+#'
+#' # Removing the current theme:
+#' mf_theme(NULL)
+#' # or
+#' mf_theme("default")
+mf_theme <- function(x,
+                     bg,
+                     fg,
+                     mar,
+                     tab,
+                     pos,
+                     inner,
+                     line,
+                     cex,
                      font) {
-  themes <- list(
-    default = list(
-      name = "default",
-      bg = "#f7f7f7",
-      fg = "#333333",
-      mar = c(.5, .5, 1.7, .5),
-      tab = TRUE,
-      pos = "left",
-      inner = FALSE,
-      line = 1.2,
-      cex = 1,
-      font = 1
-    ),
-    brutal = list(
-      name = "brutal",
-      bg = "#FFFFFF",
-      fg = "#3b4252",
-      mar = c(5.1, 4.1, 4.1, 2.1),
-      tab = TRUE,
-      pos = "left",
-      inner = FALSE,
-      line = 2,
-      cex = 1.5,
-      font = 2
-    ),
-    ink = list(
-      name = "ink",
-      bg = "#FFDEAD",
-      fg = "#0000FF",
-      mar = c(0, 0, 1.2, 0),
-      tab = FALSE,
-      pos = "left",
-      inner = FALSE,
-      line = 1.2,
-      cex = .9,
-      font = 2
-    ),
-    dark = list(
-      name = "dark",
-      bg = "#2E3947",
-      fg = "#7E848C",
-      mar = c(0.5, 0.5, 2, 0.5),
-      tab = FALSE,
-      pos = "left",
-      inner = FALSE,
-      line = 1.5,
-      cex = 1,
-      font = 1
-    ),
-    agolalight = list(
-      name = "agolalight",
-      bg = "#EDF4F5",
-      fg = "#82888A",
-      mar = c(0, 0, 2, 0),
-      tab = FALSE,
-      pos = "left",
-      inner = FALSE,
-      line = 2,
-      cex = 1.5,
-      font = 3
-    ),
-    candy = list(
-      name = "candy",
-      bg = "#FDFCFE",
-      fg = "#6B1767",
-      mar = c(0, 0, 2, 0),
-      tab = FALSE,
-      pos = "center",
-      inner = FALSE,
-      line = 2,
-      cex = 1.5,
-      font = 2
-    ),
-    darkula = list(
-      name = "darkula",
-      bg = "#232525",
-      fg = "#A9B7C6",
-      mar = c(0.5, 0.5, 0.5, 0.5),
-      tab = TRUE,
-      pos = "right",
-      inner = TRUE,
-      line = 1.5,
-      cex = 1,
-      font = 4
-    ),
-    iceberg = list(
-      name = "iceberg",
-      bg = "#0B0E0E",
-      fg = "#BDD6DB",
-      mar = c(0.5, 0.5, 0.5, 0.5),
-      tab = TRUE,
-      pos = "right",
-      inner = TRUE,
-      line = 1.5,
-      cex = 1,
-      font = 4
-    ),
-    green = list(
-      name = "green",
-      bg = "#1B1D16",
-      fg = "#D7FF68",
-      mar = c(0.5, 0.5, 2, 0.5),
-      tab = FALSE,
-      pos = "center",
-      inner = FALSE,
-      line = 1.5,
-      cex = 1,
-      font = 2
-    ),
-    nevermind = list(
-      name = "nevermind",
-      bg = "#4DB8DA",
-      fg = "#121725",
-      mar = c(2, 2, 3.5, 2),
-      tab = FALSE,
-      pos = "center",
-      inner = FALSE,
-      line = 1.5,
-      cex = 1.4,
-      font = 1
-    ),
-    jsk = list(
-      name = "jsk",
-      bg = "#ffdc11",
-      fg = "#0c973c",
-      mar = c(0, 0, 1.5, 0),
-      tab = FALSE,
-      pos = "left",
-      inner = FALSE,
-      line = 1.5,
-      cex = 1,
-      font = 2
-    ),
-    barcelona = list(
-      name = "barcelona",
-      bg = "#160808",
-      fg = "#d73e23",
-      mar = c(0, 0, 1.2, 0),
-      tab = TRUE,
-      pos = "left",
-      inner = FALSE,
-      line = 1.2,
-      cex = 1,
-      font = 2
-    )
+  # current theme
+  theme <- list(
+    bg = getOption("mapsf.bg"),
+    fg = getOption("mapsf.fg"),
+    mar = getOption("mapsf.mar"),
+    tab = getOption("mapsf.tab"),
+    pos = getOption("mapsf.pos"),
+    inner = getOption("mapsf.inner"),
+    line = getOption("mapsf.line"),
+    cex = getOption("mapsf.cex"),
+    font = getOption("mapsf.font")
   )
 
-
-  if (missing(x)) {
-    x <- .gmapsf$args
+  # if no arg input => return param list
+  defined <- ls()
+  passed <- names(as.list(match.call())[-1])
+  if (!any(passed %in% defined)) {
+    return(theme)
   }
 
-  if (is.list(x)) {
-    theme <- x
-  } else {
-    if (!x %in% names(themes)) {
-      stop(
-        paste0(
-          "x should be one of ",
-          paste0(names(themes), collapse = ", ")
-        ),
-        call. = FALSE
-      )
+  # input a theme name
+  if (!missing(x)) {
+    # if is.null(x) => set default theme
+    if (is.null(x)) {
+      x <- "default"
+    }
+    # if x is a list of args
+    if (is.list(x)) {
+      theme <- x
     } else {
-      theme <- themes[[x]]
+      theme_names <- names(.gmapsf$themes)
+      if (!x %in% theme_names) {
+        stop(
+          paste0(
+            "x should be one of ",
+            paste0(theme_names, collapse = ", ")
+          ),
+          call. = FALSE
+        )
+      } else {
+        theme <- .gmapsf$themes[[x]]
+      }
     }
   }
 
-
-
+  # modify theme param
   if (!missing(bg)) theme$bg <- bg
   if (!missing(fg)) theme$fg <- fg
   if (!missing(mar)) theme$mar <- mar
@@ -238,10 +138,18 @@ mf_theme <- function(x = "default", bg, fg, mar, tab, pos, inner, line, cex,
   if (!missing(cex)) theme$cex <- cex
   if (!missing(font)) theme$font <- font
 
+  # set theme options
+  options(
+    mapsf.bg = theme$bg,
+    mapsf.fg = theme$fg,
+    mapsf.mar = theme$mar,
+    mapsf.tab = theme$tab,
+    mapsf.pos = theme$pos,
+    mapsf.inner = theme$inner,
+    mapsf.line = theme$line,
+    mapsf.cex = theme$cex,
+    mapsf.font = theme$font
+  )
 
-
-
-  .gmapsf$args <- as.list(theme)
-
-  return(invisible(.gmapsf$args))
+  return(invisible(as.list(theme)))
 }

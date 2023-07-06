@@ -32,21 +32,21 @@
 mf_annotation <- function(x, txt, pos = "topright",
                           cex = 0.8, col_arrow,
                           col_txt, halo = FALSE, bg, s = 1, ...) {
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  test_cur_plot()
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
   if (missing(col_arrow)) {
     col_arrow <- "black"
   }
   if (missing(col_txt)) {
-    col_txt <- .gmapsf$args$fg
+    col_txt <- getOption("mapsf.fg")
   }
   if (missing(bg)) {
-    bg <- .gmapsf$args$bg
+    bg <- getOption("mapsf.bg")
   }
 
-
-  if (inherits(x, "character") && length(x)) {
+  if (inherits(x, "character") && x == "interactive") {
     x <- interleg(txt = c("annotation", "Annotation"))
   }
 
@@ -62,175 +62,54 @@ mf_annotation <- function(x, txt, pos = "topright",
     xy <- x
   }
 
-  if (s < 1) s <- 1
+  if (s < 1) {
+    s <- 1
+  }
 
   inset <- strwidth("M", units = "user", cex = 1) / 2
   radius <- 5 * s * inset
 
-  switch(pos,
-    topright = {
-      drawarc(
-        x = xy[1] + radius,
-        y = xy[2] + inset,
-        radius = radius,
-        deg1 = 180,
-        deg2 = 90,
-        col = col_arrow
-      )
-      polygon(
-        x = c(
-          xy[1] - inset / 3,
-          xy[1],
-          xy[1] + inset / 3,
-          xy[1] - inset / 3
-        ),
-        y = c(
-          xy[2] + 2 * inset,
-          xy[2] + 5 * inset / 6,
-          xy[2] + 2 * inset,
-          xy[2] + 2 * inset
-        ),
-        col = col_arrow, border = col_arrow, lwd = 1.2
-      )
-      if (halo) {
-        shadowtext(
-          x = xy[1] + radius + inset / 2,
-          y = xy[2] + radius + inset,
-          labels = txt, col = col_txt, bg = bg,
-          cex = cex, adj = c(0, .5), ...
-        )
-      } else {
-        text(
-          x = xy[1] + radius + inset / 2,
-          y = xy[2] + radius + inset, cex = cex,
-          labels = txt, col = col_txt,
-          adj = c(0, .5), ...
-        )
-      }
-    },
-    topleft = {
-      drawarc(
-        x = xy[1] - radius,
-        y = xy[2] + inset,
-        radius = radius,
-        deg1 = 0,
-        deg2 = 90,
-        col = col_arrow
-      )
-      polygon(
-        x = c(
-          xy[1] - inset / 3,
-          xy[1],
-          xy[1] + inset / 3,
-          xy[1] - inset / 3
-        ),
-        y = c(
-          xy[2] + 2 * inset,
-          xy[2] + 5 * inset / 6,
-          xy[2] + 2 * inset,
-          xy[2] + 2 * inset
-        ),
-        col = col_arrow, border = col_arrow, lwd = 1.2
-      )
-      if (halo) {
-        shadowtext(
-          x = xy[1] - radius - inset / 2,
-          y = xy[2] + radius + inset,
-          labels = txt, col = col_txt, bg = bg,
-          cex = cex, adj = c(1, .5), ...
-        )
-      } else {
-        text(
-          x = xy[1] - radius - inset / 2,
-          y = xy[2] + radius + inset, cex = cex,
-          labels = txt, col = col_txt,
-          adj = c(1, .5), ...
-        )
-      }
-    },
-    bottomleft = {
-      drawarc(
-        x = xy[1] - radius,
-        y = xy[2] - inset,
-        radius = radius,
-        deg1 = 360,
-        deg2 = 270,
-        col = col_arrow
-      )
-      polygon(
-        x = c(
-          xy[1] - inset / 3,
-          xy[1],
-          xy[1] + inset / 3,
-          xy[1] - inset / 3
-        ),
-        y = c(
-          xy[2] - 2 * inset,
-          xy[2] - 5 * inset / 6,
-          xy[2] - 2 * inset,
-          xy[2] - 2 * inset
-        ),
-        col = col_arrow, border = col_arrow, lwd = 1.2
-      )
-      if (halo) {
-        shadowtext(
-          x = xy[1] - radius - inset / 2,
-          y = xy[2] - radius - inset,
-          labels = txt, col = col_txt, bg = bg,
-          cex = cex, adj = c(1, .5), ...
-        )
-      } else {
-        text(
-          x = xy[1] - radius - inset / 2,
-          y = xy[2] - radius - inset, cex = cex,
-          labels = txt, col = col_txt,
-          adj = c(1, .5), ...
-        )
-      }
-    },
-    bottomright = {
-      drawarc(
-        x = xy[1] + radius,
-        y = xy[2] - inset,
-        radius = radius,
-        deg1 = 270,
-        deg2 = 180,
-        col = col_arrow
-      )
-      polygon(
-        x = c(
-          xy[1] - inset / 3,
-          xy[1],
-          xy[1] + inset / 3,
-          xy[1] - inset / 3
-        ),
-        y = c(
-          xy[2] - 2 * inset,
-          xy[2] - 5 * inset / 6,
-          xy[2] - 2 * inset,
-          xy[2] - 2 * inset
-        ),
-        col = col_arrow, border = col_arrow, lwd = 1.2
-      )
-      if (halo) {
-        shadowtext(
-          x = xy[1] + radius + inset / 2,
-          y = xy[2] - radius - inset,
-          labels = txt, col = col_txt, bg = bg,
-          cex = cex, adj = c(0, .5), ...
-        )
-      } else {
-        text(
-          x = xy[1] + radius + inset / 2,
-          y = xy[2] - radius - inset, cex = cex,
-          labels = txt, col = col_txt,
-          adj = c(0, .5), ...
-        )
-      }
-    }
+  res <- annot_pos_params(
+    pos = pos, xy = xy,
+    radius = radius,
+    inset = inset
   )
-}
 
+  drawarc(
+    x = res$x_arc,
+    y = res$y_arc,
+    radius = radius,
+    deg1 = res$deg1,
+    deg2 = res$deg2,
+    col = col_arrow
+  )
+  polygon(
+    x = res$x_poly,
+    y = res$y_poly,
+    col = col_arrow,
+    border = col_arrow,
+    lwd = 1.2
+  )
+  if (halo) {
+    shadowtext(
+      x = res$x_txt,
+      y = res$y_txt,
+      labels = txt, col = col_txt, bg = bg,
+      cex = cex,
+      adj = res$adj,
+      ...
+    )
+  } else {
+    text(
+      x = res$x_txt,
+      y = res$y_txt,
+      cex = cex,
+      labels = txt, col = col_txt,
+      adj = res$adj,
+      ...
+    )
+  }
+}
 
 
 drawarc <- function(x = 1, y = NULL, radius = 1, deg1 = 0, deg2 = 45, col) {
@@ -241,28 +120,6 @@ drawarc <- function(x = 1, y = NULL, radius = 1, deg1 = 0, deg2 = 45, col) {
   xylim <- par("usr")
   ymult <- 1
   devunits <- grDevices::dev.size("px")
-  draw.arc.0 <- function(x, y, radius, angle1, angle2, n, col,
-                         lwd, ...) {
-    delta.angle <- (angle2 - angle1)
-    if (n != as.integer(n)) {
-      n <- as.integer(1 + delta.angle / n)
-    }
-    delta.angle <- delta.angle / n
-    angleS <- angle1 + seq(0, length = n) * delta.angle
-    angleE <- c(angleS[-1], angle2)
-    if (n > 1) {
-      half.lwd.user <- (lwd / 2) * (xylim[2] - xylim[1]) / devunits[1]
-      adj.angle <- delta.angle * half.lwd.user / (2 * (radius +
-        half.lwd.user))
-      angleS[2:n] <- angleS[2:n] - adj.angle
-      angleE[1:(n - 1)] <- angleE[1:(n - 1)] + adj.angle
-    }
-    p1x <- x + radius * cos(angleS)
-    p1y <- y + radius * sin(angleS) * ymult
-    p2x <- x + radius * cos(angleE)
-    p2y <- y + radius * sin(angleE) * ymult
-    segments(p1x, p1y, p2x, p2y, col = col, lwd = lwd, lend = 3)
-  }
   xy <- grDevices::xy.coords(x, y)
   x <- xy$x
   y <- xy$y
@@ -270,9 +127,127 @@ drawarc <- function(x = 1, y = NULL, radius = 1, deg1 = 0, deg2 = 45, col) {
   a2 <- pmax(angle1, angle2)
   angle1 <- a1
   angle2 <- a2
-  args <- data.frame(x, y, radius, angle1, angle2, n, col,
-    lwd,
-    stringsAsFactors = FALSE
-  )
-  for (i in 1:nrow(args)) do.call("draw.arc.0", c(args[i, ]))
+  delta_angle <- (angle2 - angle1)
+  if (n != as.integer(n)) {
+    n <- as.integer(1 + delta_angle / n)
+  }
+  delta_angle <- delta_angle / n
+  angle_s <- angle1 + seq(0, length = n) * delta_angle
+  angle_e <- c(angle_s[-1], angle2)
+  if (n > 1) {
+    half_lwd_user <- (lwd / 2) * (xylim[2] - xylim[1]) / devunits[1]
+    adj_angle <- delta_angle * half_lwd_user / (2 * (radius + half_lwd_user))
+    angle_s[2:n] <- angle_s[2:n] - adj_angle
+    angle_e[1:(n - 1)] <- angle_e[1:(n - 1)] + adj_angle
+  }
+  p1x <- x + radius * cos(angle_s)
+  p1y <- y + radius * sin(angle_s) * ymult
+  p2x <- x + radius * cos(angle_e)
+  p2y <- y + radius * sin(angle_e) * ymult
+  segments(p1x, p1y, p2x, p2y, col = col, lwd = lwd, lend = 3)
+}
+
+
+annot_pos_params <- function(pos, xy, radius, inset) {
+  if (pos == "topright") {
+    x_arc <- xy[1] + radius
+    y_arc <- xy[2] + inset
+    deg1 <- 180
+    deg2 <- 90
+    x_poly <- c(
+      xy[1] - inset / 3,
+      xy[1],
+      xy[1] + inset / 3,
+      xy[1] - inset / 3
+    )
+    y_poly <- c(
+      xy[2] + 2 * inset,
+      xy[2] + 5 * inset / 6,
+      xy[2] + 2 * inset,
+      xy[2] + 2 * inset
+    )
+    x_txt <- xy[1] + radius + inset / 2
+    y_txt <- xy[2] + radius + inset
+    adj <- c(0, .5)
+  }
+
+  if (pos == "topleft") {
+    x_arc <- xy[1] - radius
+    y_arc <- xy[2] + inset
+    deg1 <- 0
+    deg2 <- 90
+    x_poly <- c(
+      xy[1] - inset / 3,
+      xy[1],
+      xy[1] + inset / 3,
+      xy[1] - inset / 3
+    )
+    y_poly <- c(
+      xy[2] + 2 * inset,
+      xy[2] + 5 * inset / 6,
+      xy[2] + 2 * inset,
+      xy[2] + 2 * inset
+    )
+    x_txt <- xy[1] - radius - inset / 2
+    y_txt <- xy[2] + radius + inset
+    adj <- c(1, .5)
+  }
+
+  if (pos == "bottomleft") {
+    x_arc <- xy[1] - radius
+    y_arc <- xy[2] - inset
+    deg1 <- 360
+    deg2 <- 270
+    x_poly <- c(
+      xy[1] - inset / 3,
+      xy[1],
+      xy[1] + inset / 3,
+      xy[1] - inset / 3
+    )
+    y_poly <- c(
+      xy[2] - 2 * inset,
+      xy[2] - 5 * inset / 6,
+      xy[2] - 2 * inset,
+      xy[2] - 2 * inset
+    )
+    x_txt <- xy[1] - radius - inset / 2
+    y_txt <- xy[2] - radius - inset
+    adj <- c(1, .5)
+  }
+
+  if (pos == "bottomright") {
+    x_arc <- xy[1] + radius
+    y_arc <- xy[2] - inset
+    deg1 <- 270
+    deg2 <- 180
+    x_poly <- c(
+      xy[1] - inset / 3,
+      xy[1],
+      xy[1] + inset / 3,
+      xy[1] - inset / 3
+    )
+    y_poly <- c(
+      xy[2] - 2 * inset,
+      xy[2] - 5 * inset / 6,
+      xy[2] - 2 * inset,
+      xy[2] - 2 * inset
+    )
+    x_txt <- xy[1] + radius + inset / 2
+    y_txt <- xy[2] - radius - inset
+    adj <- c(0, .5)
+  }
+
+
+
+  return(list(
+    x_arc = x_arc,
+    y_arc = y_arc,
+    deg1 = deg1,
+    deg2 = deg2,
+    x_poly = x_poly,
+    y_poly = y_poly,
+    x_txt = x_txt,
+    y_txt = y_txt,
+    adj = adj
+  ))
 }

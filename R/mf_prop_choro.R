@@ -10,8 +10,13 @@
 #' 'inches', 'val_max', 'symbol', 'col_na', 'pal', 'alpha', 'breaks', 'nbreaks',
 #' 'leg_pos2', 'leg_title', 'leg_title_cex', 'leg_val_cex', 'leg_val_rnd',
 #' 'leg_no_data', 'leg_frame'))
-#'
-#' @importFrom methods is
+#' @details
+#' Breaks defined by a numeric vector or a classification method are
+#' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' The "jenks" method is an exception and has to be right-closed.
+#' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -56,10 +61,10 @@ mf_prop_choro <- function(x,
                           leg_frame = c(FALSE, FALSE),
                           add = TRUE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
 
   var2 <- var[2]
@@ -67,6 +72,11 @@ mf_prop_choro <- function(x,
   # check merge and order
   dots <- create_dots(x = x, var = var1)
 
+  # jenks
+  jen <- FALSE
+  if (any(breaks %in% "jenks")) {
+    jen <- TRUE
+  }
   # get the breaks
   breaks <- mf_get_breaks(
     x = dots[[var2]], nbreaks = nbreaks,
@@ -76,7 +86,7 @@ mf_prop_choro <- function(x,
   # get the cols
   pal <- get_the_pal(pal = pal, nbreaks = nbreaks, alpha = alpha)
   # get the color vector
-  mycols <- get_col_vec(x = dots[[var2]], breaks = breaks, pal = pal)
+  mycols <- get_col_vec(x = dots[[var2]], breaks = breaks, pal = pal, jen = jen)
 
   no_data <- FALSE
   if (max(is.na(mycols)) == 1) {

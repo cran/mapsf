@@ -17,7 +17,13 @@
 #' 'leg_frame',
 #' 'breaks',
 #' 'nbreaks'))
-#' @importFrom methods is
+#' @details
+#' Breaks defined by a numeric vector or a classification method are
+#' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' The "jenks" method is an exception and has to be right-closed.
+#' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 #' @importFrom graphics box
 #' @keywords internal
 #' @export
@@ -43,16 +49,21 @@ mf_grad <- function(x,
                     leg_frame = FALSE,
                     add = TRUE) {
   # default
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-  bg <- .gmapsf$args$bg
-  fg <- .gmapsf$args$fg
+  bg <- getOption("mapsf.bg")
+  fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
   xout <- x
 
   # data prep
   x <- x[!is.na(x = x[[var]]), ]
   x <- x[order(x[[var]], decreasing = TRUE), ]
+  # jenks
+  jen <- FALSE
+  if (any(breaks %in% "jenks")) {
+    jen <- TRUE
+  }
   breaks <- mf_get_breaks(x = x[[var]], nbreaks = nbreaks, breaks = breaks)
   nbreaks <- length(breaks) - 1
 
@@ -69,7 +80,7 @@ mf_grad <- function(x,
       ), call. = FALSE)
     }
     mylwd <- get_col_vec(
-      x = x[[var]], breaks = breaks, pal = lwd
+      x = x[[var]], breaks = breaks, pal = lwd, jen = jen
     )
 
     if (add == FALSE) {
@@ -103,7 +114,7 @@ mf_grad <- function(x,
     ), call. = FALSE)
   }
   mycex <- get_col_vec(
-    x = x[[var]], breaks = breaks, pal = cex
+    x = x[[var]], breaks = breaks, pal = cex, jen = jen
   )
   # color mgmt
   pch <- pch[1]

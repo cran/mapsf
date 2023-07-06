@@ -14,7 +14,6 @@
 #' @param width width of the figure (inches), use only one of width or height
 #' @param height height of the figure (inches), use only one of width or height
 #' @param res resolution
-#' @importFrom methods is
 #' @importFrom sf st_bbox st_as_sfc st_geometry st_is_longlat st_crs
 #' @return Width and height are returned in inches.
 #' @export
@@ -26,35 +25,52 @@ mf_get_ratio <- function(x,
                          width, height,
                          res = 96,
                          expandBB = rep(0, 4),
-                         theme = "default") {
-  if (is(x, "SpatRaster")) {
+                         theme = mf_theme()) {
+  # input test
+  if (!inherits(x, c("bbox", "SpatVector", "SpatRaster", "sf", "sfc", "sfg"))) {
+    stop(
+      paste0(
+        "x should be an object of class sf, sfc, sfg, bbox, ",
+        "SpatRaster or SpatVector"
+      ),
+      call. = FALSE
+    )
+  }
+  if (inherits(x, c("SpatRaster", "SpatVector"))) {
     if (!requireNamespace("terra", quietly = TRUE)) {
       stop(
-        "'terra' package is needed for this function to work. Please install it.",
+        paste0(
+          "'terra' package is needed for this function to work. ",
+          "Please install it."
+        ),
         call. = FALSE
       )
     }
     proj <- terra::crs(x)
     bb <- terra::ext(x)[c(1, 3, 2, 4)]
-    y <- st_as_sfc(st_bbox(bb))
-    st_crs(y) <- proj
+    x <- st_as_sfc(st_bbox(bb))
+    st_crs(x) <- proj
     expandBB <- c(rep(-.04, 4))
   }
 
   if (isTRUE(st_is_longlat(st_crs(x)))) {
-    message(paste0(
-      "Exports using unprojected objects may produce figures ",
-      "with inaccurate height/width ratio. ",
-      "You may want to check 'x' CRS. "
-    ))
+    x <- st_as_sfc(st_bbox(x))
+    lat_ts <- mean(sf::st_bbox(x)[c(2, 4)]) # latitude of true scale
+    x <- st_transform(x = x, paste0("+proj=eqc +lat_ts=", lat_ts))
   }
-  old_theme <- mf_theme()
-  new_theme <- mf_theme(theme)
-  mar <- new_theme$mar
+
+  if (missing(theme)) {
+    mar <- getOption("mapsf.mar")
+  } else {
+    old_theme <- mf_theme()
+    mf_theme(theme)
+    mar <- getOption("mapsf.mar")
+    mf_theme(old_theme)
+  }
+
 
   # transform to bbox
   bb <- st_bbox(x)
-  y <- st_as_sfc(bb)
 
   if (par("xaxs") == "r") {
     expandBB <- expandBB / (1 + 0.08)
@@ -84,6 +100,6 @@ mf_get_ratio <- function(x,
     heightmar <- height - (0.2 * (mar[1] + mar[3]) * res)
     width <- (heightmar / hw) + (0.2 * (mar[2] + mar[4]) * res)
   }
-  mf_theme(old_theme)
+
   return(unname(round(c(width, height) / 96, 2)))
 }

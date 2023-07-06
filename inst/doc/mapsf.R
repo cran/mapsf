@@ -6,14 +6,14 @@ knitr::opts_chunk$set(
   fig.height = 6
 )
 
-## ----mf_init, message=FALSE, warning=FALSE------------------------------------
+## ----mf_basemap, message=FALSE, warning=FALSE---------------------------------
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
-# Initiate a base map
-mf_init(x = mtq, theme = "iceberg")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+# set a theme
+mf_theme("iceberg")
+# plot a shadow
+mf_shadow(mtq)
 # plot municipalities
 mf_map(mtq, type = "base", add = TRUE)
 # layout
@@ -30,10 +30,10 @@ mf_layout(
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
-# Initiate a base map
-mf_init(x = mtq, theme = "iceberg")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+# set a theme
+mf_theme("darkula")
+# plot a shadow
+mf_shadow(mtq)
 # plot municipalities
 mf_map(mtq, add = TRUE)
 # plot population
@@ -128,11 +128,9 @@ library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
 # set theme
-mf_init(x = mtq, theme = "candy", expandBB = c(0, 0, 0, .15))
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
-# Plot the municipalities
-mf_map(mtq, add = TRUE)
+mf_theme("candy")
+# Plot the municipalities and expand the map space on the right
+mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # Plot symbols with choropleth coloration
 mf_map(
   x = mtq,
@@ -164,12 +162,10 @@ library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
 # set theme
-mf_init(x = mtq, theme = "ink", expandBB = c(0, 0, 0, .15))
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
-# Plot the municipalities
-mf_map(mtq, add = TRUE)
-# Plot symbols with choropleth coloration
+mf_theme("ink")
+# plot the municipalities and expand the map space on the right
+mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
+# plot symbols with choropleth coloration
 mf_map(
   x = mtq,
   var = c("POP", "STATUS"),
@@ -250,13 +246,10 @@ mob <- read.csv(system.file("csv/mob.csv", package = "mapsf"))
 mob_97209 <- mob[mob$i == 97209, ]
 # create an sf object of links
 mob_links <- mf_get_links(x = mtq, df = mob_97209)
-# set figure background color
 # set theme
-mf_init(x = mtq, theme = "dark")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+mf_theme("dark")
 # Plot the municipalities
-mf_map(mtq, add = TRUE)
+mf_map(mtq)
 # plot graduated links
 mf_map(
   x = mob_links,

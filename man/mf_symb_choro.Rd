@@ -38,7 +38,7 @@ mf_symb_choro(
 
 \item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
 
-\item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks})}
+\item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks} and Details)}
 
 \item{nbreaks}{number of classes}
 
@@ -58,7 +58,7 @@ mf_symb_choro(
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
-\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). Use NA to avoid plotting the legend, use 'interactive' to choose thelegend position interactively.}
+\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right','bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). Use NA to avoid plotting the legend, use 'interactive' to choose thelegend position interactively.}
 
 \item{leg_title}{legend title}
 
@@ -80,6 +80,14 @@ x is (invisibly) returned.
 \description{
 Plot symbols with colors based on a quantitative
 data classification.
+}
+\details{
+Breaks defined by a numeric vector or a classification method are
+left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+The "jenks" method is an exception and has to be right-closed.
+Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 }
 \examples{
 mtq <- mf_get_mtq()

@@ -9,7 +9,7 @@
 #'
 #' @examples
 #' mtq <- mf_get_mtq()
-#' mf_init(mtq)
+#' mf_map(mtq, col = NA, border = NA)
 #' mf_background(system.file("img/background.jpg", package = "mapsf"))
 #' mf_map(mtq, lwd = 3, col = NA, border = "white", add = TRUE)
 #' mf_credits(
@@ -17,6 +17,7 @@
 #'   col = "white"
 #' )
 mf_background <- function(filename, ...) {
+  test_cur_plot()
   ex <- strsplit(basename(filename), split = "\\.")[[1]]
   ex <- tolower(ex[length(ex)])
   if (ex == "png") {
@@ -31,7 +32,10 @@ mf_background <- function(filename, ...) {
   if (ex %in% c("jpg", "jpeg")) {
     if (!requireNamespace("jpeg", quietly = TRUE)) {
       stop(
-        "'jpeg' is package needed for this function to work. Please install it.",
+        paste0(
+          "'jpeg' is package needed for this function to work. ",
+          "Please install it."
+        ),
         call. = FALSE
       )
     }

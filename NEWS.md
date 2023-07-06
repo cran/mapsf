@@ -1,3 +1,27 @@
+# mapsf 0.7.0
+
+## Fix
+- use a vector of colors for lines if necessary in mf_label() (#50)
+- enable pipe without side effects (no extra plot)
+- use a default transparent background for insets 
+- deprecate "theme" arg in relevant function, adapt docs and vignettes, use 
+options() for themes instead of global variable & mimic the behaviour of 
+basetheme package
+- force the use of cairo device, if available, in mf_export() for png
+- fix wrong class allocation when using breaks = "jenks" (#53)
+- exports using unprojected objects do not produce figures with inaccurate 
+height/width ratio anymore. 
+
+## Feat
+- add expandBB arg in mf_map()
+- add expandBB arg in mf_raster()
+- add arg checking depending on type in mf_map()
+- add an error message for functions that need a pre-existing plot
+- add mf_graticule() to add graticule lines and labels
+- set internally the 'add' arg for each map types in mf_map()
+
+
+
 # mapsf 0.6.1
 
 

@@ -11,7 +11,7 @@ mf_map(
   breaks,
   nbreaks,
   pal,
-  alpha = 1,
+  alpha,
   inches,
   val_max,
   symbol,
@@ -32,6 +32,7 @@ mf_map(
   leg_val_rnd,
   leg_no_data,
   leg_frame,
+  expandBB,
   add,
   ...
 )
@@ -41,10 +42,22 @@ mf_map(
 
 \item{var}{name(s) of the variable(s) to plot}
 
-\item{type}{one of "base", "prop", "choro", "typo", "symb", "grad",
-"prop_choro", "prop_typo", "symb_choro"}
+\item{type}{\itemize{
+\item \strong{base}: base maps
+\item \strong{prop}: proportional symbols maps
+\item \strong{choro}: choropleth maps
+\item \strong{typo}: typology maps
+\item \strong{symb}: symbols maps
+\item \strong{grad}: graduated symbols maps
+\item \strong{prop_choro}: proportional symbols maps with symbols colors based
+on a quantitative data classification
+\item \strong{prop_typo}: proportional symbols maps with symbols colors based
+on qualitative data
+\item \strong{symb_choro}: symbols maps with symbols colors based on
+a quantitative data classification
+}}
 
-\item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks})}
+\item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks} and Details)}
 
 \item{nbreaks}{number of classes}
 
@@ -64,9 +77,9 @@ mf_map(
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
-\item{pch}{pch (point type) for symbols}
+\item{pch}{point type}
 
-\item{cex}{cex (point size) for symbols}
+\item{cex}{point size}
 
 \item{border}{border color}
 
@@ -92,6 +105,9 @@ mf_map(
 
 \item{leg_frame}{whether to add a frame to the legend (TRUE) or not (FALSE)}
 
+\item{expandBB}{fractional values to expand the bounding box with, in each
+direction (bottom, left, top, right)}
+
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
 
 \item{...}{further parameters from \link{plot} for sfc objects}
@@ -101,27 +117,36 @@ x is (invisibly) returned.
 }
 \description{
 This is the main function of the package.
-mf_map can be used to plot all types of maps.
+\code{mf_map()} can be used to plot all types of maps.\cr
 The three main arguments are: \code{x} (sf object), \code{var} (variable to map), and
-\code{type} (map type).
-
-Relevant arguments and default values are detailed in specific functions.
-
-Maps types:
-\itemize{
-\item \strong{base}, base maps (\link{mf_base});
-\item \strong{prop}, proportional symbols maps (\link{mf_prop});
-\item \strong{choro}, choropleth maps (\link{mf_choro});
-\item \strong{typo}, typology maps (\link{mf_typo});
-\item \strong{symb}, symbols maps (\link{mf_symb});
-\item \strong{grad}, graduated symbols maps (\link{mf_grad});
-\item \strong{prop_choro}, proportional symbols maps with symbols colors based
-on a quantitative data classification (\link{mf_prop_choro});
-\item \strong{prop_typo}, proportional symbols maps with symbols colors based
-on qualitative data (\link{mf_prop_typo});
-\item \strong{symb_choro}, symbols maps with symbols colors based on
-a quantitative data classification (\link{mf_symb_choro}).
+\code{type} (map type).\cr
+Relevant arguments and default values for each map types are detailed in
+specific functions, see Details.
 }
+\details{
+Relevant arguments, default values and examples for each map types are
+detailed in specific functions:
+\itemize{
+\item \strong{base}: base maps - \link{mf_base}
+\item \strong{prop}: proportional symbols maps - \link{mf_prop}
+\item \strong{choro}: choropleth maps - \link{mf_choro}
+\item \strong{typo}: typology maps - \link{mf_typo}
+\item \strong{symb}: symbols maps - \link{mf_symb}
+\item \strong{grad}: graduated symbols maps - \link{mf_grad}
+\item \strong{prop_choro}: proportional symbols maps with symbols colors based
+on a quantitative data classification - \link{mf_prop_choro}
+\item \strong{prop_typo}: proportional symbols maps with symbols colors based
+on qualitative data - \link{mf_prop_typo}
+\item \strong{symb_choro}: symbols maps with symbols colors based on
+a quantitative data classification - \link{mf_symb_choro}
+}
+
+Breaks defined by a numeric vector or a classification method are
+left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+The "jenks" method is an exception and has to be right-closed.
+Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 }
 \examples{
 mtq <- mf_get_mtq()

@@ -11,7 +11,7 @@
 #' or a vector of two coordinates in map units (c(x, y)).
 #' @param unit units used for the scale bar. Can be "mi" for miles,
 #' "m" for meters, or "km" for kilometers (default)
-#' @note This scale bar is not accurate on unprojected (long/lat) maps.
+#' @note This scale bar does not work on unprojected (long/lat) maps.
 #' @return No return value, a scale bar is displayed.
 #' @export
 #' @examples
@@ -20,9 +20,10 @@
 #' mf_scale()
 mf_scale <- function(size, pos = "bottomright",
                      lwd = 1.5, cex = 0.6, col, unit = "km") {
+  test_cur_plot()
   # default color
   if (missing(col)) {
-    col <- .gmapsf$args$fg
+    col <- getOption("mapsf.fg")
   }
 
   # get the current plot dimensions
@@ -50,7 +51,7 @@ mf_scale <- function(size, pos = "bottomright",
   yscale <- pu[3] + inset
 
   if (!missing(pos)) {
-    if (is.numeric(pos) & length(pos) == 2) {
+    if (is.numeric(pos) && length(pos) == 2) {
       xscale <- pos[1]
       yscale <- pos[2]
     } else {
@@ -91,22 +92,18 @@ mf_scale <- function(size, pos = "bottomright",
 #' @param unit_out output unit
 #' @noRd
 unit_conversion <- function(size, unit_in, unit_out) {
-  # uncomment comments if the function is eventually exported
-
-  # if(!unit_in %in% c('km','m','mi')) stop("unit must be 'km', 'm', or 'mi'")
-  if (!unit_out %in% c("km", "m", "mi")) stop("unit must be 'km', 'm', or 'mi'")
-
+  if (!unit_out %in% c("km", "m", "mi")) {
+    stop("unit must be 'km', 'm', or 'mi'")
+  }
   if (unit_out == "m") {
     if (unit_in == "km") size <- size * 1000
     if (unit_in == "mi") size <- size * 1609.344
   }
   if (unit_out == "km") {
     if (unit_in == "m") size <- size / 1000
-    # if(unit_in == "mi") size <- size * 1.609344
   }
   if (unit_out == "mi") {
     if (unit_in == "m") size <- size / 1609.344
-    # if(unit_in == "km") size <- size / 1.609344
   }
   return(size)
 }

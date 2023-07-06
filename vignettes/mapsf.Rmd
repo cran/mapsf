@@ -130,7 +130,7 @@ Several datasets are embedded in the package:
 
 ## Base map
 
-`mf_init()` is designed to initiate a map centered on a specific extent (`x` bounding box). The `theme` argument allows to select a theme.
+`mf_theme()` allows to apply a theme to the map.
 
 `mf_shadow()` plots the shadow of a polygon layer.
 
@@ -138,14 +138,14 @@ Several datasets are embedded in the package:
 
 `mf_layout()` add a complete layout to the map (title, credits, north arrow, scale bar). Each layout elements can also be set separately (with `mf_title()`, `mf_credits()`, `mf_arrow()` and `mf_scale()`).
 
-```{r mf_init, message=FALSE, warning=FALSE}
+```{r mf_basemap, message=FALSE, warning=FALSE}
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
-# Initiate a base map
-mf_init(x = mtq, theme = "iceberg")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+# set a theme
+mf_theme("iceberg")
+# plot a shadow
+mf_shadow(mtq)
 # plot municipalities
 mf_map(mtq, type = "base", add = TRUE)
 # layout
@@ -167,10 +167,10 @@ mf_layout(
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
-# Initiate a base map
-mf_init(x = mtq, theme = "iceberg")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+# set a theme
+mf_theme("darkula")
+# plot a shadow
+mf_shadow(mtq)
 # plot municipalities
 mf_map(mtq, add = TRUE)
 # plot population
@@ -280,18 +280,16 @@ mf_layout(
 
 `mf_map(x, var, type = "prop_choro")` creates a map of symbols that are proportional to values of a first variable and colored to reflect the classification of a second variable.
 
-`expandBB` argument in `mf_init()` allows to expand the map space. Here, we increase the space available on the right of the map to avoid overlaps between the legends and the map.
+`expandBB` argument in `mf_map()` allows to expand the map space. Here, we increase the space available on the right of the map to avoid overlaps between the legends and the map.
 
 ```{r mf_map_pc, fig.width=5}
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
 # set theme
-mf_init(x = mtq, theme = "candy", expandBB = c(0, 0, 0, .15))
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
-# Plot the municipalities
-mf_map(mtq, add = TRUE)
+mf_theme("candy")
+# Plot the municipalities and expand the map space on the right
+mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # Plot symbols with choropleth coloration
 mf_map(
   x = mtq,
@@ -328,12 +326,10 @@ library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
 # set theme
-mf_init(x = mtq, theme = "ink", expandBB = c(0, 0, 0, .15))
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
-# Plot the municipalities
-mf_map(mtq, add = TRUE)
-# Plot symbols with choropleth coloration
+mf_theme("ink")
+# plot the municipalities and expand the map space on the right
+mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
+# plot symbols with choropleth coloration
 mf_map(
   x = mtq,
   var = c("POP", "STATUS"),
@@ -430,13 +426,10 @@ mob <- read.csv(system.file("csv/mob.csv", package = "mapsf"))
 mob_97209 <- mob[mob$i == 97209, ]
 # create an sf object of links
 mob_links <- mf_get_links(x = mtq, df = mob_97209)
-# set figure background color
 # set theme
-mf_init(x = mtq, theme = "dark")
-# Plot a shadow
-mf_shadow(mtq, add = TRUE)
+mf_theme("dark")
 # Plot the municipalities
-mf_map(mtq, add = TRUE)
+mf_map(mtq)
 # plot graduated links
 mf_map(
   x = mob_links,

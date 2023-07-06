@@ -1,27 +1,11 @@
 #' @title Plot a map
 #' @description This is the main function of the package.
-#' mf_map can be used to plot all types of maps.
+#' `mf_map()` can be used to plot all types of maps.\cr
 #' The three main arguments are: `x` (sf object), `var` (variable to map), and
-#' `type` (map type).
-#'
-#' Relevant arguments and default values are detailed in specific functions.
-#'
-#' Maps types:
-#' * **base**, base maps (\link{mf_base});
-#' * **prop**, proportional symbols maps (\link{mf_prop});
-#' * **choro**, choropleth maps (\link{mf_choro});
-#' * **typo**, typology maps (\link{mf_typo});
-#' * **symb**, symbols maps (\link{mf_symb});
-#' * **grad**, graduated symbols maps (\link{mf_grad});
-#' * **prop_choro**, proportional symbols maps with symbols colors based
-#' on a quantitative data classification (\link{mf_prop_choro});
-#' * **prop_typo**, proportional symbols maps with symbols colors based
-#' on qualitative data (\link{mf_prop_typo});
-#' * **symb_choro**, symbols maps with symbols colors based on
-#' a quantitative data classification (\link{mf_symb_choro}).
+#' `type` (map type).\cr
+#' Relevant arguments and default values for each map types are detailed in
+#' specific functions, see Details.
 #' @md
-#'
-#'
 #' @eval my_params(c(
 #' "xfull",
 #' "var",
@@ -48,11 +32,47 @@
 #' 'val_max',
 #' 'symbol',
 #' 'val_order'))
-#' @param type one of "base", "prop", "choro", "typo", "symb", "grad",
-#' "prop_choro", "prop_typo", "symb_choro"
-#' @param cex cex (point size) for symbols
-#' @param pch pch (point type) for symbols
 #' @param ... further parameters from \link{plot} for sfc objects
+#' @param type
+#' * **base**: base maps
+#' * **prop**: proportional symbols maps
+#' * **choro**: choropleth maps
+#' * **typo**: typology maps
+#' * **symb**: symbols maps
+#' * **grad**: graduated symbols maps
+#' * **prop_choro**: proportional symbols maps with symbols colors based
+#' on a quantitative data classification
+#' * **prop_typo**: proportional symbols maps with symbols colors based
+#' on qualitative data
+#' * **symb_choro**: symbols maps with symbols colors based on
+#' a quantitative data classification
+#' @param cex point size
+#' @param pch point type
+#' @param expandBB fractional values to expand the bounding box with, in each
+#' direction (bottom, left, top, right)
+#' @details
+#'
+#' Relevant arguments, default values and examples for each map types are
+#' detailed in specific functions:
+#' * **base**: base maps - \link{mf_base}
+#' * **prop**: proportional symbols maps - \link{mf_prop}
+#' * **choro**: choropleth maps - \link{mf_choro}
+#' * **typo**: typology maps - \link{mf_typo}
+#' * **symb**: symbols maps - \link{mf_symb}
+#' * **grad**: graduated symbols maps - \link{mf_grad}
+#' * **prop_choro**: proportional symbols maps with symbols colors based
+#' on a quantitative data classification - \link{mf_prop_choro}
+#' * **prop_typo**: proportional symbols maps with symbols colors based
+#' on qualitative data - \link{mf_prop_typo}
+#' * **symb_choro**: symbols maps with symbols colors based on
+#' a quantitative data classification - \link{mf_symb_choro}
+#'
+#' Breaks defined by a numeric vector or a classification method are
+#' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, \[15 - 20].
+#' The "jenks" method is an exception and has to be right-closed.
+#' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
+#' will be mapped as \[2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
 #' @export
 #' @return x is (invisibly) returned.
 #' @examples
@@ -71,15 +91,35 @@
 #' mf_map(mtq, var = c("POP", "STATUS"), type = "prop_typo")
 #' mf_map(mtq)
 #' mf_map(mtq, var = c("STATUS", "MED"), type = "symb_choro")
-mf_map <- function(x, var, type = "base",
-                   breaks, nbreaks, pal, alpha = 1,
-                   inches, val_max, symbol, col,
-                   lwd_max, val_order, pch, cex,
-                   border, lwd,
-                   col_na, cex_na, pch_na,
-                   leg_pos, leg_title, leg_title_cex,
-                   leg_val_cex, leg_val_rnd, leg_no_data,
-                   leg_frame, add,
+mf_map <- function(x,
+                   var,
+                   type = "base",
+                   breaks,
+                   nbreaks,
+                   pal,
+                   alpha,
+                   inches,
+                   val_max,
+                   symbol,
+                   col,
+                   lwd_max,
+                   val_order,
+                   pch,
+                   cex,
+                   border,
+                   lwd,
+                   col_na,
+                   cex_na,
+                   pch_na,
+                   leg_pos,
+                   leg_title,
+                   leg_title_cex,
+                   leg_val_cex,
+                   leg_val_rnd,
+                   leg_no_data,
+                   leg_frame,
+                   expandBB,
+                   add,
                    ...) {
   # check args
   if (!type %in% c(
@@ -96,10 +136,10 @@ mf_map <- function(x, var, type = "base",
   }
 
   cl <- inherits(x = x, what = c("sf", "sfc", "sfg"), which = TRUE) != 0
-  if (cl[1] == FALSE & cl[2] == TRUE & type != "base") {
+  if (cl[1] == FALSE && cl[2] == TRUE && type != "base") {
     stop(paste0("'x' should be an sf object."), call. = FALSE)
   }
-  if (cl[1] == FALSE & cl[2] == FALSE & cl[3] == FALSE) {
+  if (cl[1] == FALSE && cl[2] == FALSE && cl[3] == FALSE) {
     stop(paste0("'x' should be an sf, sfc or sfg object."), call. = FALSE)
   }
 
@@ -110,27 +150,53 @@ mf_map <- function(x, var, type = "base",
       lv <- length(var)
       lin <- var %in% names(x)
       if (lv != length(lin[lin == TRUE])) {
-        stop(paste0("It is likely that 'var' is not a valid variable name."),
+        stop(
+          paste0("It is likely that 'var' is not a valid variable name."),
           call. = FALSE
         )
       }
     }
   }
 
+  # add mgmgt, set default add, do not add if no device is launch
+  if (missing(add)) {
+    add <- switch(type,
+      prop = TRUE,
+      choro = FALSE,
+      typo = FALSE,
+      symb = TRUE,
+      base = FALSE,
+      grad = TRUE,
+      prop_choro = TRUE,
+      prop_typo = TRUE,
+      symb_choro = TRUE
+    )
+  }
+
+
+  if (is.null(grDevices::dev.list())) {
+    add <- FALSE
+  }
+
   argx <- as.list(match.call()[-1])
-  argx <- argx[names(argx) != "type"]
+  argx <- argx[!names(argx) %in% c("type", "expandBB")]
 
-  switch(type,
-    prop = do.call(what = mf_prop, argx, envir = parent.frame()),
-    choro = do.call(what = mf_choro, argx, envir = parent.frame()),
-    typo = do.call(what = mf_typo, argx, envir = parent.frame()),
-    symb = do.call(what = mf_symb, argx, envir = parent.frame()),
-    base = do.call(what = mf_base, argx, envir = parent.frame()),
-    grad = do.call(what = mf_grad, argx, envir = parent.frame()),
-    prop_choro = do.call(what = mf_prop_choro, argx, envir = parent.frame()),
-    prop_typo = do.call(what = mf_prop_typo, argx, envir = parent.frame()),
-    symb_choro = do.call(what = mf_symb_choro, argx, envir = parent.frame())
-  )
 
-  # return(invisible(x))
+  if(type != "base") {
+    argx <- check_args(argx, type)
+  }
+
+  # enabling pipe without side effect
+  argx$x <- eval(x)
+
+  if (!missing(expandBB) && !add) {
+    mf_init(argx$x, expandBB = expandBB)
+    argx$add <- TRUE
+  } else {
+    argx$add <- add
+  }
+
+  do.call(what = get(paste0("mf_", type)), argx, envir = parent.frame())
+
+  return(invisible(x))
 }

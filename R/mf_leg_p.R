@@ -47,7 +47,7 @@ mf_legend_p <- function(pos = "left",
                         fg,
                         cex = 1,
                         self_adjust = FALSE) {
-  op <- par(mar = .gmapsf$args$mar, no.readonly = TRUE)
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
   # stop if the position is not valid
   if (length(pos) == 1) {
@@ -59,8 +59,8 @@ mf_legend_p <- function(pos = "left",
   # default values
   insetf <- strwidth("MM", units = "user", cex = 1)
   inset <- insetf * cex
-  if (missing(bg)) bg <- .gmapsf$args$bg
-  if (missing(fg)) fg <- .gmapsf$args$fg
+  if (missing(bg)) bg <- getOption("mapsf.bg")
+  if (missing(fg)) fg <- getOption("mapsf.fg")
   if (missing(border)) border <- fg
 
   val <- unique(val)
@@ -80,7 +80,7 @@ mf_legend_p <- function(pos = "left",
   xy_leg <- NULL
 
   while (TRUE) {
-    if (length(pos) == 2 & is.numeric(pos)) {
+    if (length(pos) == 2 && is.numeric(pos)) {
       xy_leg <- pos
     }
     xy_title <- get_xy_title(

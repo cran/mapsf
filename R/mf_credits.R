@@ -19,17 +19,15 @@ mf_credits <- function(txt = "Source(s) & Author(s)",
                        cex = .6,
                        font = 3,
                        bg = NA) {
+  test_cur_plot()
   if (missing(col)) {
-    col <- .gmapsf$args$fg
+    col <- getOption("mapsf.fg")
   }
   pd <- par("usr")
-  pw <- pd[2] - pd[1]
   pdp <- strwidth("M", units = "user", cex = 1) / 2
-
 
   w <- strwidth(s = txt, units = "user", cex = cex, font = font)
   h <- strheight(s = txt, units = "user", cex = cex, font = font)
-
 
   ppos <- switch(pos,
     bottomleft = {
