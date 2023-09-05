@@ -1,6 +1,6 @@
-6320258c0d547eac713f33d17aa9adcb *DESCRIPTION
+ccfe083d16ae2f359e3f01b8b9cb3c76 *DESCRIPTION
 fa7268432a7899b84addb2e74eaa8291 *NAMESPACE
-cf3dde250d92c6e4b1ff75816580a308 *NEWS.md
+bfa73b97f7e124c8e8a05e8843590020 *NEWS.md
 bfca84768299160e521b7f5d1bbc4b7c *R/RcppExports.R
 e3b8d60613ad3450482530ec6a233ea1 *R/mf_annotation.R
 a4c0f10ef9b57c0f5529e6a679bc26d5 *R/mf_arrow.R
@@ -37,7 +37,7 @@ ecd8f05dfc7cf311a7ff64dd471ac88b *R/mf_leg_p_utils.R
 ca83bf4a694c63bfe1cae19cf7ca4d72 *R/mf_leg_utils.R
 19e63147366ea5fa35e6cd4476698a1a *R/mf_legend.R
 9419b8d98779b7e10afe272a8cd911b8 *R/mf_map.R
-91d5d33cc83f2befc0f12d3bda380bd1 *R/mf_map_utils.R
+cbb1c3d8b1be47b8dffeb2a832a4fbde *R/mf_map_utils.R
 3c619c5c7525249207f791e5115c637c *R/mf_pkg_utils.R
 6da452b59f7bd94445cd72f52fd10727 *R/mf_prop.R
 64d14274474f3937672cf0c9e9dbe9c2 *R/mf_prop_choro.R
@@ -51,13 +51,13 @@ c96f1d741f31386eb3006ada02abb92f *R/mf_theme.R
 6e1276d65ba088e4de426fc5db6d831d *R/mf_title.R
 308530d89264e7ba27fc5d430699237b *R/mf_typo.R
 6e9c364a7ba432f9a6f0f9d2de3c4fb4 *R/mf_worldmap.R
-e519b7cb6196def9d72b7c5e7b6f56bf *R/package.R
-d7a25b5386ecca48b4147644fe6b6059 *README.md
+2743d9ee63e3a5c4d15e04b1077735e5 *R/package.R
+808ea6e1f1ef1bed4f3ab638cdea281a *README.md
 8ff82c07048417ca3eca2483bdbb8bd4 *build/vignette.rds
 4fa9aa9e59962baa1a7523e1be1f5601 *inst/csv/mob.csv
 dfccedb043195f3909788302258b33d0 *inst/doc/mapsf.R
 0327f15eccae0262006d0b8b45d2a94c *inst/doc/mapsf.Rmd
-e16d12a33ad7379613593f75ac233561 *inst/doc/mapsf.html
+bd192d1edfa224b5aa5f65b143e041ed *inst/doc/mapsf.html
 e6b2c382ce8810d6ea207e6fcd5d4253 *inst/gpkg/mtq.gpkg
 45c99e415c1b887159d41dbc608b7af6 *inst/gpkg/world.gpkg
 87c137ca0ed30659c1e864362437312b *inst/img/background.jpg
@@ -99,7 +99,7 @@ b2baf592238fd6e5ea8a021b7fe896c1 *man/figures/features.png
 d68d3016087ac8f42956a6ec7ac9a82f *man/figures/mapsf_cheatsheet.png
 82378efe68263e8b9b543e1f59bd615d *man/figures/mtq.png
 1c4a9247addae213064ab8b7af214f65 *man/figures/website.png
-3510c7d205439f6c8ed0511d321339b7 *man/mapsf.Rd
+b7060e9892503fd0938ddaa8f493cab7 *man/mapsf.Rd
 a296a8f5abf056f79b4c61e9a7be8f2e *man/mf_annotation.Rd
 fb0d2ddf3333b36e1869ecc402e0bafc *man/mf_arrow.Rd
 a6ac9a394ece0ccc3314b2770922d476 *man/mf_background.Rd
@@ -142,7 +142,6 @@ e35a713166568d96676fb50d57aaea80 *man/mf_worldmap.Rd
 8e7efdf200f76492f0f38ac0168988ac *src/RcppExports.cpp
 08d96448351974263c5ba19e381ecc52 *src/init.c
 b9001e903521c253e4de53d8079d5505 *src/layout.cpp
-1de97df453b3a0c368e909b90cc70082 *vignettes/data-raw/createthumbnails.R
 fbde44edd823cbf880664070e7f20dcd *vignettes/dt.RData
 398e0dbae931b0d8d65f3b4e16128828 *vignettes/fig/deco.svg
 eab716e8409f6dc47e0d1d259b21189a *vignettes/fig/line.svg

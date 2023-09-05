@@ -1,6 +1,6 @@
 Package: mapsf
 Title: Thematic Cartography
-Version: 0.7.0
+Version: 0.7.1
 Authors@R: c(
     person("Timothée", "Giraud", email = "timothee.giraud@cnrs.fr", 
         role = c("cre","aut"), comment = c(ORCID = "0000-0002-1932-3323")), 
@@ -33,7 +33,7 @@ RoxygenNote: 7.2.3
 VignetteBuilder: knitr
 Language: en-US
 NeedsCompilation: yes
-Packaged: 2023-07-06 14:07:33 UTC; tim
+Packaged: 2023-09-05 08:54:28 UTC; tim
 Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Diego Hernangómez [ctb] (<https://orcid.org/0000-0001-8457-4658>),
   Hugues Pecout [ctb],
@@ -45,4 +45,4 @@ Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Florian Zenoni [cph] (Orthographic projection visualisation)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2023-07-06 23:20:11 UTC
+Date/Publication: 2023-09-05 12:50:03 UTC
