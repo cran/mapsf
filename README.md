@@ -8,7 +8,8 @@
 [![CRAN](https://www.r-pkg.org/badges/version-ago/mapsf)](https://cran.r-project.org/package=mapsf)
 [![R-CMD-check](https://github.com/riatelab/mapsf/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/riatelab/mapsf/actions/workflows/R-CMD-check.yaml)
 [![downloads](https://cranlogs.r-pkg.org/badges/mapsf?color=brightgreen)](https://cran.r-project.org/package=mapsf)
-[![codecov](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg?token=TPK6HZOLWH)](https://app.codecov.io/gh/riatelab/mapsf)
+[![Codecov test
+coverage](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg)](https://app.codecov.io/gh/riatelab/mapsf?branch=master)
 [![status](https://tinyverse.netlify.com/badge/mapsf)](https://CRAN.R-project.org/package=mapsf)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
@@ -50,7 +51,7 @@ mtq <- mf_get_mtq()
 # Plot the base map
 mf_map(x = mtq)
 # Plot proportional symbols
-mf_map(x = mtq, var = "POP", type = "prop")
+mf_map(x = mtq, var = "POP", type = "prop", leg_pos = "topright")
 # Plot a map layout
 mf_layout(
   title = "Population in Martinique",

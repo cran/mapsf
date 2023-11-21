@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -43,7 +43,8 @@ mf_map(
   type = "prop",
   inches = 0.25,
   col = "brown4",
-  leg_pos = "bottomleft2",
+  leg_pos = "topright",
+  leg_adj = c(0, -2),
   leg_title = "Total population"
 )
 # layout
@@ -106,6 +107,7 @@ mf_map(
     "Simple municipality"
   ),
   leg_pos = "topright",
+  leg_adj = c(0, 1),
   leg_title = ""
 )
 # labels for a few  municipalities
@@ -138,13 +140,13 @@ mf_map(
   type = "prop_choro",
   border = "grey50",
   lwd = 1,
-  leg_pos = c("topright", "right"),
-  leg_title = c("Population", "Median\nIncome\n(in euros)"),
+  leg_pos = c("topright"),
+  leg_title = c("Population", "Median Income\n(in euros)"),
   breaks = "equal",
   nbreaks = 4,
   pal = "Greens",
   leg_val_rnd = c(0, -2),
-  leg_frame = c(TRUE, TRUE)
+  leg_frame = TRUE
 )
 # layout
 mf_layout(
@@ -173,7 +175,7 @@ mf_map(
   symbol = "square",
   border = "white",
   lwd = .5,
-  leg_pos = c("right", "topright"),
+  leg_pos = "topright",
   leg_title = c("Population", "Administrative\nStatus"),
   val_order = c(
     "Prefecture", "Sub-prefecture",
@@ -247,7 +249,7 @@ mob_97209 <- mob[mob$i == 97209, ]
 # create an sf object of links
 mob_links <- mf_get_links(x = mtq, df = mob_97209)
 # set theme
-mf_theme("dark")
+mf_theme("jsk")
 # Plot the municipalities
 mf_map(mtq)
 # plot graduated links
@@ -257,7 +259,7 @@ mf_map(
   type = "grad",
   breaks = c(100, 500, 1000, 4679.0),
   lwd = c(1, 4, 8),
-  leg_pos = "bottomleft2",
+  leg_pos = "topright",
   leg_title = "Nb. of\nCommuters",
   col = "red4",
   leg_frame = TRUE
@@ -273,6 +275,6 @@ mf_layout(
   arrow = FALSE
 )
 
-## ---- echo = FALSE------------------------------------------------------------
+## ----echo = FALSE-------------------------------------------------------------
 mf_theme("default")
 

@@ -9,9 +9,10 @@ mf_choro(
   var,
   pal = "Mint",
   alpha = 1,
+  rev = FALSE,
   breaks = "quantile",
   nbreaks,
-  border,
+  border = getOption("mapsf.fg"),
   pch = 21,
   cex = 1,
   lwd = 0.7,
@@ -25,6 +26,14 @@ mf_choro(
   leg_val_rnd = 2,
   leg_no_data = "No data",
   leg_frame = FALSE,
+  leg_horiz = FALSE,
+  leg_adj = c(0, 0),
+  leg_size = 1,
+  leg_box_border = getOption("mapsf.fg"),
+  leg_box_cex = c(1, 1),
+  leg_fg = getOption("mapsf.fg"),
+  leg_bg = getOption("mapsf.bg"),
+  leg_frame_border = getOption("mapsf.fg"),
   add = FALSE
 )
 }
@@ -36,6 +45,8 @@ mf_choro(
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
 \item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+
+\item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
 \item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks} and Details)}
 
@@ -68,6 +79,22 @@ mf_choro(
 \item{leg_no_data}{label for missing values}
 
 \item{leg_frame}{whether to add a frame to the legend (TRUE) or not (FALSE)}
+
+\item{leg_horiz}{display the legend horizontally (for proportional symbols and choropleth types)}
+
+\item{leg_adj}{adjust the postion of the legend in x and y directions}
+
+\item{leg_size}{size of the legend; 2 means two times bigger}
+
+\item{leg_box_border}{border color of legend boxes}
+
+\item{leg_box_cex}{width and height size expansion of boxes}
+
+\item{leg_fg}{color of the legend foreground}
+
+\item{leg_bg}{color of the legend backgournd}
+
+\item{leg_frame_border}{border color of the legend frame}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
 }
