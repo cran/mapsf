@@ -11,6 +11,8 @@
 [![Codecov test
 coverage](https://codecov.io/gh/riatelab/mapsf/branch/master/graph/badge.svg)](https://app.codecov.io/gh/riatelab/mapsf?branch=master)
 [![status](https://tinyverse.netlify.com/badge/mapsf)](https://CRAN.R-project.org/package=mapsf)
+[![OpenSSF Best
+Practices](https://www.bestpractices.dev/projects/8704/badge)](https://www.bestpractices.dev/projects/8704)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
@@ -165,7 +167,9 @@ to migrate from `cartography` to `mapsf`.
 
 One can contribute to the package through [pull
 requests](https://github.com/riatelab/mapsf/pulls) and report issues or
-ask questions [here](https://github.com/riatelab/mapsf/issues).  
+ask questions [here](https://github.com/riatelab/mapsf/issues). See the
+[CONTRIBUTING.md](https://github.com/riatelab/mapsf/blob/master/CONTRIBUTING.md)
+file for detailed instructions on how to contribute.  
 This project uses [conventional
 commits](https://www.conventionalcommits.org/en/v1.0.0-beta.3/) and
 [semantic versioning](https://semver.org/).
