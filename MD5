@@ -1,6 +1,6 @@
-d97b568b49c1bdc407fe729dcdbc8131 *DESCRIPTION
+c39948af80f5155e7e1b6c6d3f0a0c14 *DESCRIPTION
 94cab6901794f9182ac2e5f957619401 *NAMESPACE
-d21a7a89b577e2cbe83f8a197c92f37d *NEWS.md
+589ab7fb8a3202ac15f163f38e76c6b6 *NEWS.md
 e3b8d60613ad3450482530ec6a233ea1 *R/mf_annotation.R
 a4c0f10ef9b57c0f5529e6a679bc26d5 *R/mf_arrow.R
 647f3fb5a966c0a10e1991f33ea260db *R/mf_background.R
@@ -17,7 +17,7 @@ ccd10e1d6c45e03e4f261a010e6fe8df *R/mf_get_leg_pos.R
 cf694ddcbb6746459de2acd9795a5eb8 *R/mf_get_pal.R
 28f68988ccf1dc76c265d9fddf1be6ea *R/mf_get_ratio.R
 57cc06db519dd757ac7d3417cbf568bf *R/mf_grad.R
-ed2ef8676b443c87b6580ef071a2af66 *R/mf_graticule.R
+8d180e10b21082596dd04012c2cb7c38 *R/mf_graticule.R
 9873925e48b28b5d29bcb364f0353325 *R/mf_init.R
 fa515be55692b54ee9a470f24ce8eb37 *R/mf_inset.R
 3fb817124dcf9af4784d7822bd3549d1 *R/mf_label.R
@@ -46,13 +46,13 @@ c96f1d741f31386eb3006ada02abb92f *R/mf_theme.R
 6e1276d65ba088e4de426fc5db6d831d *R/mf_title.R
 4c591d839d526776160159cc8c984169 *R/mf_typo.R
 0c6cc118a748cd9e7dfcba507d9108e4 *R/mf_worldmap.R
-ea4a2a2295baa10e640c31b85f14a682 *R/package.R
-7b51d6377487b271acf4b33823ab90c3 *README.md
-074a109fca48c8da8313e97b1eb11698 *build/vignette.rds
+21893fe30b8857a06c40387b137497e5 *R/package.R
+e43b22178b2237648b28669e5a3fbfb8 *README.md
+1bf3552ca417259136ac22d20005a663 *build/vignette.rds
 4fa9aa9e59962baa1a7523e1be1f5601 *inst/csv/mob.csv
 cd2129c763c0a0fc6023910eaae5846c *inst/doc/mapsf.R
 38b9ae6a5005dadb545c3b2db8e5b9be *inst/doc/mapsf.Rmd
-97b106b52c98e9afe9a82df7d6187d53 *inst/doc/mapsf.html
+1993b75cf4a842bf1ee82aa464535603 *inst/doc/mapsf.html
 e6b2c382ce8810d6ea207e6fcd5d4253 *inst/gpkg/mtq.gpkg
 45c99e415c1b887159d41dbc608b7af6 *inst/gpkg/world.gpkg
 87c137ca0ed30659c1e864362437312b *inst/img/background.jpg
@@ -96,7 +96,7 @@ b2baf592238fd6e5ea8a021b7fe896c1 *man/figures/features.png
 d68d3016087ac8f42956a6ec7ac9a82f *man/figures/mapsf_cheatsheet.png
 ed655665ea1fc88a0e0867b064c18d0a *man/figures/mtq.png
 1c4a9247addae213064ab8b7af214f65 *man/figures/website.png
-53ce21c90c685a2c330ef1674a3c14ec *man/mapsf.Rd
+2c1e44794ab89e1985e3ca64c0e81703 *man/mapsf.Rd
 a296a8f5abf056f79b4c61e9a7be8f2e *man/mf_annotation.Rd
 fb0d2ddf3333b36e1869ecc402e0bafc *man/mf_arrow.Rd
 a6ac9a394ece0ccc3314b2770922d476 *man/mf_background.Rd
