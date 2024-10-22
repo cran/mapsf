@@ -31,7 +31,6 @@ These functions display cartographic layers.
 
 These functions are dedicated to the map layout design.
 \itemize{
-\item \code{\link[=mf_init]{mf_init()}} Initialize a map with a specific extent
 \item \code{\link[=mf_theme]{mf_theme()}} Set a theme
 \item \code{\link[=mf_shadow]{mf_shadow()}} Plot a shadow
 \item \code{\link[=mf_background]{mf_background()}} Plot a background image
@@ -57,6 +56,8 @@ These functions are dedicated to the map layout design.
 \item \code{\link[=mf_get_breaks]{mf_get_breaks()}} Get class intervals
 \item \code{\link[=mf_get_mtq]{mf_get_mtq()}} Get the 'mtq' dataset
 \item \code{\link[=mf_get_ratio]{mf_get_ratio()}} Get map width and height values
+\item \code{\link[=mf_get_pencil]{mf_get_pencil()}} Get a pencil layer from polygons
+\item \code{\link[=mf_get_borders]{mf_get_borders()}} Get a border layer from polygons
 }
 }
 

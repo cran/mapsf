@@ -24,6 +24,8 @@
 #' 'left', 'interactive' or a vector of two coordinates
 #' in map units (c(x, y)).
 #' @param pal a color palette name or a vector of colors
+#' @param alpha if \code{pal} is a \link{hcl.colors} palette name, the
+#' alpha-transparency level in the range \[0,1\]
 #' @param inches size of the largest symbol (radius for circles, half width
 #' for squares) in inches
 #' @param border symbol border color(s)
@@ -74,13 +76,13 @@
 #'
 #'
 #' Relevant arguments for each specific legend types:
-#' * `leg(type = "prop", val, inches, symbol, col, lwd, border, val_rnd, self_adjust, horiz)`
-#' * `leg(type = "choro", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
-#' * `leg(type = "cont", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
-#' * `leg(type = "typo", val, pal, col_na, no_data, no_data_txt, box_border)`
-#' * `leg(type = "symb", val, pal, pch, cex, lwd, pch_na, cex_na, col_na, no_data, no_data_txt)`
-#' * `leg(type = "prop_line", val, col, lwd, val_rnd)`
-#' * `leg(type = "grad_line", val, col, lwd, val_rnd)`
+#' * `mf_legend(type = "prop", val, inches, symbol, col, lwd, border, val_rnd, self_adjust, horiz)`
+#' * `mf_legend(type = "choro", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
+#' * `mf_legend(type = "cont", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
+#' * `mf_legend(type = "typo", val, pal, col_na, no_data, no_data_txt, box_border)`
+#' * `mf_legend(type = "symb", val, pal, pch, cex, lwd, pch_na, cex_na, col_na, no_data, no_data_txt)`
+#' * `mf_legend(type = "prop_line", val, col, lwd, val_rnd)`
+#' * `mf_legend(type = "grad_line", val, col, lwd, val_rnd)`
 #' @examples
 #' mtq <- mf_get_mtq()
 #' mf_map(mtq)
@@ -107,6 +109,7 @@ mf_legend <- function(type,
                       val,
                       pos = "left",
                       pal = "Inferno",
+                      alpha = 1,
                       col = "tomato4",
                       inches = .3,
                       symbol = "circle",

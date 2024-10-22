@@ -21,7 +21,6 @@
 #'
 #' @section Map layout:
 #' These functions are dedicated to the map layout design.
-#' - [mf_init()] Initialize a map with a specific extent
 #' - [mf_theme()] Set a theme
 #' - [mf_shadow()] Plot a shadow
 #' - [mf_background()] Plot a background image
@@ -43,6 +42,8 @@
 #' - [mf_get_breaks()] Get class intervals
 #' - [mf_get_mtq()] Get the 'mtq' dataset
 #' - [mf_get_ratio()] Get map width and height values
+#' - [mf_get_pencil()] Get a pencil layer from polygons
+#' - [mf_get_borders()] Get a border layer from polygons
 #
 #' @md
 #'

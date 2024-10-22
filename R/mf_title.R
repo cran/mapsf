@@ -44,10 +44,8 @@ mf_title <- function(txt = "Map Title", pos, tab,
   # size refs
   pu <- par("usr")
   hbox <- line * 0.2 * xinch(1)
-  inset <- strwidth("M", units = "user", cex = 1) / 2
+  inset <- xinch(par("csi")) / 4
   wtitle <- strwidth(txt, units = "user", cex = cex, font = font)
-  htitle <- strheight("M", units = "user", cex = cex, font = font)
-
 
   # compute rect coord
   pw <- pu[2] - pu[1]
@@ -77,7 +75,7 @@ mf_title <- function(txt = "Map Title", pos, tab,
     pb[4] <- pu[4] + hbox
   }
   # title coord
-  pt <- c(pb[1] + inset, pb[2] + (hbox - htitle) / 2)
+  pt <- c(pb[1] + inset, pb[2] + (hbox) / 2)
 
   # adjust box
   if (tab == FALSE) {
@@ -98,7 +96,7 @@ mf_title <- function(txt = "Map Title", pos, tab,
   text(
     x = pt[1],
     y = pt[2],
-    labels = txt, adj = c(0, 0),
+    labels = txt, adj = c(0, 0.5),
     cex = cex, col = fg,
     font = font, xpd = TRUE
   )

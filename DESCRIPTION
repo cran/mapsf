@@ -1,6 +1,6 @@
 Package: mapsf
 Title: Thematic Cartography
-Version: 0.11.0
+Version: 0.12.0
 Authors@R: 
     c(person(given = "Timothée",
              family = "Giraud",
@@ -34,13 +34,14 @@ URL: https://riatelab.github.io/mapsf/
 BugReports: https://github.com/riatelab/mapsf/issues/
 Depends: R (>= 3.6.0)
 Imports: classInt, graphics, maplegend, s2, sf, stats, utils, grDevices
-Suggests: terra, png, jpeg, lwgeom, knitr, rmarkdown, tinytest, covr
+Suggests: terra, Ckmeans.1d.dp, png, jpeg, lwgeom, knitr, rmarkdown,
+        tinytest, covr
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Language: en-US
 NeedsCompilation: no
-Packaged: 2024-07-29 14:28:53 UTC; tim
+Packaged: 2024-10-22 14:26:18 UTC; tim
 Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
   Hugues Pecout [ctb] (<https://orcid.org/0000-0002-0246-0954>, Logo),
   Ronan Ysebaert [ctb] (<https://orcid.org/0000-0002-7344-5911>, Cheat
@@ -51,4 +52,4 @@ Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2024-07-29 15:00:02 UTC
+Date/Publication: 2024-10-22 16:10:02 UTC
