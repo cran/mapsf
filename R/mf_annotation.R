@@ -4,7 +4,7 @@
 #' "interactive"
 #' @param txt the text to display
 #' @param pos position of the text, one of "topleft", "topright", "bottomright",
-#' "bottomleft"
+#' "bottomleft" or "center"
 #' @param cex size of the text
 #' @param col_arrow arrow color
 #' @param col_txt text color
@@ -29,22 +29,25 @@
 #'   txt = "This is less\nimportant",
 #'   cex = .7, font = 3, s = 1.3
 #' )
-mf_annotation <- function(x, txt, pos = "topright",
-                          cex = 0.8, col_arrow,
-                          col_txt, halo = FALSE, bg, s = 1, ...) {
+mf_annotation <- function(x,
+                          txt,
+                          pos = "topright",
+                          cex = 0.8,
+                          col_arrow,
+                          col_txt,
+                          halo = FALSE,
+                          bg,
+                          s = 1,
+                          ...) {
   test_cur_plot()
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
-  if (missing(col_arrow)) {
-    col_arrow <- "black"
-  }
-  if (missing(col_txt)) {
-    col_txt <- getOption("mapsf.fg")
-  }
-  if (missing(bg)) {
-    bg <- getOption("mapsf.bg")
-  }
+  col_arrow <- go(col_arrow, "highlight", "black")
+  col_txt <- go(col_txt, "highlight")
+  bg <- go(bg, "background")
+
+
 
   if (inherits(x, "character") && x == "interactive") {
     x <- interleg(txt = c("annotation", "Annotation"))
@@ -66,35 +69,39 @@ mf_annotation <- function(x, txt, pos = "topright",
     s <- 1
   }
 
-  inset <- xinch(par("csi")) / 3
-  radius <- 5 * s * inset
+  if (pos %in% c("topleft", "topright", "bottomright", "bottomleft")) {
+    inset <- xinch(par("csi")) / 3
+    radius <- 5 * s * inset
+    res <- annot_pos_params(
+      pos = pos, xy = xy,
+      radius = radius,
+      inset = inset
+    )
+    drawarc(
+      x = res$x_arc,
+      y = res$y_arc,
+      radius = radius,
+      deg1 = res$deg1,
+      deg2 = res$deg2,
+      col = col_arrow
+    )
+    polygon(
+      x = res$x_poly,
+      y = res$y_poly,
+      col = col_arrow,
+      border = col_arrow,
+      lwd = 1.2
+    )
+  } else if (pos == "center") {
+    res <- list(x_txt = xy[1], y_txt = xy[2])
+  }
 
-  res <- annot_pos_params(
-    pos = pos, xy = xy,
-    radius = radius,
-    inset = inset
-  )
-
-  drawarc(
-    x = res$x_arc,
-    y = res$y_arc,
-    radius = radius,
-    deg1 = res$deg1,
-    deg2 = res$deg2,
-    col = col_arrow
-  )
-  polygon(
-    x = res$x_poly,
-    y = res$y_poly,
-    col = col_arrow,
-    border = col_arrow,
-    lwd = 1.2
-  )
   if (halo) {
     shadowtext(
       x = res$x_txt,
       y = res$y_txt,
-      labels = txt, col = col_txt, bg = bg,
+      labels = txt,
+      col = col_txt, bg = bg,
       cex = cex,
       adj = res$adj,
       ...
@@ -104,7 +111,8 @@ mf_annotation <- function(x, txt, pos = "topright",
       x = res$x_txt,
       y = res$y_txt,
       cex = cex,
-      labels = txt, col = col_txt,
+      labels = txt,
+      col = col_txt,
       adj = res$adj,
       ...
     )

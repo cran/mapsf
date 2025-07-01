@@ -11,9 +11,7 @@ mf_export(
   height,
   res = 96,
   ...,
-  expandBB = rep(0, 4),
-  theme,
-  export = "png"
+  expandBB = rep(0, 4)
 )
 }
 \arguments{
@@ -33,15 +31,15 @@ device is opened.}
 
 \item{expandBB}{fractional values to expand the bounding box with, in each
 direction (bottom, left, top, right)}
-
-\item{theme}{apply a theme (deprecated)}
-
-\item{export}{deprecated}
 }
 \value{
 No return value, a map file is initiated (in PNG or SVG format).
 }
 \description{
+It is recommended to use \link{mf_svg} or \link{mf_png} instead of
+\code{mf_export}.
+\cr
+
 Export a map with the extent of a spatial object.\cr
 The map is exported in PNG or SVG format.\cr
 If only one of \code{width} or \code{height} is set, \code{mf_export} uses
@@ -58,3 +56,4 @@ mf_export(mtq, filename = filename)
 mf_map(mtq, add = TRUE)
 dev.off()
 }
+\keyword{internal}

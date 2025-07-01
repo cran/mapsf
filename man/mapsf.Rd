@@ -49,7 +49,8 @@ These functions are dedicated to the map layout design.
 \section{Utility functions}{
 
 \itemize{
-\item \code{\link[=mf_export]{mf_export()}} Export a map
+\item \code{\link[=mf_svg]{mf_svg()}} Export a map in SVG file format
+\item \code{\link[=mf_png]{mf_png()}} Export a map in SVG file format
 \item \code{\link[=mf_distr]{mf_distr()}} Plot a distribution
 \item \code{\link[=mf_get_links]{mf_get_links()}} Get a link layer from a data.frame of links
 \item \code{\link[=mf_get_pal]{mf_get_pal()}} Get color palettes
@@ -76,6 +77,7 @@ Other contributors:
 \itemize{
   \item Hugues Pecout (\href{https://orcid.org/0000-0002-0246-0954}{ORCID}) (Logo) [contributor]
   \item Ronan Ysebaert (\href{https://orcid.org/0000-0002-7344-5911}{ORCID}) (Cheat sheet) [contributor]
+  \item Elina Marveaux (\href{https://orcid.org/0009-0000-8667-3019}{ORCID}) (Themes) [contributor]
   \item Ian Fellows (No overlap algorithm for labels, from wordcloud package) [copyright holder]
   \item Jim Lemon (Arc drawing algorithm for annotations, from plotrix package) [copyright holder]
 }

@@ -12,14 +12,13 @@ mf_scale(
   col,
   crs_units = "m",
   scale_units = "km",
-  x,
-  unit
+  adj = c(0, 0),
+  x
 )
 }
 \arguments{
 \item{size}{size of the scale bar in scale units (\code{scale_units},
-default to km). If size is not
-set, an automatic size is used (1/10 of the map width).}
+default to km). If size is not set, an automatic size is used.}
 
 \item{pos}{position. It can be one of 'bottomright', 'bottomleft',
 'interactive' or a vector of two coordinates in map units (c(x, y)).}
@@ -36,10 +35,10 @@ Possible values are "m" and "ft" (see Details).}
 \item{scale_units}{units used for the scale bar. Can be "mi" for miles,
 "ft" for feet, "m" for meters, or "km" for kilometers (default).}
 
+\item{adj}{adjust the postion of the scale bar in x and y directions}
+
 \item{x}{object of class crs, sf or sfc. If set, the CRS of x will be used
 instead of \code{crs_units} to define CRS units.}
-
-\item{unit}{deprecated, use scale_units instead}
 }
 \value{
 No return value, a scale bar is displayed.

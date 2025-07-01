@@ -10,12 +10,12 @@ mf_prop_choro(
   inches = 0.3,
   val_max,
   symbol = "circle",
-  pal = "Mint",
-  alpha = 1,
+  pal,
+  alpha = NULL,
   rev = FALSE,
   breaks = "quantile",
   nbreaks,
-  border = getOption("mapsf.fg"),
+  border,
   lwd = 0.7,
   col_na = "white",
   leg_pos = mf_get_leg_pos(x, 1),
@@ -25,13 +25,13 @@ mf_prop_choro(
   leg_val_rnd = c(0, 2),
   leg_no_data = "No data",
   leg_frame = c(FALSE, FALSE),
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_frame_border,
   leg_horiz = c(FALSE, FALSE),
   leg_adj = c(0, 0),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
+  leg_fg,
+  leg_bg,
   leg_size = 1,
-  leg_box_border = getOption("mapsf.fg"),
+  leg_box_border,
   leg_box_cex = c(1, 1),
   add = TRUE
 )
@@ -49,7 +49,7 @@ mf_prop_choro(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
-\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 

@@ -1,18 +1,21 @@
-get_the_raster_pal <- function(pal, nbreaks, alpha = 1, rev = TRUE) {
+get_the_raster_pal <- function(pal, nbreaks, alpha, rev = TRUE) {
   if (length(pal) == 1) {
     if (pal %in% hcl.pals()) {
-      cols <- hcl.colors(n = nbreaks, palette = pal, alpha = alpha, rev = rev)
+      cols <- hcl.colors(n = nbreaks, palette = pal, rev = rev)
     } else {
       stop("This is not a palette name", call. = FALSE)
     }
   } else {
     cols <- colorRampPalette(pal, alpha = TRUE)(nbreaks)
   }
+  if (!is.null(alpha)) {
+    cols <- get_hex_pal(cols, alpha)
+  }
   return(cols)
 }
 
 
-get_continuous_pal <- function(breaks, pal) {
+get_continuous_pal <- function(breaks, pal, alpha) {
   # get a palette repartitionthat match classes size
   etendu <- max(breaks) - min(breaks)
   lb <- length(breaks)
@@ -23,9 +26,12 @@ get_continuous_pal <- function(breaks, pal) {
   dd$colto <- pal[2:lb]
   l <- list()
   for (i in 1:(lb - 1)) {
-    l[[i]] <- colorRampPalette(c(dd$colfrom[i], dd$colto[i]))(dd$ncol[i])
+    l[[i]] <- colorRampPalette(c(dd$colfrom[i], dd$colto[i]), alpha = TRUE)(dd$ncol[i])
   }
   p <- do.call(c, l)
+  if (!is.null(alpha)) {
+    p <- get_hex_pal(p, alpha)
+  }
   p
 }
 
@@ -41,9 +47,7 @@ mf_raster_multiband <- function(ops, expandBB, add) {
 
 mf_raster_interval <- function(ops, ops_leg, pal, breaks, nbreaks, alpha,
                                rev, add, expandBB) {
-  if (missing(pal)) {
-    pal <- "Dark Mint"
-  }
+  pal <- go(pal, "pal_seq", "Dark Mint")
   # set breaks and palette
   ops$breaks <- mf_get_breaks(
     x = terra::values(ops$x), nbreaks = nbreaks,
@@ -57,6 +61,7 @@ mf_raster_interval <- function(ops, ops_leg, pal, breaks, nbreaks, alpha,
   if (add == FALSE) {
     mf_init(ops$x, expandBB = expandBB)
   }
+  ops$alpha <- NULL
   # plot
   do.call(terra::plot, ops)
   # legend
@@ -88,6 +93,7 @@ mf_raster_continuous <- function(ops, ops_leg, breaks, pal, expandBB, add,
   if (missing(pal)) {
     pal <- "Dark Mint"
   }
+
   val <- terra::values(ops$x, na.rm = TRUE)
 
   # with breaks
@@ -96,7 +102,7 @@ mf_raster_continuous <- function(ops, ops_leg, breaks, pal, expandBB, add,
     if (length(pal) != (lb)) {
       stop(paste0("'pal' should be a vector of ", lb, " colors"), call. = FALSE)
     }
-    pal <- get_continuous_pal(breaks, pal)
+    pal <- get_continuous_pal(breaks, pal, alpha)
     p_pal <- pal
     # this for vmin superior to lmin or/and vmax inferior to lmax
     # other cases are missing
@@ -147,6 +153,7 @@ mf_raster_continuous <- function(ops, ops_leg, breaks, pal, expandBB, add,
     mf_init(ops$x, expandBB = expandBB)
   }
 
+  ops$alpha <- NULL
   do.call(terra::plot, ops)
 
   leg(
@@ -178,9 +185,8 @@ mf_raster_classes <- function(ops, ops_leg, pal, val_order, expandBB,
     modalities <- terra::cats(ops$x)[[1]]
   }
 
-  if (missing(pal)) {
-    pal <- "Dark 2"
-  }
+  pal <- go(pal, "pal_seq", "Dark 2")
+
   if (missing(val_order)) {
     val_order <- modalities[, 2]
   }
@@ -203,6 +209,7 @@ mf_raster_classes <- function(ops, ops_leg, pal, val_order, expandBB,
   if (add == FALSE) {
     mf_init(ops$x, expandBB = expandBB)
   }
+  ops$alpha <- NULL
   do.call(terra::plot, ops)
 
   leg(

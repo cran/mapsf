@@ -7,14 +7,14 @@
 mf_symb_choro(
   x,
   var,
-  pal = "Mint",
-  alpha = 1,
+  pal,
+  alpha = NULL,
   rev = FALSE,
   breaks = "quantile",
   nbreaks,
-  border = getOption("mapsf.fg"),
+  border,
   pch,
-  cex = 1,
+  cex = 2,
   lwd = 0.7,
   pch_na = 4,
   cex_na = 1,
@@ -27,13 +27,13 @@ mf_symb_choro(
   leg_val_rnd = 2,
   leg_no_data = c("No data", "No data"),
   leg_frame = c(FALSE, FALSE),
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_frame_border,
   leg_horiz = FALSE,
   leg_adj = c(0, 0),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
+  leg_fg,
+  leg_bg,
   leg_size = 1,
-  leg_box_border = getOption("mapsf.fg"),
+  leg_box_border,
   leg_box_cex = c(1, 1),
   add = TRUE
 )
@@ -45,7 +45,7 @@ mf_symb_choro(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
-\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
@@ -61,9 +61,9 @@ mf_symb_choro(
 
 \item{lwd}{border width}
 
-\item{pch_na}{pch (point type) for NA values}
+\item{pch_na}{point type for NA values}
 
-\item{cex_na}{cex (point size) for NA values}
+\item{cex_na}{point size for NA values}
 
 \item{col_na}{color for missing values}
 

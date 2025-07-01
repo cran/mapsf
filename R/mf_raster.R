@@ -84,7 +84,7 @@ mf_raster <- function(x,
                       val_order,
                       pal,
                       expandBB = rep(0, 4),
-                      alpha = 1,
+                      alpha = NULL,
                       rev = FALSE,
                       leg_pos = "right",
                       leg_title = names(x),
@@ -92,13 +92,13 @@ mf_raster <- function(x,
                       leg_val_cex = .6,
                       leg_val_rnd = 1,
                       leg_frame = FALSE,
-                      leg_frame_border = getOption("mapsf.fg"),
+                      leg_frame_border,
                       leg_horiz = FALSE,
                       leg_adj = c(0, 0),
-                      leg_box_border = "#333333",
+                      leg_box_border,
                       leg_box_cex = c(1, 1),
-                      leg_fg = getOption("mapsf.fg"),
-                      leg_bg = getOption("mapsf.bg"),
+                      leg_fg,
+                      leg_bg,
                       leg_size = 1,
                       add = FALSE,
                       ...) {
@@ -115,6 +115,20 @@ mf_raster <- function(x,
     stop(paste0("x should be a SpatRaster."), call. = FALSE)
   }
 
+
+  leg_box_border <- go(leg_box_border, "highlight", "#333333")
+  leg_fg <- go(leg_fg, "highlight")
+  leg_bg <- go(leg_bg, "foreground", getOption("mapsf.background"))
+  leg_frame_border <- go(
+    leg_frame_border, "foreground",
+    getOption("mapsf.highlight")
+  )
+
+
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
+  on.exit(par(op))
+
+
   # catch arguments
   ops <- list(...)
   ops$x <- x
@@ -123,15 +137,17 @@ mf_raster <- function(x,
   ops$maxcell <- ifelse(max_cell, 1e6, ops$maxcell)
   ops$bgalpha <- ifelse(is.null(ops$bgalpha), 0, ops$bgalpha)
   ops$legend <- ifelse(is.null(ops$legend), FALSE, ops$legend)
-  ops$axes <- FALSE
-  ops$box <- FALSE
+  ops$axes <- ifelse(is.null(ops$axes), FALSE, ops$axes)
+  ops$box <- ifelse(is.null(ops$box), FALSE, ops$box)
   ops$mar <- NA
+  ops$alpha <- alpha
 
   # Multiband Raster
   if (terra::nlyr(x) >= 2) {
     mf_raster_multiband(ops, expandBB, add)
   }
 
+  ops$clip <- FALSE
   # One band raster
   if (terra::nlyr(x) == 1) {
     # set the type - default to continuous for numeric raster
@@ -152,8 +168,7 @@ mf_raster <- function(x,
 
     if (ops$type == "interval") {
       mf_raster_interval(
-        ops, ops_leg, pal, breaks, nbreaks, alpha, rev, add,
-        expandBB
+        ops, ops_leg, pal, breaks, nbreaks, alpha, rev, add, expandBB
       )
     }
 

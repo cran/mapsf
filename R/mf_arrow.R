@@ -7,7 +7,6 @@
 #' @param adj adjust the postion of the north arrow in x and y directions
 #' @param align object of class \code{sf} or \code{sfc} used to adjust the
 #' arrow to the real north
-#' @param adjust deprecated, see align
 #' @importFrom sf st_crs st_as_sf st_coordinates st_transform
 #' @return No return value, a north arrow is displayed.
 #' @export
@@ -15,22 +14,44 @@
 #' mtq <- mf_get_mtq()
 #' mf_map(mtq)
 #' mf_arrow(pos = "topright")
-mf_arrow <- function(pos = "topleft", col = getOption("mapsf.fg"),
+mf_arrow <- function(pos = "topleft",
+                     col,
                      cex = 1,
                      adj = c(0, 0),
-                     align, adjust) {
+                     align) {
   test_cur_plot()
-  if (!missing(adjust)) {
-    warning(paste0("'adjust' is deprecated.\nUse 'align' instead."),
-      call. = FALSE
+  col <- go(col, "highlight")
+  if (!missing(align)) {
+    align <- st_crs(align)
+  } else {
+    align <- NULL
+  }
+
+  if (length(pos) == 1 && pos == "interactive") {
+    mf_arrow_display(pos, col, cex, adj, align)
+  } else {
+    recordGraphics(
+      {
+        mf_arrow_display(pos, col, cex, adj, align)
+      },
+      list = list(
+        pos = pos,
+        col = col,
+        cex = cex,
+        adj = adj,
+        align = align
+      ),
+      env = getNamespace("mapsf")
     )
-    align <- adjust
   }
+}
 
-  if (missing(col)) {
-    col <- getOption("mapsf.fg")
-  }
 
+mf_arrow_display <- function(pos = "topleft",
+                             col,
+                             cex = 1,
+                             adj = c(0, 0),
+                             align) {
   map_extent <- par("usr")
   xe <- map_extent[1:2]
   ye <- map_extent[3:4]
@@ -44,7 +65,7 @@ mf_arrow <- function(pos = "topleft", col = getOption("mapsf.fg"),
   pos_a <- get_arrow_pos(pos, xe, ye, w, h) + adj * inset / 2
   north_arrow <- n_arrow + c(pos_a[1] - bb_n_arrow[1], pos_a[2] - bb_n_arrow[4])
 
-  if (!missing(align)) {
+  if (inherits(align, "crs")) {
     xcrs <- st_crs(align)
     a <- st_as_sf(
       x = data.frame(X = pos_a[1], Y = pos_a[2]), coords = c("X", "Y"),

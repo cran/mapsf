@@ -1,6 +1,13 @@
 #' @title Export a map
 #' @name mf_export
-#' @description Export a map with the extent of a spatial object.\cr
+#' @description
+#'
+#' It is recommended to use \link{mf_svg} or \link{mf_png} instead of
+#' \code{mf_export}.
+#' \cr
+#'
+#'
+#' Export a map with the extent of a spatial object.\cr
 #' The map is exported in PNG or SVG format.\cr
 #' If only one of \code{width} or \code{height} is set, \code{mf_export} uses
 #' the width/height ratio of \code{x} bounding box to find a matching ratio for
@@ -11,16 +18,16 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
-#' @param theme apply a theme (deprecated)
 #' @param filename path to the exported file. If the file extention is ".png" a
 #' png graphic device is opened, if the file extension is ".svg" a svg graphic
 #' device is opened.
-#' @param export deprecated
 #' @param width width of the figure (pixels for png, inches for svg)
 #' @param height height of the figure (pixels for png, inches for svg)
 #' @param res resolution (for png)
 #' @param ... further parameters for png or svg export
 #' @export
+#' @md
+#' @keywords internal
 #' @importFrom grDevices png svg
 #' @importFrom sf st_bbox st_as_sfc st_geometry st_is_longlat st_crs
 #' @return No return value, a map file is initiated (in PNG or SVG format).
@@ -36,25 +43,7 @@ mf_export <- function(x,
                       height,
                       res = 96,
                       ...,
-                      expandBB = rep(0, 4),
-                      theme,
-                      export = "png") {
-  # deprecated args mgmt
-  if (!missing(theme)) {
-    warning(
-      paste0(
-        "'theme' is deprecated.\n",
-        "In the next version of mapsf the current theme ",
-        "will be applied to the export."
-      ),
-      call. = FALSE
-    )
-    mf_theme(theme)
-  }
-  if (!missing(export)) {
-    message('"export" is deprecated.')
-  }
-
+                      expandBB = rep(0, 4)) {
   # input test
   if (!inherits(x, c("bbox", "SpatVector", "SpatRaster", "sf", "sfc", "sfg"))) {
     stop(
@@ -97,7 +86,7 @@ mf_export <- function(x,
   }
 
   mar <- getOption("mapsf.mar")
-  bgmap <- getOption("mapsf.bg")
+  bgmap <- getOption("mapsf.background")
 
   # transform to bbox
   bb <- st_bbox(x)

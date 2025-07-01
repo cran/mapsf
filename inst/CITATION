@@ -1,0 +1,6 @@
+bibentry(
+  bibtype = "Manual",
+  title = "{mapsf}: Thematic Cartography",
+  author = person(given = "Timothée", family = "Giraud"),
+  year = format(Sys.time(), "%Y"),
+  doi = "10.32614/CRAN.package.mapsf")

@@ -9,8 +9,9 @@ mf_grad(
   var,
   breaks = "quantile",
   nbreaks = 3,
-  col = "tomato4",
-  border = getOption("mapsf.fg"),
+  col,
+  alpha = NULL,
+  border,
   pch = 21,
   cex,
   lwd,
@@ -24,9 +25,9 @@ mf_grad(
   leg_size = 1,
   leg_border = border,
   leg_box_cex = c(1, 1),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_fg,
+  leg_bg,
+  leg_frame_border,
   add = TRUE
 )
 }
@@ -40,6 +41,8 @@ mf_grad(
 \item{nbreaks}{number of classes}
 
 \item{col}{color}
+
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{border}{border color}
 

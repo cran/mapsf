@@ -1,14 +1,16 @@
 #' @title Plot a title
 #' @param txt title text
 #' @param pos position, one of 'left', 'center', 'right'
-#' @param tab if TRUE the title is displayed as a 'tab'
+#' @param tab if TRUE the title is displayed as a tab
 #' @param bg background of the title
 #' @param fg foreground of the title
 #' @param cex cex of the title
 #' @param font font of the title
 #' @param line number of lines used for the title
-#' @param inner if TRUE the title is displayed inside the plot area.
+#' @param inner if TRUE the title is displayed inside the plot area
+#' @param banner if TRUE the title is dispalayed as a banner
 #' @export
+#' @importFrom grDevices recordGraphics
 #' @return No return value, a title is displayed.
 #' @examples
 #' mtq <- mf_get_mtq()
@@ -16,21 +18,22 @@
 #' mf_title()
 mf_title <- function(txt = "Map Title", pos, tab,
                      bg, fg, cex, line, font,
-                     inner) {
+                     inner, banner) {
   test_cur_plot()
+  tab <- go(tab, "title_tab")
+  pos <- go(pos, "title_pos")
+  inner <- go(inner, "title_inner")
+  line <- go(line, "title_line")
+  cex <- go(cex, "title_cex")
+  font <- go(font, "title_font")
+  fg <- go(fg, "highlight", getOption("mapsf.background"))
+  banner <- go(banner, "title_banner")
 
-  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
-  on.exit(par(op))
-
-  if (missing(tab)) tab <- getOption("mapsf.tab")
-  if (missing(pos)) pos <- getOption("mapsf.pos")
-  if (missing(inner)) inner <- getOption("mapsf.inner")
-  if (missing(line)) line <- getOption("mapsf.line")
-  if (missing(cex)) cex <- getOption("mapsf.cex")
-  if (missing(font)) font <- getOption("mapsf.font")
-  if (missing(bg)) bg <- getOption("mapsf.fg")
-  if (missing(fg)) fg <- getOption("mapsf.bg")
-
+  if (isFALSE(banner)) {
+    bg <- go(bg, opt = "background", legacy = bg)
+  } else {
+    bg <- go(bg, "foreground")
+  }
 
   # correct line space for multiplot
   mmf <- par("mfrow")
@@ -41,6 +44,31 @@ mf_title <- function(txt = "Map Title", pos, tab,
     line <- line * .66
   }
 
+  recordGraphics(
+    {
+      mf_title_display(txt, pos, tab, bg, fg, cex, line, font, inner, banner)
+    },
+    list = list(
+      txt = txt,
+      pos = pos,
+      tab = tab,
+      bg = bg,
+      fg = fg,
+      cex = cex,
+      line = line,
+      font = font,
+      inner = inner,
+      banner = banner
+    ),
+    env = getNamespace("mapsf")
+  )
+}
+
+mf_title_display <- function(txt = "Map Title", pos, tab,
+                             bg, fg, cex, line, font,
+                             inner, banner) {
+  op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
+  on.exit(par(op))
   # size refs
   pu <- par("usr")
   hbox <- line * 0.2 * xinch(1)
@@ -85,13 +113,14 @@ mf_title <- function(txt = "Map Title", pos, tab,
   # display rect
   rect(
     xleft = pb[1],
-    ybottom = pb[2],
+    ybottom = pb[2] - hbox * 0.02,
     xright = pb[3],
     ytop = pb[4],
     col = bg,
     xpd = TRUE,
     border = NA
   )
+
   # display title
   text(
     x = pt[1],
@@ -100,7 +129,15 @@ mf_title <- function(txt = "Map Title", pos, tab,
     cex = cex, col = fg,
     font = font, xpd = TRUE
   )
-
+  f <- getOption("mapsf.frame")
+  if (f %in% c("map", "figure")) {
+    mf_frame(
+      extent = f,
+      col = getOption("mapsf.highlight"),
+      lwd = getOption("mapsf.frame_lwd"),
+      lty = getOption("mapsf.frame_lty")
+    )
+  }
 
   return(invisible(NULL))
 }

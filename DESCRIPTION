@@ -1,6 +1,6 @@
 Package: mapsf
 Title: Thematic Cartography
-Version: 0.12.0
+Version: 1.0.0
 Authors@R: 
     c(person(given = "Timothée",
              family = "Giraud",
@@ -15,6 +15,10 @@ Authors@R:
              family = "Ysebaert",
              role = "ctb",
              comment = c(ORCID = "0000-0002-7344-5911", "Cheat sheet")),
+      person(given = "Elina",
+             family = "Marveaux",
+             role = "ctb",
+             comment = c(ORCID = "0009-0000-8667-3019", "Themes")),
       person(given = "Ian",
              family = "Fellows",
              role = "cph",
@@ -35,21 +39,25 @@ BugReports: https://github.com/riatelab/mapsf/issues/
 Depends: R (>= 3.6.0)
 Imports: classInt, graphics, maplegend, s2, sf, stats, utils, grDevices
 Suggests: terra, Ckmeans.1d.dp, png, jpeg, lwgeom, knitr, rmarkdown,
-        tinytest, covr
+        svglite, tinytest, covr, altdoc
 Encoding: UTF-8
 RoxygenNote: 7.3.2
 VignetteBuilder: knitr
 Language: en-US
 NeedsCompilation: no
-Packaged: 2024-10-22 14:26:18 UTC; tim
-Author: Timothée Giraud [cre, aut] (<https://orcid.org/0000-0002-1932-3323>),
-  Hugues Pecout [ctb] (<https://orcid.org/0000-0002-0246-0954>, Logo),
-  Ronan Ysebaert [ctb] (<https://orcid.org/0000-0002-7344-5911>, Cheat
-    sheet),
+Packaged: 2025-07-01 13:39:21 UTC; tim
+Author: Timothée Giraud [cre, aut] (ORCID:
+    <https://orcid.org/0000-0002-1932-3323>),
+  Hugues Pecout [ctb] (ORCID: <https://orcid.org/0000-0002-0246-0954>,
+    Logo),
+  Ronan Ysebaert [ctb] (ORCID: <https://orcid.org/0000-0002-7344-5911>,
+    Cheat sheet),
+  Elina Marveaux [ctb] (ORCID: <https://orcid.org/0009-0000-8667-3019>,
+    Themes),
   Ian Fellows [cph] (No overlap algorithm for labels, from wordcloud
     package),
   Jim Lemon [cph] (Arc drawing algorithm for annotations, from plotrix
     package)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2024-10-22 16:10:02 UTC
+Date/Publication: 2025-07-01 14:10:02 UTC

@@ -7,30 +7,17 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
-#' @param theme apply a theme (deprecated)
 #' @export
 #' @keywords internal
 #' @importFrom sf st_bbox st_as_sfc st_geometry st_crs<-
+#' @importFrom grDevices recordGraphics
 #' @return No return value, a map is initiated.
 #' @examples
 #' mtq <- mf_get_mtq()
 #' target <- mtq[30, ]
 #' mf_init(target)
 #' mf_map(mtq, add = TRUE)
-mf_init <- function(x, expandBB = rep(0, 4), theme) {
-  if (!missing(theme)) {
-    warning(
-      paste0(
-        "'theme' is deprecated.\n",
-        "In the next version of mapsf the current theme ",
-        "will be applied."
-      ),
-      call. = FALSE
-    )
-    mf_theme(theme)
-  }
-  bgmap <- getOption("mapsf.bg")
-
+mf_init <- function(x, expandBB = rep(0, 4)) {
   if (inherits(x, "SpatRaster")) {
     if (!requireNamespace("terra", quietly = TRUE)) {
       stop(
@@ -46,7 +33,7 @@ mf_init <- function(x, expandBB = rep(0, 4), theme) {
     bb <- terra::ext(x)[c(1, 3, 2, 4)]
     y <- st_as_sfc(st_bbox(bb))
     st_crs(y) <- proj
-    mf_init(y, expandBB = c(rep(-.04, 4)) + expandBB)
+    mf_init(y, expandBB = c(rep(-.0399, 4)) + expandBB)
     return(invisible(x))
   }
 
@@ -62,10 +49,33 @@ mf_init <- function(x, expandBB = rep(0, 4), theme) {
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgmap <- getOption("mapsf.background")
   # plot with bg and margins
   plot(y, col = NA, border = NA, expandBB = expandBB)
-  pux <- par("usr")
-  rect(pux[1], pux[3], pux[2], pux[4], border = NA, col = bgmap)
 
+  recordGraphics(
+    {
+      pux <- par("usr")
+      rect(pux[1],
+        pux[3],
+        pux[2],
+        pux[4],
+        border = NA,
+        col = bgmap
+      )
+    },
+    list = list(bgmap = bgmap),
+    env = getNamespace("mapsf")
+  )
+
+  f <- getOption("mapsf.frame")
+  if (f %in% c("map", "figure")) {
+    mf_frame(
+      extent = f,
+      col = getOption("mapsf.highlight"),
+      lwd = getOption("mapsf.frame_lwd"),
+      lty = getOption("mapsf.frame_lty")
+    )
+  }
   return(invisible(x))
 }

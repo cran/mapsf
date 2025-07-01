@@ -10,32 +10,18 @@ knitr::opts_chunk$set(
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
-# set a theme
-mf_theme("iceberg")
-# plot a shadow
-mf_shadow(mtq)
 # plot municipalities
-mf_map(mtq, type = "base", add = TRUE)
-# layout
-mf_layout(
-  title = "Martinique",
-  credits = paste0(
-    "Sources: IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  )
-)
+mf_map(mtq, type = "base")
+# layout elements
+credits <- paste0("Sources: IGN, 2018\n", "mapsf ", packageVersion("mapsf"))
+mf_title("Martinique")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_prop, message=FALSE, warning=FALSE------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
-# set a theme
-mf_theme("darkula")
-# plot a shadow
-mf_shadow(mtq)
 # plot municipalities
-mf_map(mtq, add = TRUE)
+mf_map(mtq)
 # plot population
 mf_map(
   x = mtq,
@@ -44,27 +30,18 @@ mf_map(
   inches = 0.25,
   col = "brown4",
   leg_pos = "topright",
-  leg_adj = c(0, -2),
+  leg_adj = c(0, -3),
   leg_title = "Total population"
 )
-# layout
-mf_layout(
-  title = "Population Distribution in Martinique",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  )
-)
+# layout elements
+mf_title("Population Distribution in Martinique")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_map_c-----------------------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
 # population density (inhab./km2) using sf::st_area()
 mtq$POPDENS <- 1e6 * mtq$POP / sf::st_area(mtq)
-# set a theme
-mf_theme("green")
 # plot population density
 mf_map(
   x = mtq,
@@ -72,28 +49,20 @@ mf_map(
   type = "choro",
   breaks = "geom",
   nbreaks = 5,
-  pal = "Greens",
+  pal = "Teal",
   border = "white",
   lwd = 0.5,
-  leg_pos = "topright",
-  leg_title = "Population Density\n(people per km2)"
+  leg_pos = "bottomleft",
+  leg_adj = c(0, 3),
+  leg_title = "Population Density\n(inh. / km2)"
 )
-# layout
-mf_layout(
-  title = "Population Distribution in Martinique",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  )
-)
+# layout elements
+mf_title("Population Distribution in Martinique")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_map_t-----------------------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
-# set theme
-mf_theme("dark")
 # plot administrative status
 mf_map(
   x = mtq,
@@ -115,22 +84,13 @@ mf_label(
   x = mtq[mtq$STATUS != "Simple municipality", ], var = "LIBGEO",
   cex = 0.9, halo = TRUE, r = 0.15
 )
-# layout
-mf_layout(
-  title = "Administrative Status",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  )
-)
+# layout elements
+mf_title("Administrative Status")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_map_pc, fig.width=5---------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
-# set theme
-mf_theme("candy")
 # Plot the municipalities and expand the map space on the right
 mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # Plot symbols with choropleth coloration
@@ -146,25 +106,15 @@ mf_map(
   nbreaks = 4,
   pal = "Greens",
   leg_val_rnd = c(0, -2),
-  leg_frame = TRUE
+  leg_frame = FALSE
 )
-# layout
-mf_layout(
-  title = "Population & Wealth in Martinique, 2015",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  ),
-  frame = TRUE
-)
+# layout elements
+mf_title("Population & Wealth in Martinique, 2015")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_map_pt, fig.width=5---------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
-# set theme
-mf_theme("ink")
 # plot the municipalities and expand the map space on the right
 mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # plot symbols with choropleth coloration
@@ -182,74 +132,40 @@ mf_map(
     "Simple municipality"
   )
 )
-# layout
-mf_layout(
-  title = "Population Distribution in Martinique",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  )
-)
+# layout elements
+mf_title("Population Distribution in Martinique")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 
 ## ----mf_label-----------------------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
-# set theme
-my_theme <- list(
-  name = "mytheme",
-  bg = "lightblue1",
-  fg = "darkseagreen4",
-  mar = c(0, 0, 0, 0),
-  tab = TRUE,
-  pos = "left",
-  inner = TRUE,
-  line = 1,
-  cex = .9,
-  font = 3
-)
-mf_theme(my_theme)
 # plot municipalities
 mf_map(mtq, col = "#e4e9de", border = "darkseagreen4")
 # plot labels
 mf_label(
   x = mtq,
   var = "LIBGEO",
-  col = "black",
   cex = 0.7,
   font = 4,
   halo = TRUE,
-  bg = "white",
   r = 0.1,
   overlap = FALSE,
+  q = 3,
   lines = FALSE
 )
-# layout
-mf_layout(
-  title = "Municipalities of Martinique",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  ),
-  arrow = FALSE
-)
-# north arrow
+# layout elements
+mf_title("Municipalities of Martinique")
+mf_credits(credits)
 mf_arrow(pos = "topright")
+mf_scale()
 
 ## ----mf_grad------------------------------------------------------------------
-library(mapsf)
-# import the sample data set
-mtq <- mf_get_mtq()
 # import the csv file embedded in mapsf
 mob <- read.csv(system.file("csv/mob.csv", package = "mapsf"))
 # Select links from Fort-de-France (97209))
 mob_97209 <- mob[mob$i == 97209, ]
 # create an sf object of links
 mob_links <- mf_get_links(x = mtq, df = mob_97209)
-# set theme
-mf_theme("jsk")
 # Plot the municipalities
 mf_map(mtq)
 # plot graduated links
@@ -261,20 +177,11 @@ mf_map(
   lwd = c(1, 4, 8),
   leg_pos = "topright",
   leg_title = "Nb. of\nCommuters",
-  col = "red4",
-  leg_frame = TRUE
+  leg_val_rnd = 0
 )
-# map layout
-mf_layout(
-  title = "Commuting to Fort-de-France",
-  credits = paste0(
-    "Sources: Insee and IGN, 2018\n",
-    "mapsf ",
-    packageVersion("mapsf")
-  ),
-  arrow = FALSE
-)
-
-## ----echo = FALSE-------------------------------------------------------------
-mf_theme("default")
+# layout elements
+mf_title("Commuting to Fort-de-France")
+mf_credits(credits)
+mf_arrow()
+mf_scale()
 

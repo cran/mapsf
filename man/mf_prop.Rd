@@ -11,8 +11,9 @@ mf_prop(
   val_max,
   lwd_max = 20,
   symbol = "circle",
-  col = "tomato4",
-  border = getOption("mapsf.fg"),
+  col,
+  alpha = NULL,
+  border,
   lwd = 0.7,
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
@@ -20,11 +21,11 @@ mf_prop(
   leg_val_cex = 0.6,
   leg_val_rnd = 0,
   leg_frame = FALSE,
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_frame_border,
   leg_horiz = FALSE,
   leg_adj = c(0, 0),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
+  leg_fg,
+  leg_bg,
   leg_size = 1,
   add = TRUE
 )
@@ -43,6 +44,8 @@ mf_prop(
 \item{symbol}{type of symbols, 'circle' or 'square'}
 
 \item{col}{color}
+
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{border}{border color}
 

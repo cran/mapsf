@@ -3,8 +3,7 @@
 #' @name mf_scale
 #' @param col color of the scale bar (line and text)
 #' @param size size of the scale bar in scale units (\code{scale_units},
-#' default to km). If size is not
-#' set, an automatic size is used (1/10 of the map width).
+#' default to km). If size is not set, an automatic size is used.
 #' @param lwd line width of the scale bar
 #' @param cex size of the scale bar text
 #' @param pos position. It can be one of 'bottomright', 'bottomleft',
@@ -13,9 +12,9 @@
 #' Possible values are "m" and "ft" (see Details).
 #' @param scale_units units used for the scale bar. Can be "mi" for miles,
 #' "ft" for feet, "m" for meters, or "km" for kilometers (default).
+#' @param adj adjust the postion of the scale bar in x and y directions
 #' @param x object of class crs, sf or sfc. If set, the CRS of x will be used
 #' instead of \code{crs_units} to define CRS units.
-#' @param unit deprecated, use scale_units instead
 #' @details Most CRS use the meter as unit. Some US CRS use feet or US survey
 #' feet. If unsure of the unit used in the CRS you can use the x argument of the
 #' function.
@@ -52,21 +51,10 @@ mf_scale <- function(size,
                      col,
                      crs_units = "m",
                      scale_units = "km",
-                     x,
-                     unit) {
+                     adj = c(0, 0),
+                     x) {
   test_cur_plot()
-  # default color
-  if (missing(col)) {
-    col <- getOption("mapsf.fg")
-  }
-  # get the current plot dimensions
-  pu <- par("usr")
-  inset <- xinch(par("csi")) / 4
-
-  if (!missing(unit)) {
-    message("'unit' is deprecated, use 'scale_units' instead.")
-    scale_units <- unit
-  }
+  col <- go(col, "highlight")
 
   if (!missing(x)) {
     uu <- sf::st_crs(x)$ud_unit
@@ -134,17 +122,61 @@ mf_scale <- function(size,
     stop("scale_units must be 'km', 'm', 'ft' or 'mi'.")
   }
 
-
-
-  # default scale
   if (missing(size)) {
-    size <- diff(pu[1:2]) / 10
+    pp <- unit_conversion(
+      size = diff(par("usr")[1:2]) / 10,
+      unit_in = crs_units,
+      unit_out = scale_units
+    )
+    if (pp < 0.1) {
+      message("The scale bar does not work on unprojected (long/lat) maps.")
+      return(invisible(NULL))
+    }
+    size <- NULL
+  }
+
+  if (length(pos) == 1 && pos == "interactive") {
+    mf_scale_display(size, pos, lwd, cex, col, crs_units, scale_units, adj)
+  } else {
+    recordGraphics(
+      {
+        mf_scale_display(size, pos, lwd, cex, col, crs_units, scale_units, adj)
+      },
+      list = list(
+        size = size,
+        pos = pos,
+        lwd = lwd,
+        cex = cex,
+        col = col,
+        crs_units = crs_units,
+        scale_units = scale_units,
+        adj = adj
+      ),
+      env = getNamespace("mapsf")
+    )
+  }
+}
+
+mf_scale_display <- function(size,
+                             pos = "bottomright",
+                             lwd = 1.5,
+                             cex = 0.6,
+                             col,
+                             crs_units = "m",
+                             scale_units = "km",
+                             adj = c(0, 0)) {
+  # get the current plot dimensions
+  pu <- par("usr")
+  inset <- xinch(par("csi")) / 4
+  # default scale
+  if (is.null(size)) {
+    size <- diff(pu[1:2]) / 12
     size <- unit_conversion(
       size = size,
       unit_in = crs_units,
       unit_out = scale_units
     )
-    size_text <- signif(size, digits = 0)
+    size_text <- pretty_scale(size, scale_units)
     size <- unit_conversion(
       size = size_text,
       unit_in = scale_units,
@@ -181,6 +213,9 @@ mf_scale <- function(size,
       }
     }
   }
+
+  xscale <- xscale + adj[1] * inset / 2
+  yscale <- yscale + adj[2] * inset / 2
 
   # plot the scale bar
   segments(
@@ -233,4 +268,40 @@ unit_conversion <- function(size, unit_in, unit_out) {
   }
 
   return(size)
+}
+
+
+
+
+pretty_scale <- function(size, scale_units) {
+  if (scale_units %in% c("km", "mi")) {
+    m <- matrix(data = c(
+      .5, .5,
+      1.5, 1,
+      3.5, 2,
+      7.5, 5,
+      15, 10,
+      35, 20,
+      75, 50,
+      150, 100,
+      350, 200,
+      750, 1000,
+      Inf, 2000
+    ), ncol = 2, byrow = TRUE)
+  }
+  if (scale_units %in% c("ft", "m")) {
+    m <- matrix(data = c(
+      150, 100,
+      350, 200,
+      750, 500,
+      1500, 1000,
+      3500, 2000,
+      Inf, 5000
+    ), ncol = 2, byrow = TRUE)
+  }
+  for (i in seq_along(m[, 1])) {
+    if (size <= m[i, 1]) {
+      return(m[i, 2])
+    }
+  }
 }

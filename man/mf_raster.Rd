@@ -12,7 +12,7 @@ mf_raster(
   val_order,
   pal,
   expandBB = rep(0, 4),
-  alpha = 1,
+  alpha = NULL,
   rev = FALSE,
   leg_pos = "right",
   leg_title = names(x),
@@ -20,13 +20,13 @@ mf_raster(
   leg_val_cex = 0.6,
   leg_val_rnd = 1,
   leg_frame = FALSE,
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_frame_border,
   leg_horiz = FALSE,
   leg_adj = c(0, 0),
-  leg_box_border = "#333333",
+  leg_box_border,
   leg_box_cex = c(1, 1),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
+  leg_fg,
+  leg_bg,
   leg_size = 1,
   add = FALSE,
   ...
@@ -53,7 +53,7 @@ see \link{mf_get_breaks} for classification methods)}
 \item{expandBB}{fractional values to expand the bounding box with, in each
 direction (bottom, left, top, right)}
 
-\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 

@@ -6,9 +6,9 @@
 \usage{
 mf_base(
   x,
-  col = "grey80",
-  border = "grey20",
-  bg = "white",
+  col,
+  border,
+  alpha = NULL,
   cex = 1,
   pch = 20,
   lwd = 0.7,
@@ -24,7 +24,7 @@ mf_base(
 
 \item{border}{border color}
 
-\item{bg}{background color}
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{cex}{point size}
 
@@ -36,7 +36,7 @@ mf_base(
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
 
-\item{...}{further parameters from \link{plot} for sfc objects}
+\item{...}{ignored}
 }
 \value{
 x is (invisibly) returned.

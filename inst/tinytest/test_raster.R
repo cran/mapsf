@@ -22,8 +22,8 @@ expect_equal(mapsf:::get_the_raster_pal(c("red", "blue"), 6, 1, TRUE),
              c("#FF0000FF", "#CC0033FF", "#990066FF", "#650099FF",
                "#3200CCFF", "#0000FFFF"))
 # get_continuous_pal
-pp <- mapsf:::get_continuous_pal(c(0, 10, 20), pal = c("red", "white", "blue"))
-expect_equal(pp[c(1, 500, 1000)], c("#FF0000", "#FFFFFF", "#0000FF"))
+pp <- mapsf:::get_continuous_pal(c(0, 10, 20), pal = c("red", "white", "blue"), alpha = 1)
+expect_equal(pp[c(1, 500, 1000)], c("#FF0000FF", "#FFFFFFFF", "#0000FFFF"))
 
 # type
 expect_error(mf_raster(a, type = "coninuous"))
@@ -42,3 +42,23 @@ expect_silent(mf_raster(d, "classes"))
 expect_silent(mf_raster(d, "classes", pal = "Burg",
                         val_order = rev(c("low", "high", "super high"))))
 expect_silent(mf_raster(a, "classes", pal = "Burg"))
+
+
+# alpha
+expect_silent(mf_raster(d, "classes", alpha = .5, pal = 1:3))
+expect_silent(mf_raster(a, alpha = .5, pal = 1:2))
+expect_silent(mf_raster(a, "interval", alpha = .4, nbreaks = 4, pal = 1:4))
+
+expect_silent(mf_raster(d, "classes", alpha = .5, pal = "Viridis"))
+expect_silent(mf_raster(a, alpha = .5, pal = "Viridis"))
+expect_silent(mf_raster(a, "interval", alpha = .4, nbreaks = 4,
+                        pal = "Viridis"))
+
+expect_silent(mf_raster(d, "classes", pal = hcl.colors(3, "Viridis",
+                                                       alpha = .5)))
+expect_silent(mf_raster(a,  pal = hcl.colors(12, "Viridis", alpha = .5)))
+expect_silent(mf_raster(a, "interval",  nbreaks = 12,
+                        pal = hcl.colors(12, "Viridis", alpha = .5)))
+
+
+

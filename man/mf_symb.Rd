@@ -8,11 +8,11 @@ mf_symb(
   x,
   var,
   pal = "Dynamic",
-  alpha = 1,
+  alpha = NULL,
   rev = FALSE,
-  border = getOption("mapsf.fg"),
+  border,
   pch,
-  cex = 1,
+  cex = 2,
   lwd = 0.7,
   col_na = "grey",
   pch_na = 4,
@@ -25,10 +25,10 @@ mf_symb(
   leg_val_rnd = 2,
   leg_no_data = "No data",
   leg_frame = FALSE,
-  leg_frame_border = getOption("mapsf.fg"),
+  leg_frame_border,
   leg_adj = c(0, 0),
-  leg_fg = getOption("mapsf.fg"),
-  leg_bg = getOption("mapsf.bg"),
+  leg_fg,
+  leg_bg,
   leg_size = 1,
   add = TRUE
 )
@@ -40,7 +40,7 @@ mf_symb(
 
 \item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
 
-\item{alpha}{if \code{pal} is a \link{hcl.colors} palette name, the alpha-transparency level in the range [0,1]}
+\item{alpha}{opacity, in the range [0,1]}
 
 \item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
@@ -54,9 +54,9 @@ mf_symb(
 
 \item{col_na}{color for missing values}
 
-\item{pch_na}{pch (point type) for NA values}
+\item{pch_na}{point type for NA values}
 
-\item{cex_na}{cex (point size) for NA values}
+\item{cex_na}{point size for NA values}
 
 \item{val_order}{values order, a character vector that matches var modalities}
 

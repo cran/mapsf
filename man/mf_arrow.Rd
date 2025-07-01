@@ -4,14 +4,7 @@
 \alias{mf_arrow}
 \title{Plot a north arrow}
 \usage{
-mf_arrow(
-  pos = "topleft",
-  col = getOption("mapsf.fg"),
-  cex = 1,
-  adj = c(0, 0),
-  align,
-  adjust
-)
+mf_arrow(pos = "topleft", col, cex = 1, adj = c(0, 0), align)
 }
 \arguments{
 \item{pos}{position. It can be one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom','bottomleft', 'left', 'interactive' or a vector of two coordinates in map units (c(x, y))}
@@ -24,8 +17,6 @@ mf_arrow(
 
 \item{align}{object of class \code{sf} or \code{sfc} used to adjust the
 arrow to the real north}
-
-\item{adjust}{deprecated, see align}
 }
 \value{
 No return value, a north arrow is displayed.
