@@ -25,6 +25,8 @@
 #' 'leg_title_cex',
 #' 'leg_val_cex',
 #' 'leg_val_rnd',
+#' 'leg_val_dec',
+#' 'leg_val_big',
 #' 'leg_box_border',
 #' 'leg_box_cex',
 #' 'leg_frame_border',
@@ -91,6 +93,8 @@ mf_raster <- function(x,
                       leg_title_cex = .8,
                       leg_val_cex = .6,
                       leg_val_rnd = 1,
+                      leg_val_dec = ".",
+                      leg_val_big = "",
                       leg_frame = FALSE,
                       leg_frame_border,
                       leg_horiz = FALSE,
@@ -141,6 +145,13 @@ mf_raster <- function(x,
   ops$box <- ifelse(is.null(ops$box), FALSE, ops$box)
   ops$mar <- NA
   ops$alpha <- alpha
+  if(isTRUE(add)){
+    ops$xlim <- par("usr")[1:2]
+    ops$ylim <- par("usr")[3:4]
+  } else {
+    ops$xlim <- terra::ext(x)[1:2]
+    ops$ylim <- terra::ext(x)[3:4]
+  }
 
   # Multiband Raster
   if (terra::nlyr(x) >= 2) {

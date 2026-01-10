@@ -53,7 +53,7 @@ mf_map(
   border = "white",
   lwd = 0.5,
   leg_pos = "bottomleft",
-  leg_adj = c(0, 3),
+  leg_adj = c(0, 6),
   leg_title = "Population Density\n(inh. / km2)"
 )
 # layout elements

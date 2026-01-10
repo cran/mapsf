@@ -22,7 +22,8 @@
 #' \code{sf::st_crs(zz, parameters = TRUE)$units_gdal} to see which units
 #' are used in the \code{zz} layer.
 #'
-#' This scale bar does not work on unprojected (long/lat) maps.
+#' The scale bar cannot be displayed on unprojected (long/lat) maps or
+#' on maps without documented CRS.
 #'
 #' @return No return value, a scale bar is displayed.
 #' @export
@@ -106,9 +107,9 @@ mf_scale <- function(size,
         crs_units <- "ft"
       } else {
         if (identical(uu, u_d)) {
-          message("The scale bar does not work on unprojected (long/lat) maps.")
+          message("The scale bar cannot be displayed on unprojected (long/lat) maps.")
         } else {
-          message("The scale bar does not work on maps without documented CRS.")
+          message("The scale bar cannot be displayed on maps without documented CRS.")
         }
         return(invisible(NULL))
       }
@@ -123,16 +124,12 @@ mf_scale <- function(size,
   }
 
   if (missing(size)) {
-    pp <- unit_conversion(
-      size = diff(par("usr")[1:2]) / 10,
-      unit_in = crs_units,
-      unit_out = scale_units
-    )
-    if (pp < 0.1) {
-      message("The scale bar does not work on unprojected (long/lat) maps.")
-      return(invisible(NULL))
-    }
     size <- NULL
+  }
+
+  if (diff(par("usr")[1:2]) < 360 * 2 || diff(par("usr")[3:4]) < 180 * 2){
+    message("The scale bar cannot be displayed on unprojected (long/lat) maps.")
+    return(invisible(NULL))
   }
 
   if (length(pos) == 1 && pos == "interactive") {
