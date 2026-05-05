@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_base.R
 \name{mf_base}
 \alias{mf_base}
-\title{Plot an sf object}
+\title{Deprecated - Plot an sf object}
 \usage{
 mf_base(
   x,
@@ -14,17 +14,20 @@ mf_base(
   lwd = 0.7,
   lty = 1,
   add = FALSE,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   ...
 )
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{sfg}}
 
-\item{col}{color}
+\item{col}{a color, hex code or color name given by \code{\link{colors}}}
 
 \item{border}{border color}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
 \item{cex}{point size}
 
@@ -42,6 +45,9 @@ mf_base(
 x is (invisibly) returned.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "base"}
+instead.
+
 Plot an sf object. This is mostly a wrapper around
 \code{plot(st_geometry(x), ...)}.
 }

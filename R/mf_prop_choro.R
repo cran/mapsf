@@ -1,5 +1,9 @@
-#' @title Plot proportional symbols using choropleth coloration
-#' @description Plot proportional symbols with colors based on a quantitative
+#' @title Deprecated - Plot proportional symbols using choropleth coloration
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "prop_choro"`
+#' instead.
+#'
+#' Plot proportional symbols with colors based on a quantitative
 #' data classification.
 #' @eval my_params(c(
 #' 'x',
@@ -36,10 +40,10 @@
 #' @details
 #' Breaks defined by a numeric vector or a classification method are
 #' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' will be mapped as \[2 - 5\[, \[5 - 10\[, \[10 - 15\[, \[15 - 20\].
 #' The "jenks" method is an exception and has to be right-closed.
 #' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
+#' will be mapped as \[2 - 5\], \]5 - 10\], \]10 - 15\], \]15 - 20\].
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -55,13 +59,13 @@
 #'   inches = .35, border = "tomato4",
 #'   val_max = 90000, symbol = "circle", col_na = "grey", pal = "Cividis",
 #'   breaks = "equal", nbreaks = 4, lwd = 4,
-#'   leg_pos = c("bottomright", "bottomleft"),
+#'   leg_pos = "bottomright",
 #'   leg_title = c("Population", "Median Income"),
-#'   leg_title_cex = c(0.8, 1),
-#'   leg_val_cex = c(.7, .9),
+#'   leg_title_cex = 1,
+#'   leg_val_cex = .9,
 #'   leg_val_rnd = c(0, 0),
 #'   leg_no_data = "No data",
-#'   leg_frame = c(TRUE, TRUE),
+#'   leg_frame = TRUE,
 #'   add = TRUE
 #' )
 mf_prop_choro <- function(x,
@@ -77,6 +81,9 @@ mf_prop_choro <- function(x,
                           border,
                           lwd = .7,
                           col_na = "white",
+                          extent = x,
+                          bg,
+                          expandBB = rep(.04, 4),
                           leg_pos = mf_get_leg_pos(x, 1),
                           leg_title = var,
                           leg_title_cex = c(.8, .8),
@@ -95,10 +102,19 @@ mf_prop_choro <- function(x,
                           leg_box_border,
                           leg_box_cex = c(1, 1),
                           add = TRUE) {
+  deprecate_direct_calls_to("mf_prop_choro")
+  xtype <- get_geom_type(x)
+  # linestring special case
+  if (xtype == "LINE") {
+    message("This map type is not available for lines.")
+    return(invisible(NULL))
+  }
+
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
   pal <- go(pal, "pal_seq", "Mint")
   leg_box_border <- go(leg_box_border, "highlight")
   leg_fg <- go(leg_fg, "highlight")
@@ -108,6 +124,7 @@ mf_prop_choro <- function(x,
     getOption("mapsf.highlight")
   )
   border <- go(border, "background")
+  border <- border[[1]]
 
   var2 <- var[2]
   var1 <- var[1]
@@ -164,7 +181,7 @@ mf_prop_choro <- function(x,
 
   # empty plot if needed
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   # Plot the symbols
@@ -176,18 +193,20 @@ mf_prop_choro <- function(x,
 
   leg_pos <- split_leg(leg_pos)
 
-  border <- getOption("mapsf.highlight")
   if (is.null(getOption("mapsf.legacy"))) {
     ccol <- getOption("mapsf.foreground")
   } else {
     ccol <- "grey80"
   }
   if (all(leg_frame, !leg_horiz)) {
-    ccol <- getOption("mapsf.background")
+    ccol <- getOption("mapsf.foreground")
   }
 
   if (length(leg_pos) == 1) {
-    ## TEST Double args
+    leg_title <- test2args(leg_title)
+    leg_val_rnd <- test2args(leg_val_rnd)
+    leg_horiz <- test2args(leg_horiz)
+
     la1 <- list(
       type = "prop",
       val = val,
@@ -206,7 +225,8 @@ mf_prop_choro <- function(x,
     lg <- do.call(leg_comp, la1)
     la2 <- list(
       leg = lg,
-      type = "choro",
+      type = "choro_point",
+      symbol = symbol,
       val = breaks,
       title = leg_title[2],
       val_rnd = leg_val_rnd[2],
@@ -217,8 +237,7 @@ mf_prop_choro <- function(x,
       no_data_txt = leg_no_data,
       horiz = leg_horiz[2],
       pal = pal,
-      box_border = leg_box_border,
-      box_cex = leg_box_cex
+      border = border
     )
     lg <- do.call(leg_comp, la2)
     leg_draw(lg,
@@ -228,6 +247,11 @@ mf_prop_choro <- function(x,
       adj = leg_adj, frame_border = leg_frame_border
     )
   } else {
+    message(paste0(
+      "The use of separated legends for this map type is deprecated.\n",
+      "Please, use only one value for leg_pos",
+      " or use mf_legend() to display two legends."
+    ))
     leg(
       type = "prop",
       pos = leg_pos[[1]], val = val, title = leg_title[1],

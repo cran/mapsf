@@ -10,9 +10,8 @@
 #' is deduced from the width/height ratio of `x`.
 #' This helps to produce maps without too much wasted space.
 #'
-#' Use \code{dev.off} to finish the export (see Examples).
-#' @md
-#' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
+#' Use `dev.off()` to finish the export (see Examples).
+#' @param x object of class `sf`, `sfc` or `SpatRaster`
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
 #' @param filename path to the exported file
@@ -44,7 +43,7 @@ mf_png <- function(x, filename = "map.png",
   }
 
   if (missing(height)) {
-    height <- round(ratio[2] *  width / ratio[1], 0)
+    height <- round(ratio[2] * width / ratio[1], 0)
   }
 
   if (missing(width)) {
@@ -52,11 +51,11 @@ mf_png <- function(x, filename = "map.png",
   }
 
   if (isTRUE(capabilities("cairo"))) {
-    png(filename = filename, width = width, height = height, res = res,
-        type = "cairo-png", ...
+    png(
+      filename = filename, width = width, height = height, res = res,
+      type = "cairo-png", ...
     )
   } else {
     png(filename = filename, width = width, height = height, res = res, ...)
   }
-
 }

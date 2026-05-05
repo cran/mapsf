@@ -1,11 +1,8 @@
-#' @title Export a map
+#' @title Deprecated - Export a map
 #' @name mf_export
 #' @description
-#'
-#' It is recommended to use \link{mf_svg} or \link{mf_png} instead of
-#' \code{mf_export}.
-#' \cr
-#'
+#' This function is deprecated. Please use \code{\link{mf_png}} or
+#' \code{\link{mf_svg}} instead.
 #'
 #' Export a map with the extent of a spatial object.\cr
 #' The map is exported in PNG or SVG format.\cr
@@ -18,7 +15,7 @@
 #' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
-#' @param filename path to the exported file. If the file extention is ".png" a
+#' @param filename path to the exported file. If the file extension is ".png" a
 #' png graphic device is opened, if the file extension is ".svg" a svg graphic
 #' device is opened.
 #' @param width width of the figure (pixels for png, inches for svg)
@@ -26,16 +23,14 @@
 #' @param res resolution (for png)
 #' @param ... further parameters for png or svg export
 #' @export
-#' @md
 #' @keywords internal
-#' @importFrom grDevices png svg
-#' @importFrom sf st_bbox st_as_sfc st_geometry st_is_longlat st_crs
 #' @return No return value, a map file is initiated (in PNG or SVG format).
 #' @examples
 #' mtq <- mf_get_mtq()
 #' (filename <- tempfile(fileext = ".png"))
-#' mf_export(mtq, filename = filename)
-#' mf_map(mtq, add = TRUE)
+#' mf_png(mtq, filename = filename)
+#' mf_map(mtq)
+#' mf_title()
 #' dev.off()
 mf_export <- function(x,
                       filename = "map.png",
@@ -44,6 +39,14 @@ mf_export <- function(x,
                       res = 96,
                       ...,
                       expandBB = rep(0, 4)) {
+  warning(
+    paste0(
+      "mf_export() is deprecated. ",
+      "Use mf_png() or mf_svg() instead."
+    ),
+    call. = FALSE
+  )
+
   # input test
   if (!inherits(x, c("bbox", "SpatVector", "SpatRaster", "sf", "sfc", "sfg"))) {
     stop(
@@ -164,14 +167,10 @@ mf_export <- function(x,
 }
 
 
-
-
-
-
 get_ratio <- function(x, width, height, mar, res, format) {
-  if (isTRUE(sf::st_is_longlat(x))) {
+  if (isTRUE(st_is_longlat(x))) {
     x <- st_as_sfc(x)
-    lat_ts <- mean(sf::st_bbox(x)[c(2, 4)]) # latitude of true scale
+    lat_ts <- mean(st_bbox(x)[c(2, 4)]) # latitude of true scale
     x <- st_transform(x = x, paste0("+proj=eqc +lat_ts=", lat_ts))
     x <- st_bbox(x)
   }

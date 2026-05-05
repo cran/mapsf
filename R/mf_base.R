@@ -1,5 +1,9 @@
-#' @title Plot an sf object
-#' @description Plot an sf object. This is mostly a wrapper around
+#' @title Deprecated - Plot an sf object
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "base"`
+#' instead.
+#'
+#' Plot an sf object. This is mostly a wrapper around
 #' \code{plot(st_geometry(x), ...)}.
 #' @param x	object of class \code{sf}, \code{sfc} or \code{sfg}
 #' @eval my_params(c(
@@ -12,7 +16,6 @@
 #' @param cex point size
 #' @param lty line or border type
 #' @param ... ignored
-#' @importFrom sf st_geometry
 #' @keywords internal
 #' @return x is (invisibly) returned.
 #' @export
@@ -30,14 +33,19 @@ mf_base <- function(x,
                     lwd = .7,
                     lty = 1,
                     add = FALSE,
+                    extent = x,
+                    bg,
+                    expandBB = rep(.04, 4),
                     ...) {
+  deprecate_direct_calls_to("mf_base")
   # margins mgmt
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
+
   if (add == FALSE) {
-    mf_init(x)
-    add <- TRUE
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   xtype <- get_geom_type(x)

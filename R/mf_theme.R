@@ -14,45 +14,55 @@
 #' Themes are persistent across maps produced by `mapsf`
 #' (e.g. they survive a `dev.off()` call).
 #'
+#' Current theme parameters are set
+#' in `mapsf` options and nammed according to the following convention:
+#' "mapsf.mf_theme_arg_name".
+#' Use `getOption()` to return the value of a specific argument of
+#' the current theme (see examples).
+#'
 #' Use `mf_theme(NULL)` or `mf_theme('base')` to reset to default theme
 #' settings.
 #'
-#' @param x name of a map theme. One of "base", "sol_dark", "sol_light",
-#' "grey", "mint", "dracula", "pistachio", "rzine".
-#' @param mar margins
+#' @eval paste0("@param x name of a map theme. One of '",
+#' paste0(get_themes_names(), collapse= "', '" ),"'.")
+#' @param mar a numeral vector of the form c(bottom, left, top, right)
+#' which gives the margin size specified in number of lines
 #' @param title_pos title position, one of 'left', 'center', 'right'
 #' @param title_tab if TRUE the title is displayed as a 'tab'
 #' @param title_cex cex of the title
 #' @param title_font font of the title
 #' @param title_line number of lines used for the title
-#' @param title_inner if TRUE the title is displayed inside the plot area.
+#' @param title_inner if TRUE the title is displayed inside the plot area;
+#' if FALSE the title is displayed in the top margin
 #' @param title_banner if TRUE the title is displayed as a banner
 #' @param foreground foreground color
 #' @param background background color
 #' @param highlight highlight color
 #' @param pal_quali default qualitative color palette (name or function)
-#' @param pal_seq default sequential color palettte (name or function)
+#' @param pal_seq default sequential color palette (name or function)
 #' @param ... deprecated arguments ('bg', 'fg', 'tab', 'pos', 'inner',
 #' 'line', 'cex' and 'font'). See the Note section.
 #' @param frame either "none", "map" or "figure"; plot a frame around the map
 #' or the figure.
 #' @param frame_lwd line width for the frame
 #' @param frame_lty line type for the frame
-#' @md
 #' @note
+#' The following themes are deprecated: "default", "brutal",
+#' "ink", "dark", "agolalight", "candy", "darkula", "iceberg", "green",
+#' "nevermind", "jsk" and "barcelona".\cr
+#' The following arguments are deprecated: "bg", "fg", "tab",
+#' "pos", "inner", "line", "cex" and "font".\cr
+#'
 #' Although the map theming system has been radically changed in version 1.0.0
 #' of the package, you can still use the old themes by referencing them by name.
-#' If you need to use the *pre* v1.0.0 default theme, set `x` to "default".
-#'
+#' If you need to use the *pre* v1.0.0 default theme, set `x` to "default".\cr
 #' If an old theme is set, only deprecated arguments are used and others are
-#' ignored.
-#'
+#' ignored.\cr
 #' If current and deprecated arguments are mixed, only deprecated arguments are
-#' used and others are ignored.
-#'
+#' used and others are ignored.\cr
 #' All references and usages of the old theming system will be removed in the
 #' next major version.
-#' @return The current list of theme parameters is (invisibly) returned.
+#' @return `mf_theme` (invisibly) returns the list of current theme parameters.
 #' @export
 #' @examples
 #' mtq <- mf_get_mtq()
@@ -97,6 +107,11 @@
 #'
 #' # Obtaining a list of parameters for the current theme:
 #' current_theme <- mf_theme()
+#'
+#' # Obtaining individual parameters for the current theme:
+#' getOption("mapsf.highlight")
+#' getOption("mapsf.pal_seq")
+#'
 #'
 #' # Use default theme:
 #' mf_theme(NULL)
@@ -161,6 +176,16 @@ mf_theme <- function(x,
         stop("x is not a theme name.", call. = FALSE)
       } else {
         theme <- .gmapsf$themes[[x]]
+        if (isTRUE(theme$legacy)) {
+          message(
+            paste0(
+              "The following themes are deprecated:\n",
+              "'default', 'brutal', 'ink', 'dark', 'agolalight', 'candy', 'darkula',\n",
+              "'iceberg', 'green', 'nevermind', 'jsk', and 'barcelona'.\n",
+              "See the Note section in the help page (?mf_theme)."
+            )
+          )
+        }
       }
     }
   }
@@ -173,9 +198,12 @@ mf_theme <- function(x,
     argx$cex, argx$font
   )
   if (!is.null(legacy_argx)) {
-    message(paste0("'bg', 'fg', 'tab', 'pos', 'inner', 'line', 'cex'",
-                   " and 'font' are deprecated.\n",
-                   "See the Note section in the help page."))
+    message(paste0(
+      "The following arguments are deprecated:\n",
+      "'bg', 'fg', 'tab', 'pos', 'inner', 'line', 'cex'",
+      " and 'font'.\n",
+      "See the Note section in the help page (?mf_theme)."
+    ))
     theme$legacy <- TRUE
     theme$title_banner <- TRUE
     theme$pal_quali <- "Dynamic"

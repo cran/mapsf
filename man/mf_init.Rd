@@ -2,29 +2,36 @@
 % Please edit documentation in R/mf_init.R
 \name{mf_init}
 \alias{mf_init}
-\title{Initialize a map with a specific extent}
+\title{Deprecated - Initialize a map with a specific extent}
 \usage{
-mf_init(x, expandBB = rep(0, 4))
+mf_init(x, expandBB = rep(0, 4), extent = x, bgc)
 }
 \arguments{
 \item{x}{object of class \code{sf}, \code{sfc} or \code{SpatRaster}}
 
 \item{expandBB}{fractional values to expand the bounding box with, in each
 direction (bottom, left, top, right)}
+
+\item{extent}{object with an st_bbox method to define plot extent; defaults to x. extent and x must use the same CRS.}
 }
 \value{
 No return value, a map is initiated.
 }
 \description{
+This function is deprecated.
+Please use \code{mf_map(x, col = NA, border = NA)} instead.
+
 Plot an invisible layer with the extent of a spatial object.\cr
-Always use \code{add = TRUE} in \code{mf_map} calls following an
-\code{mf_init} call.
+Always use \code{add = TRUE} in \code{mf_map()} calls following an
+\code{mf_init()} call.
 This function is similar to \code{mf_map(x, col = NA, border = NA)}.
 }
 \examples{
 mtq <- mf_get_mtq()
 target <- mtq[30, ]
-mf_init(target)
+mf_map(target, type = "base", col = NA, border = NA)
 mf_map(mtq, add = TRUE)
+# or
+mf_map(mtq, extent = target)
 }
 \keyword{internal}

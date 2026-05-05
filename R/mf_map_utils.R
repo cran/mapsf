@@ -1,10 +1,28 @@
+deprecate_direct_calls_to <- function(m) {
+  if (any(grepl(m, sys.call(1)))) {
+    warning(paste0(m, "() is deprecated. Use mf_map() instead."), call. = FALSE)
+  }
+}
+
+test2args <- function(x) {
+  if (length(x) != 2) {
+    stop(
+      paste0(
+        "Argument '", deparse(substitute(x)),
+        "' needs 2 values."
+      ),
+      call. = FALSE
+    )
+  }
+  return(x)
+}
+
 #' Title
 #'
 #' @param pal pal
 #' @param nbreaks nbreaks
 #' @param alpha alpha
 #' @noRd
-#' @importFrom grDevices hcl.pals hcl.colors
 get_the_pal <- function(pal, nbreaks, alpha, rev = TRUE) {
   if (length(pal) == 1) {
     if (is.function(pal)) {
@@ -25,9 +43,9 @@ get_the_pal <- function(pal, nbreaks, alpha, rev = TRUE) {
 }
 
 get_hex_pal <- function(pal, alpha) {
-  pal <- grDevices::col2rgb(pal, alpha = FALSE)
+  pal <- col2rgb(pal, alpha = FALSE)
   ffun <- function(x) {
-    grDevices::rgb(pal[1, x],
+    rgb(pal[1, x],
       pal[2, x],
       pal[3, x],
       maxColorValue = 255
@@ -74,7 +92,6 @@ get_col_vec <- function(x, breaks, pal, jen = FALSE) {
   colvec <- pal[itv]
   return(colvec)
 }
-
 
 
 #' @name create_dots
@@ -149,9 +166,6 @@ create_dots <- function(x = x, var = var) {
 }
 
 
-
-
-
 #' @name get_size
 #' @title get_size
 #' @description get a vector of radii
@@ -176,13 +190,10 @@ get_size <- function(var, inches, val_max, symbol) {
 }
 
 
-
-
-
 # Plot symbols
 plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
   if (inherits(dots, c("sf", "sfc"))) {
-    xy <- sf::st_set_geometry(dots[, 1:2], NULL)
+    xy <- st_set_geometry(dots[, 1:2], NULL)
   } else {
     xy <- dots
   }
@@ -215,7 +226,6 @@ plot_symbols <- function(symbol, dots, sizes, mycols, border, lwd, inches) {
     }
   )
 }
-
 
 
 check_order <- function(val_order, mod) {
@@ -286,8 +296,6 @@ split_leg <- function(x) {
   return(list(l1 = lp1, l2 = lp2))
 }
 
-
-
 get_geom_type <- function(x) {
   a <- list(
     POINT = "POINT",
@@ -338,4 +346,20 @@ check_args <- function(argx, type) {
     argx <- argx[!n_rel]
   }
   argx
+}
+
+
+get_val_rnd <- function(val, val_rnd, val_dec = getOption("OutDec"), val_big = "") {
+  if (is.numeric(val)) {
+    val <- round(val, val_rnd)
+    if (val_rnd <= 0) {
+      val_rnd <- 0
+    }
+    val <- format(
+      x = val, scientific = FALSE, nsmall = val_rnd,
+      decimal.mark = val_dec, big.mark = val_big,
+      trim = TRUE
+    )
+  }
+  return(val)
 }

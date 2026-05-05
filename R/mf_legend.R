@@ -5,7 +5,6 @@
 #' Please note that some arguments are available for all types of legend and
 #' some others are only relevant for specific legend types (see Details).
 #' `mf_legend()` is a wrapper for `maplegend::leg()`.
-#' @md
 #' @param type type of legend:
 #' * **prop** for proportional symbols,
 #' * **choro** for choropleth maps,
@@ -13,21 +12,30 @@
 #' * **typo** for typology maps,
 #' * **symb** for symbols maps,
 #' * **prop_line** for proportional lines maps,
-#' * **grad_line** for graduated lines maps.
+#' * **grad_line** for graduated lines maps,
+#' * **histo** for histograms,
+#' * **choro_point** for choropleth points maps,
+#' * **choro_line** for choropleth lines maps,
+#' * **choro_symb** for choropleth on symbols maps
+#' * **typo_line** for typology lines maps.
 #' @param val
 #' vector of value(s) (for "prop" and "prop_line", at least c(min, max)
 #' for "cont"),
-#' vector of categories (for "symb" and "typo"),
-#' break labels (for "choro" and "grad_line").
+#' vector of categories (for "symb", "typo", "typo_line"),
+#' break labels (for "choro", "choro_point", "choro_line", "choro_symb",
+#' and "grad_line"),
+#' histogram parameters (for "histo").
 #' @param pos position of the legend. It can be one of 'topleft', 'top',
 #' 'topright', 'right', 'bottomright', 'bottom','bottomleft',
 #' 'left', 'interactive' or a vector of two coordinates
 #' in map units (c(x, y)).
-#' @param pal a color palette name or a vector of colors
-#' @param alpha if \code{pal} is a \link{hcl.colors} palette name, the
+#' @param pal a set of colors (hex codes) or a palette name (valid palette
+#' names can be obtained with [hcl.pals].
+#' @param alpha if `pal` is a valid palette name, the
 #' alpha-transparency level in the range \[0,1\]
 #' @param inches size of the largest symbol (radius for circles, half width
 #' for squares) in inches
+#' @param val_max maximum value corresponding to the largest symbol
 #' @param border symbol border color(s)
 #' @param symbol type of symbols, 'circle' or 'square'
 #' @param self_adjust if TRUE values are self-adjusted to keep min, max and
@@ -37,21 +45,24 @@
 #' @param val_cex size of the values in the legend
 #' @param val_rnd number of decimal places of the values in
 #' the legend
+#' @param val_dec decimal separator
+#' @param val_big thousands separator
 #' @param frame if TRUE the legend is plotted within a frame
 #' @param no_data if TRUE a "missing value" box is plotted
 #' @param no_data_txt label for missing values
 #' @param bg background color of the legend
 #' @param fg foreground color of the legend
 #' @param box_border border color of legend boxes
-#' @param box_cex width and height size expansion of boxes,
-#' (or offset between circles for "prop" legends with horiz = TRUE)
+#' @param box_cex width and height size expansion of boxes, histogram
+#' circles, squares or lines
 #' @param return_bbox return only bounding box of the legend.
 #' No legend is plotted.
 #' @param col color of the symbols (for "prop") or color of the lines (for
 #' "prop_line" and "grad_line")
-#' @param lwd width(s) of the symbols borders (for "prop" and "symb"),
-#' width of the largest line (for "prop_line"), vector of line width
-#' (for "grad_line")
+#' @param lwd width(s) of the symbols borders (for "prop", "symb",
+#' "choro_point", "choro_symb"),
+#' width of the largest line (for "prop_line"), line width (for "choro_line"
+#' and "typo_line"), vector of line widths (for "grad_line")
 #' @param size size of the legend; 2 means two times bigger
 #' @param cex size(s) of the symbols
 #' @param pch type(s) of the symbols (0:25)
@@ -59,7 +70,7 @@
 #' @param cex_na size of the symbols for missing values
 #' @param pch_na type of the symbols for missing values
 #' @param horiz if TRUE plot an horizontal legend
-#' @param adj adjust the postion of the legend in x and y directions
+#' @param adj adjust the position of the legend in x and y directions
 #' @param frame_border border color of the frame
 #' @return No value is returned, a legend is displayed
 #' (except if `return_bbox` is used).
@@ -67,18 +78,23 @@
 #' @export
 #' @details
 #' Some arguments are available for all types of legend: `val`, `pos`, `title`,
-#' `title_cex`, `val_cex`, `frame`, `bg`, `fg`, `size`, `adj`,
+#' `title_cex`, `val_cex`, `frame`, `bg`, `fg`, `size`, `adj`, `alpha`,
 #' `return_bbox`).
 #'
-#'
 #' Relevant arguments for each specific legend types:
-#' * `mf_legend(type = "prop", val, inches, symbol, col, lwd, border, val_rnd, self_adjust, horiz)`
-#' * `mf_legend(type = "choro", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
-#' * `mf_legend(type = "cont", val, pal, val_rnd, col_na, no_data, no_data_txt, box_border, horiz)`
-#' * `mf_legend(type = "typo", val, pal, col_na, no_data, no_data_txt, box_border)`
+#' * `mf_legend(type = "prop", val, inches, val_max, symbol, col, lwd, border, val_rnd, val_big, val_dec, self_adjust, horiz)`
+#' * `mf_legend(type = "choro", val, pal, val_rnd, val_big, val_dec, col_na, no_data, no_data_txt, box_border, box_cex, horiz)`
+#' * `mf_legend(type = "cont", val, pal, val_rnd, val_big, val_dec, col_na, no_data, no_data_txt, box_border, box_cex, horiz)`
+#' * `mf_legend(type = "typo", val, pal, col_na, no_data, no_data_txt, box_border, box_cex)`
 #' * `mf_legend(type = "symb", val, pal, pch, cex, lwd, pch_na, cex_na, col_na, no_data, no_data_txt)`
-#' * `mf_legend(type = "prop_line", val, col, lwd, val_rnd)`
-#' * `mf_legend(type = "grad_line", val, col, lwd, val_rnd)`
+#' * `mf_legend(type = "prop_line", val, col, lwd, val_rnd, val_big, val_dec)`
+#' * `mf_legend(type = "grad_line", val, col, lwd, val_rnd, val_big, val_dec)`
+#' * `mf_legend(type = "histo", val, pal, box_border, val_rnd, val_big, val_dec)`
+#' * `mf_legend(type = "choro_point", val, pal, symbol, border, cex, val_rnd, val_big, val_dec, col_na, no_data, no_data_txt, horiz)`
+#' * `mf_legend(type = "choro_line", val, pal, lwd, val_rnd, val_big, val_dec, col_na, no_data, no_data_txt)`
+#' * `mf_legend(type = "choro_symb", val, pal, pch, lwd, val_rnd, val_big, val_dec, col_na, no_data, no_data_txt)`
+#' * `mf_legend(type = "typo_line", val, pal, lwd, col_na, no_data, no_data_txt, box_cex)`
+
 #' @examples
 #' mtq <- mf_get_mtq()
 #' mf_map(mtq)
@@ -108,6 +124,7 @@ mf_legend <- function(type,
                       alpha = 1,
                       col = "tomato4",
                       inches = .3,
+                      val_max = NULL,
                       symbol = "circle",
                       self_adjust = FALSE,
                       lwd = 0.7,
@@ -118,6 +135,8 @@ mf_legend <- function(type,
                       title_cex = 0.8 * size,
                       val_cex = 0.6 * size,
                       val_rnd = 0,
+                      val_dec = ".",
+                      val_big = "",
                       col_na = "white",
                       cex_na = 1,
                       pch_na = 4,

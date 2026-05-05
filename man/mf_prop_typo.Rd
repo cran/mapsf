@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_prop_typo.R
 \name{mf_prop_typo}
 \alias{mf_prop_typo}
-\title{Plot proportional symbols using typology coloration}
+\title{Deprecated - Plot proportional symbols using typology coloration}
 \usage{
 mf_prop_typo(
   x,
@@ -18,6 +18,9 @@ mf_prop_typo(
   lwd = 0.7,
   lwd_max = 15,
   col_na = "white",
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x, 1),
   leg_title = var,
   leg_title_cex = c(0.8, 0.8),
@@ -49,11 +52,11 @@ mf_prop_typo(
 
 \item{symbol}{type of symbols, 'circle' or 'square'}
 
-\item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+\item{pal}{a set of colors (hex codes) or a palette name (valid palette names can be obtained with \code{\link{hcl.pals}}).}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
-\item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
+\item{rev}{if \code{pal} is a valid palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
@@ -65,7 +68,7 @@ mf_prop_typo(
 
 \item{col_na}{color for missing values}
 
-\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right','bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). Use NA to avoid plotting the legend, use 'interactive' to choose thelegend position interactively.}
+\item{leg_pos}{position of the legend, two of 'topleft', 'top','topright', 'right','bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). leg_pos argument can be c('position', 'position'), c('position', x2, y2), c(x1,y1, 'position') or c(x1, y1, x2, y2). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -85,7 +88,7 @@ mf_prop_typo(
 
 \item{leg_horiz}{display the legend horizontally (for proportional symbols and choropleth types)}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
 }
@@ -93,6 +96,9 @@ mf_prop_typo(
 x is (invisibly) returned.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "prop_typo"}
+instead.
+
 Plot proportional symbols with colors based on qualitative data.
 }
 \examples{
@@ -107,13 +113,13 @@ mf_map(
   inches = .35, border = "tomato4",
   val_max = 90000, symbol = "circle", col_na = "grey", pal = "Dynamic",
   lwd = 2,
-  leg_pos = c("bottomright", "bottomleft"),
+  leg_pos = "bottomright",
   leg_title = c("Population", "Municipality\nstatus"),
-  leg_title_cex = c(0.9, 0.9),
-  leg_val_cex = c(.7, .7),
+  leg_title_cex = 0.9,
+  leg_val_cex = .7,
   val_order = c("Prefecture", "Sub-prefecture", "Simple municipality"),
   leg_no_data = "No dada",
-  leg_frame = c(TRUE, TRUE),
+  leg_frame = TRUE,
   add = TRUE
 )
 }

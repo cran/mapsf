@@ -1,5 +1,9 @@
-#' @title Plot a choropleth map
-#' @description Plot choropleth map.
+#' @title Deprecated - Plot a choropleth map
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "choro"`
+#' instead.
+#'
+#' Plot a choropleth map
 #' @eval my_params(c(
 #' 'x',
 #' 'var',
@@ -31,15 +35,13 @@
 #' 'leg_frame_border'))
 #' @param cex cex cex of the symbols if x is a POINT layer
 #' @param pch pch type of pch if x is a POINT layer
-#' @param pch_na pch for NA values if x is a POINT layer
-#' @param cex_na cex for NA values if x is a POINT layer
 #' @details
 #' Breaks defined by a numeric vector or a classification method are
 #' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' will be mapped as \[2 - 5\[, \[5 - 10\[, \[10 - 15\[, \[15 - 20\].
 #' The "jenks" method is an exception and has to be right-closed.
 #' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
+#' will be mapped as \[2 - 5\], \]5 - 10\], \]10 - 15\], \]15 - 20\].
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -68,8 +70,9 @@ mf_choro <- function(x, var,
                      cex = 2,
                      lwd = .7,
                      col_na = "white",
-                     cex_na = 1,
-                     pch_na = 4,
+                     extent = x,
+                     bg,
+                     expandBB = rep(.04, 4),
                      leg_pos = mf_get_leg_pos(x),
                      leg_title = var,
                      leg_title_cex = .8,
@@ -88,10 +91,12 @@ mf_choro <- function(x, var,
                      leg_bg,
                      leg_frame_border,
                      add = FALSE) {
+  deprecate_direct_calls_to("mf_choro")
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
   pal <- go(pal, "pal_seq", "Mint")
   leg_box_border <- go(leg_box_border, "highlight")
   leg_fg <- go(leg_fg, "highlight")
@@ -123,13 +128,36 @@ mf_choro <- function(x, var,
 
 
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   xtype <- get_geom_type(x)
 
   if (xtype == "LINE") {
     plot(st_geometry(x), col = mycols, lwd = lwd, add = TRUE)
+    leg(
+      type = "choro_line",
+      pos = leg_pos,
+      val = breaks,
+      title = leg_title,
+      title_cex = leg_title_cex,
+      val_cex = leg_val_cex,
+      val_rnd = leg_val_rnd,
+      val_dec = leg_val_dec,
+      val_big = leg_val_big,
+      col_na = col_na,
+      no_data = no_data,
+      no_data_txt = leg_no_data,
+      frame = leg_frame,
+      pal = pal,
+      bg = leg_bg,
+      fg = leg_fg,
+      size = leg_size,
+      lwd = lwd,
+      box_cex = leg_box_cex,
+      frame_border = leg_frame_border,
+      adj = leg_adj
+    )
   }
 
   if (xtype == "POLYGON") {
@@ -138,6 +166,30 @@ mf_choro <- function(x, var,
       st_geometry(x),
       col = mycols, border = border, lwd = lwd,
       add = TRUE
+    )
+    leg(
+      type = "choro",
+      pos = leg_pos,
+      val = breaks,
+      title = leg_title,
+      title_cex = leg_title_cex,
+      val_cex = leg_val_cex,
+      val_rnd = leg_val_rnd,
+      val_dec = leg_val_dec,
+      val_big = leg_val_big,
+      col_na = col_na,
+      no_data = no_data,
+      no_data_txt = leg_no_data,
+      horiz = leg_horiz,
+      frame = leg_frame,
+      pal = pal,
+      bg = leg_bg,
+      fg = leg_fg,
+      size = leg_size,
+      box_border = leg_box_border,
+      box_cex = leg_box_cex,
+      frame_border = leg_frame_border,
+      adj = leg_adj
     )
   }
   if (xtype == "POINT") {
@@ -153,32 +205,34 @@ mf_choro <- function(x, var,
       col = mycolspt, bg = mycolsptbg, cex = cex, pch = pch,
       lwd = lwd, add = TRUE
     )
+    leg(
+      type = "choro_symb",
+      pos = leg_pos,
+      val = breaks,
+      pch = pch,
+      cex = cex,
+      lwd = lwd,
+      border = border,
+      title = leg_title,
+      title_cex = leg_title_cex,
+      val_cex = leg_val_cex,
+      val_rnd = leg_val_rnd,
+      val_dec = leg_val_dec,
+      val_big = leg_val_big,
+      col_na = col_na,
+      no_data = no_data,
+      no_data_txt = leg_no_data,
+      horiz = leg_horiz,
+      frame = leg_frame,
+      pal = pal,
+      bg = leg_bg,
+      fg = leg_fg,
+      size = leg_size,
+      box_cex = leg_box_cex * c(.75, .85),
+      frame_border = leg_frame_border,
+      adj = leg_adj
+    )
   }
-
-  leg(
-    type = "choro",
-    pos = leg_pos,
-    val = breaks,
-    title = leg_title,
-    title_cex = leg_title_cex,
-    val_cex = leg_val_cex,
-    val_rnd = leg_val_rnd,
-    val_dec = leg_val_dec,
-    val_big = leg_val_big,
-    col_na = col_na,
-    no_data = no_data,
-    no_data_txt = leg_no_data,
-    horiz = leg_horiz,
-    frame = leg_frame,
-    pal = pal,
-    bg = leg_bg,
-    fg = leg_fg,
-    size = leg_size,
-    box_border = leg_box_border,
-    box_cex = leg_box_cex,
-    frame_border = leg_frame_border,
-    adj = leg_adj
-  )
 
   return(invisible(x))
 }

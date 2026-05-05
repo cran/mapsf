@@ -7,13 +7,12 @@
 #' of x, figure margins and title size.\cr
 #' If height is specified, then width is
 #' deduced from the width / height ratio of x, figure margins and title size.
-#' @param x object of class \code{sf}, \code{sfc} or \code{SpatRaster}
+#' @param x object of class `sf`, `sfc` or `SpatRaster`
 #' @param expandBB fractional values to expand the bounding box with, in each
 #' direction (bottom, left, top, right)
 #' @param theme theme used for the map
 #' @param width width of the figure (inches), use only one of width or height
 #' @param height height of the figure (inches), use only one of width or height
-#' @importFrom sf st_bbox st_as_sfc st_geometry st_is_longlat st_crs
 #' @return Width and height are returned in inches.
 #' @export
 #'
@@ -58,7 +57,6 @@ test_ratio_input <- function(x) {
 }
 
 
-
 x_to_bb <- function(x, expandBB) {
   if (inherits(x, c("SpatRaster", "SpatVector"))) {
     ras_proj <- terra::crs(x)
@@ -73,7 +71,7 @@ x_to_bb <- function(x, expandBB) {
 
   if (isTRUE(st_is_longlat(st_crs(x)))) {
     x <- st_as_sfc(st_bbox(x))
-    lat_ts <- mean(sf::st_bbox(x)[c(2, 4)]) # latitude of true scale
+    lat_ts <- mean(st_bbox(x)[c(2, 4)]) # latitude of true scale
     x <- st_transform(x = x, paste0("+proj=eqc +lat_ts=", lat_ts))
   }
 
@@ -97,7 +95,6 @@ get_mar <- function(theme) {
   }
   mar
 }
-
 
 
 bb_to_ratio <- function(bb, mar, width, height) {

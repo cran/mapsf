@@ -2,13 +2,26 @@
 # import stuffs
 # @import graphics
 # @import stats
-#' @import sf
-#' @import graphics
+# @import sf
+# @import graphics
+#' @importFrom s2 as_s2_geography s2_data_countries s2_difference s2_union_agg
+#' s2_buffer_cells as_s2_geography s2_intersection
 #' @importFrom maplegend leg leg_comp leg_draw
-#' @importFrom grDevices colorRampPalette
-#' @importFrom stats aggregate median na.omit quantile runif sd
-
-
+#' @importFrom grDevices colorRampPalette dev.list png svg hcl.colors
+#' recordGraphics hcl.pals dev.size xy.coords col2rgb rgb
+#' @importFrom stats aggregate median na.omit quantile runif sd bw.SJ density
+#' @importFrom sf st_polygon st_multilinestring st_multipolygon st_buffer
+#' st_coordinates st_buffer st_geometry st_crs st_bbox st_as_sf st_transform
+#' st_is_longlat st_as_sfc st_centroid st_crs<- st_geometry<- st_is_empty
+#' st_collection_extract st_cast st_read st_geometry_type st_agr
+#' st_set_agr st_convex_hull st_make_grid st_union st_intersects
+#' st_set_geometry st_sf st_area st_combine st_graticule st_intersection
+#' st_sample st_set_crs st_sfc
+#' @importFrom graphics arrows axis boxplot grconvertX box rasterImage
+#' grconvertY hist lines locator par plot.new plot.window points polygon
+#' rasterImage rect segments strheight strwidth symbols text
+#' title xinch xyinch yinch
+#' @importFrom classInt classIntervals
 
 
 #' @importFrom utils globalVariables
@@ -33,7 +46,6 @@ go <- function(x, opt, legacy) {
 }
 
 
-#' @importFrom grDevices dev.list
 test_cur_plot <- function() {
   if (is.null(dev.list())) {
     stop("You can only use this feature on an existing plot.", call. = FALSE)
@@ -76,4 +88,142 @@ shadowtext <- function(x, y = NULL, labels, col = "white", bg = "black",
     text(x + cos(i) * xo, y + sin(i) * yo, labels, col = bg, ...)
   }
   text(x, y, labels, col = col, ...)
+}
+
+
+get_breaks_methods_names <- function() {
+  return(
+    c(
+      "quantile", "equal", "msd", "ckmeans", "Q6", "geom", "fixed", "sd",
+      "pretty", "kmeans", "hclust", "bclust", "fisher", "jenks", "dpih",
+      "headtails", "maximum", "box", "q6", "arith", "em"
+    )
+  )
+}
+
+
+get_themes_names <- function() {
+  n <- names(.gmapsf$themes)
+  return(n[!n %in% c(
+    "default", "brutal", "ink", "dark", "agolalight", "candy",
+    "darkula", "iceberg", "green", "nevermind", "jsk", "barcelona"
+  )])
+}
+
+
+readimage <- function(filename) {
+  ex <- strsplit(basename(filename), split = "\\.")[[1]]
+  ex <- tolower(ex[length(ex)])
+  if (ex == "png") {
+    if (!requireNamespace("png", quietly = TRUE)) {
+      stop(
+        "'png' is package needed for this function to work. Please install it.",
+        call. = FALSE
+      )
+    }
+    img <- png::readPNG(filename)
+  }
+  if (ex %in% c("jpg", "jpeg")) {
+    if (!requireNamespace("jpeg", quietly = TRUE)) {
+      stop(
+        paste0(
+          "'jpeg' is package needed for this function to work. ",
+          "Please install it."
+        ),
+        call. = FALSE
+      )
+    }
+    img <- jpeg::readJPEG(filename)
+  }
+  return(img)
+}
+
+
+#' xy of legend
+#'
+#' @param pos pos
+#' @param pu pu
+#' @param wdest dl
+#' @param hdest dl
+#'
+#' @noRd
+posinset <- function(pos, pusr, wdest, hdest, adj = c(0, 0)) {
+  if (is.numeric(pos) && length(pos) == 2) {
+    xy <- c(
+      pos[1],
+      pos[1] + wdest,
+      pos[2] - hdest,
+      pos[2]
+    )
+    return(xy)
+  }
+
+  posposs <- c(
+    "bottomleft", "left", "topleft", "top", "bottom",
+    "bottomright", "right", "topright"
+  )
+  if (!pos %in% posposs) {
+    stop(paste0(
+      "pos should be one of ", paste0(posposs, collapse = ", "),
+      "."
+    ), call. = FALSE)
+  }
+
+  x_spacing <- xinch(par("csi")) / 4
+  y_spacing <- yinch(par("csi")) / 4
+  pusr <- pusr + c(x_spacing, -x_spacing, y_spacing, -y_spacing)
+
+  xy <- switch(pos,
+    bottomleft = c(
+      pusr[1],
+      pusr[1] + wdest,
+      pusr[3],
+      pusr[3] + hdest
+    ),
+    topleft = c(
+      pusr[1],
+      pusr[1] + wdest,
+      pusr[4] - hdest,
+      pusr[4]
+    ),
+    left = c(
+      pusr[1],
+      pusr[1] + wdest,
+      pusr[3] + (pusr[4] - pusr[3]) / 2 - (hdest) / 2,
+      pusr[3] + (pusr[4] - pusr[3]) / 2 + (hdest) / 2
+    ),
+    top = c(
+      pusr[1] + (pusr[2] - pusr[1]) / 2 - (wdest) / 2,
+      pusr[1] + (pusr[2] - pusr[1]) / 2 + (wdest) / 2,
+      pusr[4] - hdest,
+      pusr[4]
+    ),
+    bottom = c(
+      pusr[1] + (pusr[2] - pusr[1]) / 2 - (wdest) / 2,
+      pusr[1] + (pusr[2] - pusr[1]) / 2 + (wdest) / 2,
+      pusr[3],
+      pusr[3] + hdest
+    ),
+    bottomright = c(
+      pusr[2] - wdest,
+      pusr[2],
+      pusr[3],
+      pusr[3] + hdest
+    ),
+    right = c(
+      pusr[2] - wdest,
+      pusr[2],
+      pusr[3] + (pusr[4] - pusr[3]) / 2 - (hdest) / 2,
+      pusr[3] + (pusr[4] - pusr[3]) / 2 + (hdest) / 2
+    ),
+    topright = c(
+      pusr[2] - wdest,
+      pusr[2],
+      pusr[4] - hdest,
+      pusr[4]
+    )
+  )
+  xy <- xy + c(adj[1], adj[1], adj[2], adj[2]) *
+    c(x_spacing, x_spacing, y_spacing, y_spacing)
+  return(xy)
 }

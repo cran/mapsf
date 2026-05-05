@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_grad.R
 \name{mf_grad}
 \alias{mf_grad}
-\title{Plot graduated symbols}
+\title{Deprecated - Plot graduated symbols}
 \usage{
 mf_grad(
   x,
@@ -15,17 +15,19 @@ mf_grad(
   pch = 21,
   cex,
   lwd,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
   leg_title_cex = 0.8,
   leg_val_cex = 0.6,
-  leg_val_rnd = 2,
+  leg_val_rnd = 0,
   leg_val_dec = ".",
   leg_val_big = "",
   leg_frame = FALSE,
   leg_adj = c(0, 0),
   leg_size = 1,
-  leg_border = border,
   leg_box_cex = c(1, 1),
   leg_fg,
   leg_bg,
@@ -42,9 +44,9 @@ mf_grad(
 
 \item{nbreaks}{number of classes}
 
-\item{col}{color}
+\item{col}{a color, hex code or color name given by \code{\link{colors}}}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
 \item{border}{border color}
 
@@ -54,7 +56,7 @@ mf_grad(
 
 \item{lwd}{border width}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -70,17 +72,15 @@ mf_grad(
 
 \item{leg_frame}{whether to add a frame to the legend (TRUE) or not (FALSE)}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{leg_size}{size of the legend; 2 means two times bigger}
-
-\item{leg_border}{symbol border color(s)}
 
 \item{leg_box_cex}{width and height size expansion of boxes}
 
 \item{leg_fg}{color of the legend foreground}
 
-\item{leg_bg}{color of the legend backgournd}
+\item{leg_bg}{color of the legend background}
 
 \item{leg_frame_border}{border color of the legend frame}
 
@@ -90,6 +90,9 @@ mf_grad(
 x is (invisibly) returned.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "grad"}
+instead.
+
 Plot graduated symbols based on quantitative data.
 }
 \details{

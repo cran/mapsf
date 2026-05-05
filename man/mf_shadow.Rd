@@ -4,16 +4,34 @@
 \alias{mf_shadow}
 \title{Plot a shadow}
 \usage{
-mf_shadow(x, col, cex = 1, add = FALSE)
+mf_shadow(
+  x,
+  col,
+  cex = 1,
+  add = FALSE,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4)
+)
 }
 \arguments{
 \item{x}{an sf or sfc polygon object}
 
-\item{col}{shadow color}
+\item{col}{shadow color. The default color is the highlight color
+(see \link{mf_theme}).}
 
 \item{cex}{shadow extent}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
+
+\item{extent}{object with an \code{st_bbox} method to define plot extent;
+defaults to \code{x}. \code{extent} and \code{x} must use the same CRS.}
+
+\item{bg}{background color of the map, hex code or color name given by
+\link{colors}, ignored if \code{add = TRUE}}
+
+\item{expandBB}{fractional values to expand the bounding box with, in each
+direction (bottom, left, top, right)}
 }
 \value{
 x is (invisibly) returned.

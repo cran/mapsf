@@ -2,7 +2,7 @@
 #' @description Plot a scale bar.
 #' @name mf_scale
 #' @param col color of the scale bar (line and text)
-#' @param size size of the scale bar in scale units (\code{scale_units},
+#' @param size size of the scale bar in scale units (`scale_units`,
 #' default to km). If size is not set, an automatic size is used.
 #' @param lwd line width of the scale bar
 #' @param cex size of the scale bar text
@@ -12,15 +12,15 @@
 #' Possible values are "m" and "ft" (see Details).
 #' @param scale_units units used for the scale bar. Can be "mi" for miles,
 #' "ft" for feet, "m" for meters, or "km" for kilometers (default).
-#' @param adj adjust the postion of the scale bar in x and y directions
+#' @param adj adjust the position of the scale bar in x and y directions
 #' @param x object of class crs, sf or sfc. If set, the CRS of x will be used
-#' instead of \code{crs_units} to define CRS units.
+#' instead of `crs_units` to define CRS units.
 #' @details Most CRS use the meter as unit. Some US CRS use feet or US survey
 #' feet. If unsure of the unit used in the CRS you can use the x argument of the
 #' function.
 #' Alternatively, you can use
-#' \code{sf::st_crs(zz, parameters = TRUE)$units_gdal} to see which units
-#' are used in the \code{zz} layer.
+#' `sf::st_crs(zz, parameters = TRUE)$units_gdal` to see which units
+#' are used in the `zz` layer.
 #'
 #' The scale bar cannot be displayed on unprojected (long/lat) maps or
 #' on maps without documented CRS.
@@ -58,7 +58,7 @@ mf_scale <- function(size,
   col <- go(col, "highlight")
 
   if (!missing(x)) {
-    uu <- sf::st_crs(x)$ud_unit
+    uu <- st_crs(x)$ud_unit
     u_m <- structure(1,
       units = structure(
         list(
@@ -127,7 +127,7 @@ mf_scale <- function(size,
     size <- NULL
   }
 
-  if (diff(par("usr")[1:2]) < 360 * 2 || diff(par("usr")[3:4]) < 180 * 2){
+  if (diff(par("usr")[1:2]) < 360 * 2 || diff(par("usr")[3:4]) < 180 * 2) {
     message("The scale bar cannot be displayed on unprojected (long/lat) maps.")
     return(invisible(NULL))
   }
@@ -266,8 +266,6 @@ unit_conversion <- function(size, unit_in, unit_out) {
 
   return(size)
 }
-
-
 
 
 pretty_scale <- function(size, scale_units) {

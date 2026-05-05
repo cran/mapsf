@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_annotation.R
 \name{mf_annotation}
 \alias{mf_annotation}
-\title{Plot an annotation}
+\title{Deprecated - Plot an annotation}
 \usage{
 mf_annotation(
   x,
@@ -44,6 +44,9 @@ mf_annotation(
 No return value, an annotation is displayed.
 }
 \description{
+This function is deprecated. Please use \link{mf_text} instead.
+instead.
+
 Plot an annotation on a map.
 }
 \note{
@@ -52,16 +55,23 @@ Annotations cannot be displayed on unprojected (long/lat) maps.
 \examples{
 mtq <- mf_get_mtq()
 mf_map(mtq)
-mf_annotation(
-  x = c(711167.8, 1614764),
-  txt = "Look!\nImportant feature\nhere!",
-  pos = "bottomleft", cex = 1.2, font = 2,
-  halo = TRUE, s = 1.5
+mf_text(
+  x = mtq[2, ],
+  txt = "pos = 'bottomleft'\nline = 2\nclockwise = FALSE",
+  pos = "bottomleft",
+  offset = 6,
+  clockwise = FALSE,
+  line = 2,
+  box = FALSE
 )
-
-mf_annotation(
-  x = mtq[20, ],
-  txt = "This is less\nimportant",
-  cex = .7, font = 3, s = 1.3
+mf_text(
+  x = mtq[28, ],
+  txt = "pos = 'topright'\nline = 3\nclockwise = FALSE",
+  pos = "topright",
+  offset = 10,
+  clockwise = FALSE,
+  line = 3,
+  halo = TRUE,
+  align = "left"
 )
 }

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_prop.R
 \name{mf_prop}
 \alias{mf_prop}
-\title{Plot proportional symbols}
+\title{Deprecated - Plot proportional symbols}
 \usage{
 mf_prop(
   x,
@@ -15,6 +15,9 @@ mf_prop(
   alpha = NULL,
   border,
   lwd = 0.7,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
   leg_title_cex = 0.8,
@@ -45,15 +48,15 @@ mf_prop(
 
 \item{symbol}{type of symbols, 'circle' or 'square'}
 
-\item{col}{color}
+\item{col}{a color, hex code or color name given by \code{\link{colors}}}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
 \item{border}{border color}
 
 \item{lwd}{border width}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -73,11 +76,11 @@ mf_prop(
 
 \item{leg_horiz}{display the legend horizontally (for proportional symbols and choropleth types)}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{leg_fg}{color of the legend foreground}
 
-\item{leg_bg}{color of the legend backgournd}
+\item{leg_bg}{color of the legend background}
 
 \item{leg_size}{size of the legend; 2 means two times bigger}
 
@@ -87,6 +90,9 @@ mf_prop(
 x is (invisibly) returned.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "prop"}
+instead.
+
 Plot proportional symbols.
 }
 \examples{

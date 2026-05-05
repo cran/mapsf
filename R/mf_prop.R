@@ -1,5 +1,9 @@
-#' @title Plot proportional symbols
-#' @description Plot proportional symbols.
+#' @title Deprecated - Plot proportional symbols
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "prop"`
+#' instead.
+#'
+#' Plot proportional symbols.
 #' @eval my_params(c(
 #' 'x',
 #' 'var',
@@ -26,7 +30,6 @@
 #' 'leg_fg',
 #' 'leg_size',
 #' 'leg_adj'))
-#' @importFrom graphics box
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -54,6 +57,9 @@ mf_prop <- function(x,
                     alpha = NULL,
                     border,
                     lwd = .7,
+                    extent = x,
+                    bg,
+                    expandBB = rep(.04, 4),
                     leg_pos = mf_get_leg_pos(x),
                     leg_title = var,
                     leg_title_cex = .8,
@@ -69,10 +75,12 @@ mf_prop <- function(x,
                     leg_bg,
                     leg_size = 1,
                     add = TRUE) {
+  deprecate_direct_calls_to("mf_prop")
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
   col <- go(col, "highlight", "tomato4")
   border <- go(border, "background")
   leg_fg <- go(leg_fg, "highlight")
@@ -81,8 +89,7 @@ mf_prop <- function(x,
     leg_frame_border, "foreground",
     getOption("mapsf.highlight")
   )
-
-
+  border <- border[[1]]
 
   if (!is.null(alpha)) {
     col <- get_hex_pal(col, alpha)
@@ -99,10 +106,10 @@ mf_prop <- function(x,
     }
     xl$lwd <- xl[[var]] * lwd_max / maxval
     if (add == FALSE) {
-      mf_init(x)
+      mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
     }
     op2 <- par(lend = 1)
-    mf_base(xl, lwd = xl$lwd, add = TRUE, col = col)
+    mf_map(xl, lwd = xl$lwd, add = TRUE, col = col)
 
     val <- seq(min(xl[[var]]), max(xl[[var]]), length.out = 4)
     leg(
@@ -166,7 +173,7 @@ mf_prop <- function(x,
 
   # empty plot if needed
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   # Plot the symbols
@@ -175,11 +182,6 @@ mf_prop <- function(x,
     mycols = mycols, border = borders, lwd = lwd,
     inches = inches
   )
-
-  border <- getOption("mapsf.foreground")
-  if (all(leg_frame, !leg_horiz, is.null(getOption("mapsf.legacy")))) {
-    border <- getOption("mapsf.background")
-  }
 
   # symbols size
   leg(

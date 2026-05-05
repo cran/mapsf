@@ -1,5 +1,9 @@
-#' @title Plot graduated symbols
-#' @description Plot graduated symbols based on quantitative data.
+#' @title Deprecated - Plot graduated symbols
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "grad"`
+#' instead.
+#'
+#' Plot graduated symbols based on quantitative data.
 #' @eval my_params(c(
 #' 'x',
 #' 'var',
@@ -22,7 +26,6 @@
 #' 'nbreaks',
 #' 'leg_adj',
 #' 'leg_size',
-#' 'leg_border',
 #' 'leg_box_cex',
 #' 'leg_fg',
 #' 'leg_bg',
@@ -30,11 +33,10 @@
 #' @details
 #' Breaks defined by a numeric vector or a classification method are
 #' left-closed: breaks defined by \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5[, [5 - 10[, [10 - 15[, [15 - 20].
+#' will be mapped as \[2 - 5\[, \[5 - 10\[, \[10 - 15\[, \[15 - 20\].
 #' The "jenks" method is an exception and has to be right-closed.
 #' Jenks breaks computed as \code{c(2, 5, 10, 15, 20)}
-#' will be mapped as [2 - 5], ]5 - 10], ]10 - 15], ]15 - 20].
-#' @importFrom graphics box
+#' will be mapped as \[2 - 5\], \]5 - 10\], \]10 - 15\], \]15 - 20\].
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -52,27 +54,32 @@ mf_grad <- function(x,
                     pch = 21,
                     cex,
                     lwd,
+                    extent = x,
+                    bg,
+                    expandBB = rep(.04, 4),
                     leg_pos = mf_get_leg_pos(x),
                     leg_title = var,
                     leg_title_cex = .8,
                     leg_val_cex = .6,
-                    leg_val_rnd = 2,
+                    leg_val_rnd = 0,
                     leg_val_dec = ".",
                     leg_val_big = "",
                     leg_frame = FALSE,
                     leg_adj = c(0, 0),
                     leg_size = 1,
-                    leg_border = border,
                     leg_box_cex = c(1, 1),
                     leg_fg,
                     leg_bg,
                     leg_frame_border,
                     add = TRUE) {
+  deprecate_direct_calls_to("mf_grad")
+
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
   xout <- x
 
+  bgc <- go(bg, "background")
   col <- go(col, "highlight", "tomato4")
   border <- go(border, "background")
   leg_fg <- go(leg_fg, "highlight")
@@ -105,20 +112,19 @@ mf_grad <- function(x,
       lwd <- seq(1, 4, length.out = nbreaks)
     }
     if (length(lwd) != nbreaks) {
-      stop(paste0(
-        "the length of lwd does not match the number of ",
-        "breaks."
-      ), call. = FALSE)
+      stop("The length of lwd does not match the number of breaks.",
+        call. = FALSE
+      )
     }
     mylwd <- get_col_vec(
       x = x[[var]], breaks = breaks, pal = lwd, jen = jen
     )
 
     if (add == FALSE) {
-      mf_init(x)
+      mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
     }
     # map
-    plot(sf::st_geometry(x), col = col, lwd = mylwd, add = TRUE)
+    plot(st_geometry(x), col = col, lwd = mylwd, add = TRUE)
     # legend
     leg(
       type = "grad_line",
@@ -152,10 +158,9 @@ mf_grad <- function(x,
     cex <- seq(1, 4, length.out = nbreaks)
   }
   if (length(cex) != nbreaks) {
-    stop(paste0(
-      "the length of cex does not match the number of ",
-      "breaks."
-    ), call. = FALSE)
+    stop("The length of cex does not match the number of breaks.",
+      call. = FALSE
+    )
   }
   mycex <- get_col_vec(
     x = x[[var]], breaks = breaks, pal = cex, jen = jen
@@ -168,7 +173,7 @@ mf_grad <- function(x,
 
 
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
   # display
   plot(st_geometry(x),
@@ -176,8 +181,9 @@ mf_grad <- function(x,
     lwd = lwd, add = TRUE
   )
   # legend
-  lb <- length(breaks)
-  lab <- paste0(breaks[1:(lb - 1)], rep(" - ", lb - 1), breaks[2:lb])
+  bks <- get_val_rnd(breaks, leg_val_rnd, leg_val_dec, leg_val_big)
+  lb <- length(bks)
+  lab <- paste0(bks[1:(lb - 1)], rep(" - ", lb - 1), bks[2:lb])
   leg(
     type = "symb",
     pos = leg_pos,
@@ -186,7 +192,7 @@ mf_grad <- function(x,
     title_cex = leg_title_cex,
     val_cex = leg_val_cex,
     frame = leg_frame,
-    border = leg_border,
+    border = rep(border, length(lab)),
     pal = col,
     lwd = lwd,
     cex = rev(cex),

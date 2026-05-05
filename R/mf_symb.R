@@ -1,5 +1,9 @@
-#' @title Plot symbols
-#' @description Plot symbols based on qualitative data.
+#' @title Deprecated - Plot symbols
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "symb"`
+#' instead.
+#'
+#' Plot symbols based on qualitative data.
 #' @eval my_params(c(
 #' 'x',
 #' 'var',
@@ -26,7 +30,6 @@
 #' 'leg_size',
 #' 'leg_frame',
 #' 'leg_adj'))
-#' @importFrom graphics box
 #' @keywords internal
 #' @export
 #' @return x is (invisibly) returned.
@@ -45,7 +48,7 @@
 #'   pch_na = 24, leg_frame = TRUE
 #' )
 mf_symb <- function(x, var,
-                    pal = "Dynamic",
+                    pal,
                     alpha = NULL,
                     rev = FALSE,
                     border,
@@ -56,6 +59,9 @@ mf_symb <- function(x, var,
                     pch_na = 4,
                     cex_na = 1,
                     val_order,
+                    extent = x,
+                    bg,
+                    expandBB = rep(.04, 4),
                     leg_pos = mf_get_leg_pos(x),
                     leg_title = var,
                     leg_title_cex = .8,
@@ -68,10 +74,19 @@ mf_symb <- function(x, var,
                     leg_bg,
                     leg_size = 1,
                     add = TRUE) {
+  deprecate_direct_calls_to("mf_symb")
+  xtype <- get_geom_type(x)
+  # linestring special case
+  if (xtype == "LINE") {
+    message("This map type is not available for lines.")
+    return(invisible(NULL))
+  }
+
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
   border <- go(border, "background")
   leg_fg <- go(leg_fg, "highlight")
   leg_bg <- go(leg_bg, "foreground", getOption("mapsf.background"))
@@ -80,7 +95,6 @@ mf_symb <- function(x, var,
     getOption("mapsf.highlight")
   )
   pal <- go(pal, "pal_quali", "Dynamic")
-
 
 
   xout <- x
@@ -109,8 +123,8 @@ mf_symb <- function(x, var,
   }
   if (length(pch) != length(val_order)) {
     message(paste0(
-      "the length of pch does not match the number of ",
-      "modalities. The first pch is used for all modalities"
+      "The length of pch does not match the number of ",
+      "modalities. The first pch is used for all modalities."
     ))
     pch <- rep(pch[1], length(val_order))
   }
@@ -118,8 +132,8 @@ mf_symb <- function(x, var,
   if (length(cex) != length(val_order)) {
     if (length(cex) != 1) {
       message(paste0(
-        "the length of cex does not match the number of ",
-        "modalities. The first cex is used for all modalities"
+        "The length of cex does not match the number of ",
+        "modalities. The first cex is used for all modalities."
       ))
     }
     cex <- rep(cex[1], length(val_order))
@@ -153,9 +167,10 @@ mf_symb <- function(x, var,
   mycolspt <- mycols
   mycolspt[mysym %in% 21:25] <- border
   mycolsptbg <- mycols
+  border <- rep(border, sum(pch %in% 21:25))
 
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   plot(st_geometry(x),

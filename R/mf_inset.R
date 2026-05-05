@@ -5,7 +5,6 @@
 #' "bottomright", "right", "topright"
 #' @param cex share of the map width occupied by the inset
 #' @param fig coordinates of the inset region (in NDC, see in ?par())
-#' @md
 #' @export
 #' @details
 #' If x is used (with pos and cex), the width/height ratio of the inset will
@@ -117,87 +116,4 @@ mf_inset_off <- function() {
   mf_theme(.gmapsf$oth)
   par(mar = .gmapsf$par$mar, mfg = .gmapsf$mfg)
   points(1, 1, col = NA)
-}
-
-
-
-
-
-
-
-
-#' xy of legend
-#'
-#' @param pos pos
-#' @param pu pu
-#' @param wdest dl
-#' @param hdest dl
-#'
-#' @noRd
-posinset <- function(pos, pusr, wdest, hdest) {
-  posposs <- c(
-    "bottomleft", "left", "topleft", "top", "bottom",
-    "bottomright", "right", "topright"
-  )
-  if (!pos %in% posposs) {
-    stop(paste0(
-      "pos should be one of ", paste0(posposs, collapse = ", "),
-      "."
-    ), call. = FALSE)
-  }
-  inset_x <- xinch(par("csi")) / 4
-  inset_y <- yinch(par("csi")) / 4
-  pusr <- pusr + c(inset_x, -inset_x, inset_y, -inset_y)
-
-  xy <- switch(pos,
-    bottomleft = c(
-      pusr[1],
-      pusr[1] + wdest,
-      pusr[3],
-      pusr[3] + hdest
-    ),
-    topleft = c(
-      pusr[1],
-      pusr[1] + wdest,
-      pusr[4] - hdest,
-      pusr[4]
-    ),
-    left = c(
-      pusr[1],
-      pusr[1] + wdest,
-      pusr[3] + (pusr[4] - pusr[3]) / 2 - (hdest) / 2,
-      pusr[3] + (pusr[4] - pusr[3]) / 2 + (hdest) / 2
-    ),
-    top = c(
-      pusr[1] + (pusr[2] - pusr[1]) / 2 - (wdest) / 2,
-      pusr[1] + (pusr[2] - pusr[1]) / 2 + (wdest) / 2,
-      pusr[4] - hdest,
-      pusr[4]
-    ),
-    bottom = c(
-      pusr[1] + (pusr[2] - pusr[1]) / 2 - (wdest) / 2,
-      pusr[1] + (pusr[2] - pusr[1]) / 2 + (wdest) / 2,
-      pusr[3],
-      pusr[3] + hdest
-    ),
-    bottomright = c(
-      pusr[2] - wdest,
-      pusr[2],
-      pusr[3],
-      pusr[3] + hdest
-    ),
-    right = c(
-      pusr[2] - wdest,
-      pusr[2],
-      pusr[3] + (pusr[4] - pusr[3]) / 2 - (hdest) / 2,
-      pusr[3] + (pusr[4] - pusr[3]) / 2 + (hdest) / 2
-    ),
-    topright = c(
-      pusr[2] - wdest,
-      pusr[2],
-      pusr[4] - hdest,
-      pusr[4]
-    )
-  )
-  xy
 }

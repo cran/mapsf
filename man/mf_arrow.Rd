@@ -7,13 +7,15 @@
 mf_arrow(pos = "topleft", col, cex = 1, adj = c(0, 0), align)
 }
 \arguments{
-\item{pos}{position. It can be one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom','bottomleft', 'left', 'interactive' or a vector of two coordinates in map units (c(x, y))}
+\item{pos}{position. It can be one of 'topleft', 'top','topright', 'right',
+'bottomright', 'bottom','bottomleft', 'left', 'interactive' or a vector of
+two coordinates in map units (c(x, y))}
 
 \item{col}{arrow color}
 
 \item{cex}{arrow size}
 
-\item{adj}{adjust the postion of the north arrow in x and y directions}
+\item{adj}{adjust the position of the north arrow in x and y directions}
 
 \item{align}{object of class \code{sf} or \code{sfc} used to adjust the
 arrow to the real north}

@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_typo.R
 \name{mf_typo}
 \alias{mf_typo}
-\title{Plot a typology map}
+\title{Deprecated - Plot a typology map}
 \usage{
 mf_typo(
   x,
@@ -15,9 +15,10 @@ mf_typo(
   pch = 21,
   cex = 2,
   lwd = 0.7,
-  cex_na = 1,
-  pch_na = 4,
   col_na = "white",
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
   leg_title_cex = 0.8,
@@ -39,11 +40,11 @@ mf_typo(
 
 \item{var}{name(s) of the variable(s) to plot}
 
-\item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+\item{pal}{a set of colors (hex codes) or a palette name (valid palette names can be obtained with \code{\link{hcl.pals}}).}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
-\item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
+\item{rev}{if \code{pal} is a valid palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
@@ -55,13 +56,9 @@ mf_typo(
 
 \item{lwd}{border width}
 
-\item{cex_na}{cex for NA values if x is a POINT layer}
-
-\item{pch_na}{pch for NA values if x is a POINT layer}
-
 \item{col_na}{color for missing values}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -75,7 +72,7 @@ mf_typo(
 
 \item{leg_frame_border}{border color of the legend frame}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{leg_size}{size of the legend; 2 means two times bigger}
 
@@ -85,7 +82,7 @@ mf_typo(
 
 \item{leg_fg}{color of the legend foreground}
 
-\item{leg_bg}{color of the legend backgournd}
+\item{leg_bg}{color of the legend background}
 
 \item{add}{whether to add the layer to an existing plot (TRUE) or not (FALSE)}
 }
@@ -93,6 +90,9 @@ mf_typo(
 No return value, a map is displayed.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "typo"}
+instead.
+
 Plot a typology map.
 }
 \examples{

@@ -1,5 +1,9 @@
-#' @title Plot an annotation
-#' @description Plot an annotation on a map.
+#' @title Deprecated - Plot an annotation
+#' @description
+#' This function is deprecated. Please use [mf_text] instead.
+#' instead.
+#'
+#' Plot an annotation on a map.
 #' @param x an sf object with 1 row, a couple of coordinates (c(x, y)) or
 #' "interactive"
 #' @param txt the text to display
@@ -19,17 +23,24 @@
 #' @examples
 #' mtq <- mf_get_mtq()
 #' mf_map(mtq)
-#' mf_annotation(
-#'   x = c(711167.8, 1614764),
-#'   txt = "Look!\nImportant feature\nhere!",
-#'   pos = "bottomleft", cex = 1.2, font = 2,
-#'   halo = TRUE, s = 1.5
+#' mf_text(
+#'   x = mtq[2, ],
+#'   txt = "pos = 'bottomleft'\nline = 2\nclockwise = FALSE",
+#'   pos = "bottomleft",
+#'   offset = 6,
+#'   clockwise = FALSE,
+#'   line = 2,
+#'   box = FALSE
 #' )
-#'
-#' mf_annotation(
-#'   x = mtq[20, ],
-#'   txt = "This is less\nimportant",
-#'   cex = .7, font = 3, s = 1.3
+#' mf_text(
+#'   x = mtq[28, ],
+#'   txt = "pos = 'topright'\nline = 3\nclockwise = FALSE",
+#'   pos = "topright",
+#'   offset = 10,
+#'   clockwise = FALSE,
+#'   line = 3,
+#'   halo = TRUE,
+#'   align = "left"
 #' )
 mf_annotation <- function(x,
                           txt,
@@ -41,10 +52,13 @@ mf_annotation <- function(x,
                           bg,
                           s = 1,
                           ...) {
+  warning("mf_annotation() is deprecated. Use mf_text() instead.",
+    call. = FALSE
+  )
+
   test_cur_plot()
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
-
 
   if (diff(par("usr")[1:2]) < 389) {
     message("Annotations cannot be displayed on unprojected (long/lat) maps.")
@@ -56,15 +70,14 @@ mf_annotation <- function(x,
   bg <- go(bg, "background")
 
 
-
   if (inherits(x, "character") && x == "interactive") {
     x <- interleg(txt = c("annotation", "Annotation"))
   }
 
   if (inherits(x, c("sf", "sfc"))) {
-    xy <- sf::st_coordinates(
-      sf::st_centroid(
-        sf::st_geometry(x[1, ]),
+    xy <- st_coordinates(
+      st_centroid(
+        st_geometry(x[1, ]),
         of_largest_polygon = TRUE
       )
     )
@@ -135,8 +148,8 @@ drawarc <- function(x = 1, y = NULL, radius = 1, deg1 = 0, deg2 = 45, col) {
   lwd <- 1.2
   xylim <- par("usr")
   ymult <- 1
-  devunits <- grDevices::dev.size("px")
-  xy <- grDevices::xy.coords(x, y)
+  devunits <- dev.size("px")
+  xy <- xy.coords(x, y)
   x <- xy$x
   y <- xy$y
   a1 <- pmin(angle1, angle2)
@@ -252,7 +265,6 @@ annot_pos_params <- function(pos, xy, radius, inset) {
     y_txt <- xy[2] - radius - inset
     adj <- c(0, .5)
   }
-
 
 
   return(list(

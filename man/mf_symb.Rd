@@ -2,12 +2,12 @@
 % Please edit documentation in R/mf_symb.R
 \name{mf_symb}
 \alias{mf_symb}
-\title{Plot symbols}
+\title{Deprecated - Plot symbols}
 \usage{
 mf_symb(
   x,
   var,
-  pal = "Dynamic",
+  pal,
   alpha = NULL,
   rev = FALSE,
   border,
@@ -18,6 +18,9 @@ mf_symb(
   pch_na = 4,
   cex_na = 1,
   val_order,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
   leg_title_cex = 0.8,
@@ -37,11 +40,11 @@ mf_symb(
 
 \item{var}{name(s) of the variable(s) to plot}
 
-\item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+\item{pal}{a set of colors (hex codes) or a palette name (valid palette names can be obtained with \code{\link{hcl.pals}}).}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
-\item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
+\item{rev}{if \code{pal} is a valid palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
 \item{border}{border color}
 
@@ -59,7 +62,7 @@ mf_symb(
 
 \item{val_order}{values order, a character vector that matches var modalities}
 
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -73,11 +76,11 @@ mf_symb(
 
 \item{leg_frame_border}{border color of the legend frame}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{leg_fg}{color of the legend foreground}
 
-\item{leg_bg}{color of the legend backgournd}
+\item{leg_bg}{color of the legend background}
 
 \item{leg_size}{size of the legend; 2 means two times bigger}
 
@@ -87,6 +90,9 @@ mf_symb(
 x is (invisibly) returned.
 }
 \description{
+This function is deprecated. Please use \code{mf_map()} with \code{type = "symb"}
+instead.
+
 Plot symbols based on qualitative data.
 }
 \examples{

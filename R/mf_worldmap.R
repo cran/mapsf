@@ -1,6 +1,6 @@
 #' @title Plot a point on a world map
 #' @description Plot a point on a world map.
-#' @eval my_params("xfull")
+#' @param x object of class `sf` or `sfc`
 #' @param lon longitude
 #' @param lat latitude
 #' @param water_col color of the water
@@ -11,8 +11,6 @@
 #' (cex, pch, col...)
 #' @return No return value, a world map is displayed.
 #' @export
-#' @note The main part of the code is stolen from @fzenoni
-#' (\url{https://gist.github.com/fzenoni/ef23faf6d1ada5e4a91c9ef23b0ba2c1}).
 #' @examples
 #' mtq <- mf_get_mtq()
 #' mf_worldmap(mtq)
@@ -56,7 +54,6 @@ mf_worldmap <- function(x, lon, lat, water_col = "lightblue",
 }
 
 
-#' @import s2
 orthomap <- function(lon, lat) {
   g <- as_s2_geography(TRUE)
   co <- s2_data_countries()

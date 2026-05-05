@@ -1,7 +1,7 @@
 #' @title Plot a raster
-#' @description Plot a raster object (SpatRaster from terra).
+#' @description Plot a raster object (`SpatRaster` from `terra`).
 #' @name mf_raster
-#' @param x a SpatRaster
+#' @param x a `SpatRaster`
 #' @param type type of raster map, one of "continuous", "classes", or
 #' "interval". Default type for a numeric and categorial raster are
 #' "continuous" and "classes" respectively.
@@ -12,32 +12,47 @@
 #' @param leg_horiz display the legend horizontally
 #' @param breaks either a numeric vector with the actual breaks
 #' (for type = "continuous" and type = "interval"), or a
-#' classification method name (for type = "interval" only;
-#' see \link{mf_get_breaks} for classification methods)
-#' @eval my_params(c(
-#' "nbreaks",
-#' "val_order",
-#' "pal",
-#' "alpha",
-#' 'rev',
-#' 'leg_pos',
-#' 'leg_title',
-#' 'leg_title_cex',
-#' 'leg_val_cex',
-#' 'leg_val_rnd',
-#' 'leg_val_dec',
-#' 'leg_val_big',
-#' 'leg_box_border',
-#' 'leg_box_cex',
-#' 'leg_frame_border',
-#' 'leg_adj',
-#' 'leg_fg',
-#' 'leg_bg',
-#' 'leg_size',
-#' 'leg_frame'))
-#' @param ... bgalpha, smooth, maxcell or other arguments passed to be
-#' passed to
-#' \code{\link[terra:plotRGB]{plotRGB}} or \code{\link[terra:plot]{plot}}
+#' classification method name (for type = "interval" only; see [mf_get_breaks]
+#' for details).
+#' @param nbreaks number of classes (for type = "interval" only)
+#' @param val_order modalities order in the legend, a character vector that
+#' matches `var` modalities. Default to alphabetic order of modalities (for
+#' type = "classes" only).
+#' @param pal a set of colors (hex codes) or a palette name. Palette names can
+#' be obtained with [hcl.pals]. The default palette is the pal_quali palette for
+#' type = "classes" and pal_seq otherwise (see [mf_theme]).
+#' @param alpha pal` opacity, in the range \[0,1\] (0 means
+#' transparent and 1 means opaque). Default is set to 1.
+#' @param rev if `pal` is a palette name, whether the ordering of the colors
+#' should be reversed (TRUE) or not (FALSE)
+#' @param bg background color of the map, hex code or color name given by
+#' [colors], ignored if `add = TRUE`
+#'
+#' @param leg_pos position of the legend, one of 'topleft', 'top','topright',
+#' 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two
+#' coordinates in map units (c(x, y)). Use `NA` to avoid plotting the legend,
+#' use 'interactive' to choose the legend position by clicking on the map.
+#' @param leg_title legend title
+#' @param leg_title_cex size of the title
+#' @param leg_val_cex size of the values
+#' @param leg_val_rnd number of decimal places of the values displayed in the
+#' legend
+#' @param leg_val_dec	decimal separator
+#' @param leg_val_big	thousands separator
+#' @param leg_frame	whether to add a frame to the legend (TRUE) or not (FALSE)
+#' @param leg_frame_border border color of the legend frame
+#' @param leg_horiz	display the legend horizontally (for proportional symbols
+#' and choropleth types)
+#' @param leg_adj	adjust the position of the legend in x and y directions
+#' @param leg_bg color of the legend background
+#' @param leg_fg	color of the legend foreground
+#' @param leg_size size of the legend. Combine this argument with
+#' `leg_title_cex` and `leg_val_cex`.
+#' @param leg_box_border border color of legend boxes (for types related to
+#' choropleth and typology)
+#' @param leg_box_cex	width and height size expansion of boxes
+#' @param ... bgalpha, smooth, maxcell or other arguments passed to
+#' `terra::plotRGB` or `terra::plot`
 #' @export
 #' @return x is (invisibly) returned.
 #' @examples
@@ -85,9 +100,10 @@ mf_raster <- function(x,
                       breaks = "equal",
                       val_order,
                       pal,
-                      expandBB = rep(0, 4),
                       alpha = NULL,
                       rev = FALSE,
+                      expandBB = rep(0, 4),
+                      bg,
                       leg_pos = "right",
                       leg_title = names(x),
                       leg_title_cex = .8,
@@ -120,6 +136,7 @@ mf_raster <- function(x,
   }
 
 
+  bg <- ifelse(missing(bg), getOption("mapsf.background"), bg)
   leg_box_border <- go(leg_box_border, "highlight", "#333333")
   leg_fg <- go(leg_fg, "highlight")
   leg_bg <- go(leg_bg, "foreground", getOption("mapsf.background"))
@@ -145,7 +162,7 @@ mf_raster <- function(x,
   ops$box <- ifelse(is.null(ops$box), FALSE, ops$box)
   ops$mar <- NA
   ops$alpha <- alpha
-  if(isTRUE(add)){
+  if (isTRUE(add)) {
     ops$xlim <- par("usr")[1:2]
     ops$ylim <- par("usr")[3:4]
   } else {
@@ -155,7 +172,7 @@ mf_raster <- function(x,
 
   # Multiband Raster
   if (terra::nlyr(x) >= 2) {
-    mf_raster_multiband(ops, expandBB, add)
+    mf_raster_multiband(ops, expandBB, bg, add)
   }
 
   ops$clip <- FALSE
@@ -179,16 +196,20 @@ mf_raster <- function(x,
 
     if (ops$type == "interval") {
       mf_raster_interval(
-        ops, ops_leg, pal, breaks, nbreaks, alpha, rev, add, expandBB
+        ops, ops_leg, pal, breaks, nbreaks, alpha, rev, add, expandBB, bg
       )
     }
 
     if (ops$type == "continuous") {
-      mf_raster_continuous(ops, ops_leg, breaks, pal, expandBB, add, alpha, rev)
+      mf_raster_continuous(
+        ops, ops_leg, breaks, pal, expandBB, add, alpha, rev, bg
+      )
     }
 
     if (ops$type == "classes") {
-      mf_raster_classes(ops, ops_leg, pal, val_order, expandBB, add, alpha, rev)
+      mf_raster_classes(
+        ops, ops_leg, pal, val_order, expandBB, add, alpha, rev, bg
+      )
     }
   }
 

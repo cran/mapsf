@@ -2,7 +2,7 @@
 % Please edit documentation in R/mf_choro.R
 \name{mf_choro}
 \alias{mf_choro}
-\title{Plot a choropleth map}
+\title{Deprecated - Plot a choropleth map}
 \usage{
 mf_choro(
   x,
@@ -17,8 +17,9 @@ mf_choro(
   cex = 2,
   lwd = 0.7,
   col_na = "white",
-  cex_na = 1,
-  pch_na = 4,
+  extent = x,
+  bg,
+  expandBB = rep(0.04, 4),
   leg_pos = mf_get_leg_pos(x),
   leg_title = var,
   leg_title_cex = 0.8,
@@ -44,11 +45,11 @@ mf_choro(
 
 \item{var}{name(s) of the variable(s) to plot}
 
-\item{pal}{a set of colors or a palette name (from \link{hcl.colors})}
+\item{pal}{a set of colors (hex codes) or a palette name (valid palette names can be obtained with \code{\link{hcl.pals}}).}
 
-\item{alpha}{opacity, in the range [0,1]}
+\item{alpha}{opacity, in the range 0,1}
 
-\item{rev}{if \code{pal} is a \link{hcl.colors} palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
+\item{rev}{if \code{pal} is a valid palette name, whether the ordering of the colors should be reversed (TRUE) or not (FALSE)}
 
 \item{breaks}{either a numeric vector with the actual breaks, or a classification method name (see \link{mf_get_breaks} and Details)}
 
@@ -64,11 +65,7 @@ mf_choro(
 
 \item{col_na}{color for missing values}
 
-\item{cex_na}{cex for NA values if x is a POINT layer}
-
-\item{pch_na}{pch for NA values if x is a POINT layer}
-
-\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). If leg_pos = NA then the legend is not plotted. If leg_pos = 'interactive' click onthe map to choose the legend position.}
+\item{leg_pos}{position of the legend, one of 'topleft', 'top','topright', 'right', 'bottomright', 'bottom', 'bottomleft', 'left' or a vector of two coordinates in map units (c(x, y)). Use \code{NA} to avoid plotting the legend, use 'interactive' to choose the legend position by clicking on the map.}
 
 \item{leg_title}{legend title}
 
@@ -88,7 +85,7 @@ mf_choro(
 
 \item{leg_horiz}{display the legend horizontally (for proportional symbols and choropleth types)}
 
-\item{leg_adj}{adjust the postion of the legend in x and y directions}
+\item{leg_adj}{adjust the position of the legend in x and y directions}
 
 \item{leg_size}{size of the legend; 2 means two times bigger}
 
@@ -98,7 +95,7 @@ mf_choro(
 
 \item{leg_fg}{color of the legend foreground}
 
-\item{leg_bg}{color of the legend backgournd}
+\item{leg_bg}{color of the legend background}
 
 \item{leg_frame_border}{border color of the legend frame}
 
@@ -108,7 +105,10 @@ mf_choro(
 x is (invisibly) returned.
 }
 \description{
-Plot choropleth map.
+This function is deprecated. Please use \code{mf_map()} with \code{type = "choro"}
+instead.
+
+Plot a choropleth map
 }
 \details{
 Breaks defined by a numeric vector or a classification method are

@@ -1,5 +1,10 @@
-#' @title Plot a typology map
-#' @description Plot a typology map.
+#' @title Deprecated - Plot a typology map
+#' @description
+#' This function is deprecated. Please use `mf_map()` with `type = "typo"`
+#' instead.
+#'
+#'
+#' Plot a typology map.
 #' @eval my_params(c(
 #' 'x',
 #' 'var',
@@ -26,8 +31,6 @@
 #' 'leg_adj'))
 #' @param cex cex cex of the symbols if x is a POINT layer
 #' @param pch pch type of pch if x is a POINT layer
-#' @param pch_na pch for NA values if x is a POINT layer
-#' @param cex_na cex for NA values if x is a POINT layer
 #' @keywords internal
 #' @export
 #' @return No return value, a map is displayed.
@@ -55,9 +58,10 @@ mf_typo <- function(x,
                     pch = 21,
                     cex = 2,
                     lwd = .7,
-                    cex_na = 1,
-                    pch_na = 4,
                     col_na = "white",
+                    extent = x,
+                    bg,
+                    expandBB = rep(.04, 4),
                     leg_pos = mf_get_leg_pos(x),
                     leg_title = var,
                     leg_title_cex = .8,
@@ -72,10 +76,12 @@ mf_typo <- function(x,
                     leg_fg,
                     leg_bg,
                     add = FALSE) {
+  deprecate_direct_calls_to("mf_typo")
   # default
   op <- par(mar = getOption("mapsf.mar"), no.readonly = TRUE)
   on.exit(par(op))
 
+  bgc <- go(bg, "background")
   pal <- go(pal, "pal_quali", "Dynamic")
   leg_box_border <- go(leg_box_border, "highlight")
   leg_fg <- go(leg_fg, "highlight")
@@ -84,7 +90,9 @@ mf_typo <- function(x,
     leg_frame_border, "foreground",
     getOption("mapsf.highlight")
   )
-
+  lwd <- lwd[[1]]
+  cex <- cex[[1]]
+  pch <- pch[[1]]
 
   # get modalities
   val_order <- get_modalities(
@@ -110,7 +118,7 @@ mf_typo <- function(x,
   mycols[is.na(mycols)] <- col_na
 
   if (add == FALSE) {
-    mf_init(x)
+    mf_init(x, expandBB = expandBB, extent = extent, bgc = bgc)
   }
 
   xtype <- get_geom_type(x)
@@ -184,8 +192,8 @@ mf_typo <- function(x,
       val_cex = leg_val_cex, col_na = col_na, no_data = no_data,
       no_data_txt = leg_no_data,
       frame = leg_frame, border = border, pal = pal, lwd = lwd,
-      cex = rep(cex, n), pch = rep(pch, n), cex_na = cex_na,
-      pch_na = pch_na, bg = leg_bg, fg = leg_fg, adj = leg_adj,
+      cex = rep(cex, n), pch = rep(pch, n), cex_na = cex,
+      pch_na = pch, bg = leg_bg, fg = leg_fg, adj = leg_adj,
       size = leg_size, frame_border = leg_frame_border
     )
   }
