@@ -1,6 +1,6 @@
 Package: mapsf
 Title: Thematic Cartography
-Version: 1.2.0
+Version: 1.2.1
 Authors@R: 
     c(person(given = "Timothée",
              family = "Giraud",
@@ -46,11 +46,11 @@ Imports: classInt, graphics, maplegend (>= 0.6.3), s2, sf, stats,
 Suggests: terra, Ckmeans.1d.dp, png, jpeg, knitr, rmarkdown, svglite,
         tinytest, covr
 Encoding: UTF-8
-RoxygenNote: 7.3.3
 VignetteBuilder: knitr
 Language: en-US
+Config/roxygen2/version: 8.0.0
 NeedsCompilation: no
-Packaged: 2026-05-05 12:54:30 UTC; tim
+Packaged: 2026-05-29 12:30:10 UTC; tim
 Author: Timothée Giraud [cre, aut] (ORCID:
     <https://orcid.org/0000-0002-1932-3323>),
   Hugues Pecout [ctb] (ORCID: <https://orcid.org/0000-0002-0246-0954>,
@@ -67,4 +67,4 @@ Author: Timothée Giraud [cre, aut] (ORCID:
     Bézier curve algorithm for text annotations)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2026-05-05 13:30:02 UTC
+Date/Publication: 2026-05-29 17:00:02 UTC
