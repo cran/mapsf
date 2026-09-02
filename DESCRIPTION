@@ -1,6 +1,6 @@
 Package: mapsf
 Title: Thematic Cartography
-Version: 1.2.1
+Version: 1.2.2
 Authors@R: 
     c(person(given = "Timothée",
              family = "Giraud",
@@ -23,10 +23,6 @@ Authors@R:
              family = "Fellows",
              role = "cph",
              comment = "No overlap algorithm for labels, from wordcloud package"),
-      person(given = "Jim",
-             family = "Lemon",
-             role = "cph",
-             comment = "Arc drawing algorithm for annotations, from plotrix package"), 
       person(given = "Danielle",
              family = "Navarro",
              role = "cph",
@@ -48,9 +44,9 @@ Suggests: terra, Ckmeans.1d.dp, png, jpeg, knitr, rmarkdown, svglite,
 Encoding: UTF-8
 VignetteBuilder: knitr
 Language: en-US
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 NeedsCompilation: no
-Packaged: 2026-05-29 12:30:10 UTC; tim
+Packaged: 2026-09-02 11:48:58 UTC; tim
 Author: Timothée Giraud [cre, aut] (ORCID:
     <https://orcid.org/0000-0002-1932-3323>),
   Hugues Pecout [ctb] (ORCID: <https://orcid.org/0000-0002-0246-0954>,
@@ -61,10 +57,8 @@ Author: Timothée Giraud [cre, aut] (ORCID:
     Themes),
   Ian Fellows [cph] (No overlap algorithm for labels, from wordcloud
     package),
-  Jim Lemon [cph] (Arc drawing algorithm for annotations, from plotrix
-    package),
   Danielle Navarro [cph] (ORCID: <https://orcid.org/0000-0001-7648-6578>,
     Bézier curve algorithm for text annotations)
 Maintainer: Timothée Giraud <timothee.giraud@cnrs.fr>
 Repository: CRAN
-Date/Publication: 2026-05-29 17:00:02 UTC
+Date/Publication: 2026-09-02 12:40:02 UTC

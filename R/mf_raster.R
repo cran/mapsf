@@ -5,8 +5,8 @@
 #' @param type type of raster map, one of "continuous", "classes", or
 #' "interval". Default type for a numeric and categorial raster are
 #' "continuous" and "classes" respectively.
-#' @param expandBB expension of the map area in each direction (bottom, left,
-#' top, right). The expension is expressed as a share of `x` width
+#' @param expandBB expansion of the map area in each direction (bottom, left,
+#' top, right). The expansion is expressed as a share of `x` width
 #' (for left and right values) or a share of `x` height (for bottom and top
 #' values).
 #' @param add whether to add the layer to an existing plot (TRUE) or
@@ -88,12 +88,12 @@
 #'
 #'   ## classes
 #'   elev2 <- classify(elev, c(140, 400, 450, 549))
-#'   lev_evel <- data.frame(ID = 0:2, elevation = c("Low", "High", "Super High"))
+#'   lev_evel <- data.frame(ID = 0:2, elevation = c("Low", "High", "Very High"))
 #'   levels(elev2) <- lev_evel
 #'   mf_raster(elev2)
 #'   mf_raster(elev2,
 #'     pal = c("salmon4", "olivedrab", "yellow3"),
-#'     val_order = c("Super High", "High", "Low")
+#'     val_order = c("Very High", "High", "Low")
 #'   )
 #' }
 mf_raster <- function(x,
@@ -164,13 +164,8 @@ mf_raster <- function(x,
   ops$box <- ifelse(is.null(ops$box), FALSE, ops$box)
   ops$mar <- NA
   ops$alpha <- alpha
-  if (isTRUE(add)) {
-    ops$xlim <- par("usr")[1:2]
-    ops$ylim <- par("usr")[3:4]
-  } else {
-    ops$xlim <- terra::ext(x)[1:2]
-    ops$ylim <- terra::ext(x)[3:4]
-  }
+  ops$ext <- terra::vect(terra::ext(x))
+  ops$ext <- terra::vect(terra::ext(x))
 
   # Multiband Raster
   if (terra::nlyr(x) >= 2) {
