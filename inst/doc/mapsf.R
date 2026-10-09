@@ -6,7 +6,7 @@ knitr::opts_chunk$set(
   fig.height = 6
 )
 
-## ----mf_basemap, message=FALSE, warning=FALSE---------------------------------
+## ----mf_basemap, message=FALSE, warning=FALSE, fig.alt="A map of Martinique municipalities that uses the 'base' map type"----
 library(mapsf)
 # import the sample data set
 mtq <- mf_get_mtq()
@@ -19,7 +19,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_prop, message=FALSE, warning=FALSE------------------------------------
+## ----mf_prop, message=FALSE, warning=FALSE, fig.alt="A map of Martinique municipalities that uses the 'prop' map type"----
 # plot municipalities
 mf_map(mtq)
 # plot population
@@ -39,7 +39,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_map_c-----------------------------------------------------------------
+## ----mf_map_c, fig.alt="A map of Martinique municipalities that uses the 'choro' map type"----
 # population density (inhab./km2) using sf::st_area()
 mtq$POPDENS <- 1e6 * mtq$POP / sf::st_area(mtq)
 # plot population density
@@ -62,7 +62,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_map_t-----------------------------------------------------------------
+## ----mf_map_t, fig.alt="A map of Martinique municipalities that uses the 'typo' map type"----
 # plot administrative status
 mf_map(
   x = mtq,
@@ -90,7 +90,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_map_pc, fig.width=5---------------------------------------------------
+## ----mf_map_pc, fig.width=5, fig.alt="A map of Martinique municipalities that uses the 'prop_choro' map type"----
 # Plot the municipalities and expand the map space on the right
 mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # Plot symbols with choropleth coloration
@@ -114,7 +114,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_map_pt, fig.width=5---------------------------------------------------
+## ----mf_map_pt, fig.width=5, fig.alt="A map of Martinique municipalities that uses the 'prop_typo' map type"----
 # plot the municipalities and expand the map space on the right
 mf_map(x = mtq, expandBB = c(0, 0, 0, .15))
 # plot symbols with choropleth coloration
@@ -138,7 +138,7 @@ mf_credits(credits)
 mf_arrow()
 mf_scale()
 
-## ----mf_label-----------------------------------------------------------------
+## ----mf_label, fig.alt="A map of Martinique municipalities that uses the mf_label() function"----
 # plot municipalities
 mf_map(mtq, col = "#e4e9de", border = "darkseagreen4")
 # plot labels
@@ -159,7 +159,7 @@ mf_credits(credits)
 mf_arrow(pos = "topright")
 mf_scale()
 
-## ----mf_grad------------------------------------------------------------------
+## ----mf_grad, fig.alt="A map of Martinique municipalities that uses the 'grad' map type for flows"----
 # import the csv file embedded in mapsf
 mob <- read.csv(system.file("csv/mob.csv", package = "mapsf"))
 # Select links from Fort-de-France (97209))
